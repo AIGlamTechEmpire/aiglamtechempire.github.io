@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casandra | AI Empire Portal</title>
+<style>
+/* ═══════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --navy:      #1D3557;
+  --navy-dark: #0f1f33;
+  --navy-mid:  #162840;
+  --gold:      #dec171;
+  --gold-dim:  #b89a4e;
+  --pink:      #f06292;
+  --pink-soft: #f8a5c2;
+  --teal:      #4dd0e1;  /* minimal — only accents */
+  --cream:     #fdf6e3;
+  --white:     #ffffff;
+  --muted:     #6b8da8;
+  --card:      #1a3050;
+  --border:    #243d57;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: var(--navy-dark);
+  color: var(--white);
+  min-height: 100vh;
+  font-size: 15px;
+}
+
+/* ═══════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--navy-dark); }
+::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 3px; }
+
+/* ═══════════════════════════════════════
+   TOP HEADER
+═══════════════════════════════════════ */
+.header {
+  background: var(--navy);
+  border-bottom: 3px solid var(--gold);
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
+.header-logo {
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.header-sub {
+  font-size: 0.68rem;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.header-right { display: flex; align-items: center; gap: 10px; }
+.header-date {
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.week-badge {
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════════
+   QUICK ACTION BAR
+═══════════════════════════════════════ */
+.action-bar {
+  background: var(--navy-mid);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.action-bar-label {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-right: 4px;
+}
+.qbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.qbtn:hover { opacity: 0.85; transform: translateY(-1px); }
+.qbtn-gold   { background: var(--gold);  color: var(--navy); }
+.qbtn-pink   { background: var(--pink);  color: #fff; }
+.qbtn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--muted);
+}
+.qbtn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ═══════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════ */
+.main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+/* ═══════════════════════════════════════
+   FOCUS STRIP — THE ONE THING
+═══════════════════════════════════════ */
+.focus-strip {
+  background: linear-gradient(135deg, var(--navy) 0%, #1a3a5c 100%);
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  padding: 20px 28px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.focus-icon { font-size: 2rem; flex-shrink: 0; }
+.focus-meta {
+  flex-shrink: 0;
+}
+.focus-label {
+  font-size: 0.62rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+.focus-sublabel {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.focus-divider {
+  width: 2px;
+  height: 40px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.focus-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--white);
+  font-family: inherit;
+  outline: none;
+  caret-color: var(--gold);
+}
+.focus-input::placeholder { color: var(--muted); font-weight: 400; }
+.focus-save {
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════
+   SECTION LABELS
+═══════════════════════════════════════ */
+.section-label {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--border), transparent);
+}
+
+/* ═══════════════════════════════════════
+   GRID SYSTEM
+═══════════════════════════════════════ */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+@media (max-width: 900px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════
+   CARDS
+═══════════════════════════════════════ */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+}
+.card-accent {
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: var(--gold);
+}
+
+/* ═══════════════════════════════════════
+   12-WEEK PORTAL CARD — HERO
+═══════════════════════════════════════ */
+.portal-hero {
+  background: linear-gradient(135deg, #1D3557 0%, #162840 60%, #0f1f33 100%);
+  border: 2px solid var(--gold);
+  border-radius: 18px;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.portal-hero:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(222,193,113,0.15);
+}
+.portal-hero-left { flex: 1; }
+.portal-hero-icon { font-size: 3rem; margin-bottom: 12px; display: block; }
+.portal-hero-tag {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.portal-hero-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--white);
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+.portal-hero-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 440px;
+}
+.portal-hero-right { flex-shrink: 0; text-align: center; }
+.portal-hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold);
+  color: var(--navy);
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.portal-hero-progress {
+  margin-top: 14px;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.progress-bar-wrap {
+  background: var(--border);
+  border-radius: 4px;
+  height: 6px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(to right, var(--gold-dim), var(--gold));
+  transition: width 0.5s ease;
+}
+
+/* ═══════════════════════════════════════
+   AGENT TASK BOARD
+═══════════════════════════════════════ */
+.agent-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.agent-col {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.agent-col-header {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.agent-col-header.you  { background: rgba(240,98,146,0.15); color: var(--pink); border-bottom: 1px solid rgba(240,98,146,0.2); }
+.agent-col-header.agent { background: rgba(222,193,113,0.12); color: var(--gold); border-bottom: 1px solid rgba(222,193,113,0.15); }
+.agent-tasks { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.agent-task {
+  background: var(--navy-mid);
+  border-radius: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.task-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.dot-pink  { background: var(--pink); }
+.dot-gold  { background: var(--gold); }
+.dot-teal  { background: var(--teal); }
+.dot-muted { background: var(--muted); }
+.task-body { flex: 1; }
+.task-name { font-size: 0.83rem; font-weight: 600; color: var(--white); margin-bottom: 3px; }
+.task-meta { font-size: 0.7rem; color: var(--muted); }
+.task-status {
+  font-size: 0.62rem;
+  padding: 3px 9px;
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+.status-doing   { background: rgba(222,193,113,0.15); color: var(--gold); }
+.status-ready   { background: rgba(77,208,225,0.12);  color: var(--teal); }
+.status-decide  { background: rgba(240,98,146,0.15);  color: var(--pink); }
+.status-waiting { background: rgba(107,141,168,0.15); color: var(--muted); }
+.add-task-row {
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+}
+.add-task-input {
+  width: 100%;
+  background: var(--navy-dark);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 9px 13px;
+  color: var(--white);
+  font-size: 0.78rem;
+  font-family: inherit;
+  outline: none;
+}
+.add-task-input:focus { border-color: var(--gold); }
+.add-task-input::placeholder { color: var(--muted); }
+
+/* ═══════════════════════════════════════
+   BRAND UNIVERSE CARDS
+═══════════════════════════════════════ */
+.brand-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.brand-card:hover { transform: translateY(-2px); border-color: var(--gold); }
+.brand-card-stripe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+}
+.brand-icon { font-size: 1.8rem; margin-bottom: 10px; display: block; }
+.brand-tag {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.brand-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.brand-colors { display: flex; gap: 5px; margin-bottom: 10px; }
+.swatch {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.brand-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+.active-dot  { background: #4caf50; box-shadow: 0 0 4px #4caf50; }
+.build-dot   { background: var(--gold); }
+.concept-dot { background: var(--muted); }
+
+/* ═══════════════════════════════════════
+   BRAIN DUMP
+═══════════════════════════════════════ */
+.brain-dump {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.brain-header {
+  padding: 14px 20px;
+  background: rgba(240,98,146,0.1);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brain-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--pink);
+}
+.brain-hint { font-size: 0.68rem; color: var(--muted); }
+.brain-input-area {
+  padding: 16px;
+  display: flex;
+  gap: 10px;
+}
+.brain-input {
+  flex: 1;
+  background: var(--navy-dark);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: var(--white);
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  resize: none;
+  height: 44px;
+}
+.brain-input:focus { border-color: var(--pink); height: 88px; transition: height 0.2s; }
+.brain-input::placeholder { color: var(--muted); }
+.brain-add {
+  background: var(--pink);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0 18px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  align-self: flex-start;
+  height: 44px;
+}
+.brain-notes { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+.brain-note {
+  background: var(--navy-mid);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.82rem;
+  color: var(--white);
+  border-left: 3px solid var(--pink-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.5;
+}
+.brain-note-del {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  padding: 0 2px;
+}
+.brain-note-del:hover { color: var(--pink); }
+.brain-empty {
+  padding: 20px 0;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* ═══════════════════════════════════════
+   STATS ROW
+═══════════════════════════════════════ */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+.stat-num {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-size: 0.65rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ═══════════════════════════════════════
+   MODAL
+═══════════════════════════════════════ */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--navy);
+  border: 2px solid var(--gold);
+  border-radius: 18px;
+  padding: 36px;
+  width: 90%;
+  max-width: 460px;
+}
+.modal h2 { color: var(--gold); font-size: 1.05rem; letter-spacing: 1px; margin-bottom: 22px; }
+.modal input, .modal select, .modal textarea {
+  width: 100%;
+  background: var(--navy-dark);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 12px 14px;
+  color: var(--white);
+  font-size: 0.88rem;
+  font-family: inherit;
+  margin-bottom: 12px;
+  outline: none;
+}
+.modal input:focus, .modal select:focus { border-color: var(--gold); }
+.modal-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 6px; }
+.btn-cancel {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.btn-save {
+  background: var(--gold);
+  border: none;
+  color: var(--navy);
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.footer {
+  text-align: center;
+  padding: 40px 24px 24px;
+  font-size: 0.7rem;
+  color: var(--border);
+  letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════
+     HEADER
+════════════════════════════════ -->
+<header class="header">
+  <div class="header-left">
+    <div>
+      <div class="header-logo">👑 Casandra's AI Empire Portal</div>
+      <div class="header-sub">GlamAI WomanKing™ · GlamAI Architect™ · AI GlamTech Empire™</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-date" id="today-date"></div>
+    <div class="week-badge" id="week-badge">WEEK 1</div>
+  </div>
+</header>
+
+<!-- ════════════════════════════════
+     QUICK ACTION BAR
+════════════════════════════════ -->
+<div class="action-bar">
+  <span class="action-bar-label">Quick Add:</span>
+  <button class="qbtn qbtn-gold" onclick="openBrainDump()">💡 New Idea</button>
+  <button class="qbtn qbtn-pink" onclick="openAgentTask()">🤖 New Agent Task</button>
+  <button class="qbtn qbtn-outline" onclick="openAddLink()">🔗 Save a Link</button>
+  <span style="width:1px;height:22px;background:var(--border);margin:0 6px;flex-shrink:0;"></span>
+  <span class="action-bar-label">My Content:</span>
+  <a href="#content-hub" class="qbtn" style="background:rgba(222,193,113,0.12);color:var(--gold);border:1.5px solid var(--gold);">📺 Tech Tuesday — Script + LinkedIn Kit</a>
+  <a href="AdFactory_DigitalTwin.html" target="_blank" class="qbtn" style="background:rgba(240,98,146,0.15);color:var(--pink);border:1.5px solid rgba(240,98,146,0.5);">🎬 Ad Factory — Scene by Scene</a>
+  <a href="AdFactory_GettingStarted.html" target="_blank" class="qbtn" style="background:rgba(240,98,146,0.08);color:var(--pink-soft);border:1.5px solid rgba(240,98,146,0.25);">✅ Ad Checklist</a>
+  <a href="GlamTech_12Week_Full_Execution_Guide.html" target="_blank" class="qbtn" style="background:rgba(77,208,225,0.08);color:#7dd8e3;border:1.5px solid rgba(77,208,225,0.25);">👑 12-Week Guide</a>
+  <span style="width:1px;height:22px;background:var(--border);margin:0 6px;flex-shrink:0;"></span>
+  <span class="action-bar-label">Launch:</span>
+  <a href="https://claude.ai" target="_blank" class="qbtn" style="background:rgba(240,98,146,0.12);color:var(--pink-soft);border:1.5px solid rgba(240,98,146,0.3);" title="Open Claude">🧠 Claude</a>
+  <a href="https://chatgpt.com" target="_blank" class="qbtn" style="background:rgba(222,193,113,0.08);color:var(--gold);border:1.5px solid rgba(222,193,113,0.25);" title="Open ChatGPT">💬 ChatGPT</a>
+  <a href="https://canva.com" target="_blank" class="qbtn" style="background:rgba(77,208,225,0.08);color:#7dd8e3;border:1.5px solid rgba(77,208,225,0.2);" title="Open Canva">🎨 Canva</a>
+</div>
+
+<!-- ════════════════════════════════
+     MAIN
+════════════════════════════════ -->
+<div class="main">
+
+  <!-- ── TODAY'S ONE FOCUS ── -->
+  <div class="focus-strip">
+    <span class="focus-icon">🎯</span>
+    <div class="focus-meta">
+      <div class="focus-label">My ONE thing today</div>
+      <div class="focus-sublabel">ADHD Rule: one focus only</div>
+    </div>
+    <div class="focus-divider"></div>
+    <input class="focus-input" id="focus-input" type="text"
+      placeholder="What's the ONE thing that moves the needle today?" />
+    <button class="focus-save" onclick="saveFocus()">Lock It In</button>
+  </div>
+
+  <!-- ── STATS ROW ── -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-week">1</div>
+      <div class="stat-label">Week of 12</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-tasks">0</div>
+      <div class="stat-label">Agent Tasks</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-ideas">0</div>
+      <div class="stat-label">Ideas Saved</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Brands</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">👑</div>
+      <div class="stat-label">Status: WomanKing</div>
+    </div>
+  </div>
+
+  <!-- ── 12-WEEK EXECUTION PORTAL HERO ── -->
+  <div class="section-label">🔥 12-Week Execution</div>
+  <a href="https://aiglamtechempire.github.io/12-week-woman-king/" target="_blank" class="portal-hero">
+    <div class="portal-hero-left">
+      <span class="portal-hero-icon">👑</span>
+      <div class="portal-hero-tag">WomanKing™ Master Plan</div>
+      <div class="portal-hero-title">12-Week Execution Portal</div>
+      <div class="portal-hero-desc">
+        Your full 12-week roadmap to building the AI GlamTech Empire.
+        Click to open your live execution plan — tasks, milestones, and weekly wins.
+      </div>
+    </div>
+    <div class="portal-hero-right">
+      <div class="portal-hero-btn">
+        Open Portal →
+      </div>
+      <div class="portal-hero-progress">
+        <span id="progress-label">Week 1 of 12</span>
+        <div class="progress-bar-wrap" style="width:200px; margin:6px auto 0;">
+          <div class="progress-bar-fill" id="progress-fill" style="width:8%;"></div>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <!-- ── AD FACTORY ── -->
+  <div class="section-label">🎬 Ad Production</div>
+  <a href="AdFactory_DigitalTwin.html" target="_blank" class="portal-hero" style="border-color:rgba(240,98,146,0.4);background:linear-gradient(135deg,rgba(240,98,146,0.08) 0%,rgba(29,53,87,0.6) 100%);">
+    <div class="portal-hero-left">
+      <span class="portal-hero-icon">🎬</span>
+      <div class="portal-hero-tag" style="color:var(--pink);">Ad Factory — Scene by Scene</div>
+      <div class="portal-hero-title">Digital Twin Ad Production Bible</div>
+      <div class="portal-hero-desc">
+        Your full step-by-step production tool. 6 scenes × 8 sec = 48 seconds.
+        Whisk prompts, Flow directions, spoken lines, camera angles — all in one place.
+      </div>
+    </div>
+    <div class="portal-hero-right">
+      <div class="portal-hero-btn" style="background:var(--pink);color:#fff;">
+        Open Ad Factory →
+      </div>
+    </div>
+  </a>
+  <a href="AdFactory_GettingStarted.html" target="_blank" class="portal-hero" style="border-color:rgba(240,98,146,0.2);background:rgba(240,98,146,0.04);margin-top:10px;">
+    <div class="portal-hero-left">
+      <span class="portal-hero-icon">✅</span>
+      <div class="portal-hero-tag" style="color:var(--pink-soft);">Starting a New Ad?</div>
+      <div class="portal-hero-title">Ad Getting Started Checklist</div>
+      <div class="portal-hero-desc">
+        Path A: Make your own ad (7 steps). Path B: DFY client order (6 steps). Checkboxes save as you go.
+      </div>
+    </div>
+    <div class="portal-hero-right">
+      <div class="portal-hero-btn" style="background:rgba(240,98,146,0.2);color:var(--pink-soft);border:1.5px solid rgba(240,98,146,0.4);">
+        Open Checklist →
+      </div>
+    </div>
+  </a>
+
+  <!-- ── AGENT TASK BOARD ── -->
+  <div class="section-label">🤖 Agent Task Board</div>
+  <div class="agent-board">
+
+    <!-- WHAT I'M DOING (YOU) -->
+    <div class="agent-col">
+      <div class="agent-col-header you">
+        <span>👑</span> Needs Your Decision
+      </div>
+      <div class="agent-tasks" id="you-tasks">
+        <div class="agent-task">
+          <div class="task-dot dot-pink"></div>
+          <div class="task-body">
+            <div class="task-name">Review Agent's content drafts</div>
+            <div class="task-meta">Agent completed — your approval needed</div>
+          </div>
+          <span class="task-status status-decide">Decide</span>
+        </div>
+        <div class="agent-task">
+          <div class="task-dot dot-pink"></div>
+          <div class="task-body">
+            <div class="task-name">Choose Week 1 priority brand</div>
+            <div class="task-meta">Which brand goes first — ARIA, Pinky Floyd, or GlamAI?</div>
+          </div>
+          <span class="task-status status-decide">Decide</span>
+        </div>
+      </div>
+      <div class="add-task-row">
+        <input class="add-task-input" placeholder="+ Add something you need to decide..."
+          onkeydown="if(event.key==='Enter') addYouTask(this)" />
+      </div>
+    </div>
+
+    <!-- WHAT AGENT IS DOING -->
+    <div class="agent-col">
+      <div class="agent-col-header agent">
+        <span>🤖</span> Agent Is Working On
+      </div>
+      <div class="agent-tasks" id="agent-tasks">
+        <div class="agent-task">
+          <div class="task-dot dot-gold"></div>
+          <div class="task-body">
+            <div class="task-name">Building your AI Portal dashboard</div>
+            <div class="task-meta">Creating all portals in brand colors</div>
+          </div>
+          <span class="task-status status-doing">In Progress</span>
+        </div>
+        <div class="agent-task">
+          <div class="task-dot dot-muted"></div>
+          <div class="task-body">
+            <div class="task-name">Organize 12-week tasks by brand</div>
+            <div class="task-meta">Ready to map tasks to ARIA, GlamAI, Pinky Floyd</div>
+          </div>
+          <span class="task-status status-ready">Ready</span>
+        </div>
+      </div>
+      <div class="add-task-row">
+        <input class="add-task-input" placeholder="+ Give agent a new task..."
+          onkeydown="if(event.key==='Enter') addAgentTask(this)" />
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── BRAIN DUMP + BRAND UNIVERSE (side by side) ── -->
+  <div class="grid-2" style="margin-top:28px;">
+
+    <!-- BRAIN DUMP -->
+    <div>
+      <div class="section-label">🧠 Brain Dump — Capture Before It's Gone</div>
+      <div class="brain-dump">
+        <div class="brain-header">
+          <div class="brain-title">💭 Idea Vault</div>
+          <div class="brain-hint">Type it fast before it disappears</div>
+        </div>
+        <div class="brain-input-area">
+          <textarea class="brain-input" id="brain-input"
+            placeholder="Idea, thought, reminder... just get it out ✍️"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addBrainNote();}"></textarea>
+          <button class="brain-add" onclick="addBrainNote()">+</button>
+        </div>
+        <div class="brain-notes" id="brain-notes">
+          <div class="brain-empty" id="brain-empty">No ideas yet — your next million-dollar thought goes here 💡</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BRAND UNIVERSE -->
+    <div>
+      <div class="section-label">💅 Brand Universe</div>
+      <div class="grid-2" style="margin-top:0;">
+
+        <div class="brand-card">
+          <div class="brand-card-stripe" style="background: linear-gradient(to right, #1D3557, #dec171);"></div>
+          <span class="brand-icon">👑</span>
+          <div class="brand-tag">Personal Brand</div>
+          <div class="brand-name">Casandra</div>
+          <div class="brand-colors">
+            <div class="swatch" style="background:#1D3557;" title="#1D3557"></div>
+            <div class="swatch" style="background:#dec171;" title="#dec171"></div>
+            <div class="swatch" style="background:#f06292;" title="Pink"></div>
+          </div>
+          <div class="brand-status">
+            <div class="status-dot active-dot"></div>
+            <span style="color:#4caf50;">Active</span>
+          </div>
+        </div>
+
+        <div class="brand-card">
+          <div class="brand-card-stripe" style="background: linear-gradient(to right, #f06292, #f8a5c2);"></div>
+          <span class="brand-icon">🌸</span>
+          <div class="brand-tag">Alter Ego</div>
+          <div class="brand-name">Pinky Floyd</div>
+          <div class="brand-colors">
+            <div class="swatch" style="background:#f06292;"></div>
+            <div class="swatch" style="background:#f8a5c2;"></div>
+            <div class="swatch" style="background:#dec171;"></div>
+          </div>
+          <div class="brand-status">
+            <div class="status-dot build-dot"></div>
+            <span style="color:var(--gold);">Building</span>
+          </div>
+        </div>
+
+        <div class="brand-card">
+          <div class="brand-card-stripe" style="background: linear-gradient(to right, #dec171, #1D3557);"></div>
+          <span class="brand-icon">💎</span>
+          <div class="brand-tag">AI Brand</div>
+          <div class="brand-name">GlamAI WomanKing™</div>
+          <div class="brand-colors">
+            <div class="swatch" style="background:#1D3557;"></div>
+            <div class="swatch" style="background:#dec171;"></div>
+          </div>
+          <div class="brand-status">
+            <div class="status-dot active-dot"></div>
+            <span style="color:#4caf50;">Active</span>
+          </div>
+        </div>
+
+        <div class="brand-card">
+          <div class="brand-card-stripe" style="background: linear-gradient(to right, #1D3557, #4dd0e1);"></div>
+          <span class="brand-icon">🏗️</span>
+          <div class="brand-tag">AI Brand</div>
+          <div class="brand-name">GlamAI Architect™</div>
+          <div class="brand-colors">
+            <div class="swatch" style="background:#1D3557;"></div>
+            <div class="swatch" style="background:#dec171;"></div>
+          </div>
+          <div class="brand-status">
+            <div class="status-dot build-dot"></div>
+            <span style="color:var(--gold);">Building</span>
+          </div>
+        </div>
+
+        <div class="brand-card" style="grid-column: 1 / -1;">
+          <div class="brand-card-stripe" style="background: linear-gradient(to right, #dec171, #f06292, #1D3557);"></div>
+          <span class="brand-icon">🚀</span>
+          <div class="brand-tag">Parent Empire</div>
+          <div class="brand-name">AI GlamTech Empire™</div>
+          <div class="brand-colors">
+            <div class="swatch" style="background:#1D3557;"></div>
+            <div class="swatch" style="background:#dec171;"></div>
+            <div class="swatch" style="background:#f06292;"></div>
+          </div>
+          <div class="brand-status">
+            <div class="status-dot active-dot"></div>
+            <span style="color:#4caf50;">Building the Empire</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+  <!-- ── AI TOOLS ── -->
+  <div class="section-label" style="margin-top:36px;">⚡ My AI Tool Universe</div>
+  <div class="grid-4">
+
+    <a href="https://claude.ai" target="_blank" class="card" style="text-decoration:none;transition:transform 0.15s,border-color 0.15s;" onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='var(--pink)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+      <div class="card-accent" style="background:var(--pink);"></div>
+      <div style="font-size:1.6rem;margin-bottom:8px;">🧠</div>
+      <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--pink);margin-bottom:4px;">AI Assistant</div>
+      <div style="font-size:0.9rem;font-weight:800;color:var(--white);margin-bottom:5px;">Claude</div>
+      <div style="font-size:0.73rem;color:var(--muted);line-height:1.5;">Your executive AI. Builds, writes, strategizes with you.</div>
+    </a>
+
+    <a href="https://chatgpt.com" target="_blank" class="card" style="text-decoration:none;transition:transform 0.15s,border-color 0.15s;" onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='var(--gold)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+      <div class="card-accent" style="background:var(--gold);"></div>
+      <div style="font-size:1.6rem;margin-bottom:8px;">💬</div>
+      <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">AI Assistant</div>
+      <div style="font-size:0.9rem;font-weight:800;color:var(--white);margin-bottom:5px;">ChatGPT</div>
+      <div style="font-size:0.73rem;color:var(--muted);line-height:1.5;">Brainstorm, second opinions, content ideation.</div>
+    </a>
+
+    <a href="https://canva.com" target="_blank" class="card" style="text-decoration:none;transition:transform 0.15s,border-color 0.15s;" onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='#7dd8e3'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+      <div class="card-accent" style="background:#4dd0e1;"></div>
+      <div style="font-size:1.6rem;margin-bottom:8px;">🎨</div>
+      <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:#7dd8e3;margin-bottom:4px;">Design</div>
+      <div style="font-size:0.9rem;font-weight:800;color:var(--white);margin-bottom:5px;">Canva</div>
+      <div style="font-size:0.73rem;color:var(--muted);line-height:1.5;">Brand kit, visuals &amp; content for all your brands.</div>
+    </a>
+
+    <a href="https://github.com" target="_blank" class="card" style="text-decoration:none;transition:transform 0.15s,border-color 0.15s;" onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='var(--gold)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+      <div class="card-accent" style="background:var(--gold);"></div>
+      <div style="font-size:1.6rem;margin-bottom:8px;">🖥️</div>
+      <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Free Hosting</div>
+      <div style="font-size:0.9rem;font-weight:800;color:var(--white);margin-bottom:5px;">GitHub</div>
+      <div style="font-size:0.73rem;color:var(--muted);line-height:1.5;">Host your portals live for free. Tech Tuesday topic!</div>
+    </a>
+
+    <div class="card" style="border:1px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:130px;cursor:pointer;" onclick="openAddLink()">
+      <div style="font-size:1.5rem;margin-bottom:8px;color:var(--muted);">🔒</div>
+      <div style="font-size:0.75rem;color:var(--muted);">Secret Tool</div>
+      <div style="font-size:0.65rem;color:var(--border);margin-top:4px;">Add your undisclosed tools</div>
+    </div>
+
+    <div class="card" style="border:1px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:130px;cursor:pointer;" onclick="openAddLink()">
+      <div style="font-size:1.5rem;margin-bottom:8px;color:var(--muted);">🔒</div>
+      <div style="font-size:0.75rem;color:var(--muted);">Secret Tool</div>
+      <div style="font-size:0.65rem;color:var(--border);margin-top:4px;">Add your undisclosed tools</div>
+    </div>
+
+    <div class="card" style="border:1px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:130px;cursor:pointer;" onclick="openAddLink()">
+      <div style="font-size:1.5rem;margin-bottom:8px;color:var(--muted);">＋</div>
+      <div style="font-size:0.75rem;color:var(--muted);">Add a Tool</div>
+    </div>
+
+    <div class="card" style="border:1px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:130px;cursor:pointer;" onclick="openAddLink()">
+      <div style="font-size:1.5rem;margin-bottom:8px;color:var(--muted);">＋</div>
+      <div style="font-size:0.75rem;color:var(--muted);">Add a Tool</div>
+    </div>
+
+  </div>
+
+  <!-- ── MY CONTENT HUB ── -->
+  <div id="content-hub" class="section-label" style="margin-top:36px; scroll-margin-top:80px;">📁 My Content Hub</div>
+  <div class="grid-3">
+
+    <a href="TechTuesday_Script_LinkedIn.html" target="_blank" class="card" style="text-decoration:none;transition:transform 0.15s,border-color 0.15s;display:block;" onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='var(--gold)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+      <div class="card-accent" style="background:var(--gold);"></div>
+      <div style="font-size:1.6rem;margin-bottom:10px;">📺</div>
+      <div style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Tech Tuesday</div>
+      <div style="font-size:0.95rem;font-weight:800;color:var(--white);margin-bottom:6px;">Facebook Live Script</div>
+      <div style="font-size:0.78rem;color:var(--muted);line-height:1.5;">7–9 min script + LinkedIn teaser article + Substack CTA. Teleprompter mode included.</div>
+      <div style="margin-top:12px;font-size:0.68rem;color:var(--gold);font-weight:600;">Open → Script &amp; LinkedIn Kit</div>
+    </a>
+
+    <div class="card" style="border:1px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:160px;cursor:pointer;" onclick="openAddContent()">
+      <div style="font-size:1.8rem;margin-bottom:10px;color:var(--muted);">＋</div>
+      <div style="font-size:0.75rem;color:var(--muted);">Add Next Piece of Content</div>
+    </div>
+
+    <div class="card" style="border:1px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:160px;cursor:pointer;" onclick="openAddContent()">
+      <div style="font-size:1.8rem;margin-bottom:10px;color:var(--muted);">＋</div>
+      <div style="font-size:0.75rem;color:var(--muted);">Add Next Piece of Content</div>
+    </div>
+
+  </div>
+</div><!-- end main -->
+
+<!-- FOOTER -->
+<div class="footer">AI GlamTech Empire™ · Casandra's Command Center · Your genius, organized 👑</div>
+
+<!-- ════════════════════════════════
+     MODALS
+════════════════════════════════ -->
+<!-- Brain Dump Quick Modal -->
+<div class="overlay" id="brain-modal">
+  <div class="modal">
+    <h2>💡 Drop that Idea</h2>
+    <textarea id="modal-brain-input" rows="4"
+      placeholder="Get it out before it disappears..."
+      style="resize:none;"></textarea>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAll()">Cancel</button>
+      <button class="btn-save" onclick="saveModalIdea()">Save It 💾</button>
+    </div>
+  </div>
+</div>
+
+<!-- Agent Task Modal -->
+<div class="overlay" id="agent-modal">
+  <div class="modal">
+    <h2>🤖 New Agent Task</h2>
+    <input type="text" id="agent-task-input" placeholder="What should the agent work on?" />
+    <select id="agent-task-type">
+      <option value="agent">🤖 Agent Handles It</option>
+      <option value="you">👑 Needs My Decision</option>
+    </select>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAll()">Cancel</button>
+      <button class="btn-save" onclick="saveAgentTask()">Add Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Link Modal -->
+<div class="overlay" id="link-modal">
+  <div class="modal">
+    <h2>🔗 Save a Link</h2>
+    <input type="text" id="link-title-input" placeholder="Name (e.g. My Canva Brand Kit)" />
+    <input type="url" id="link-url-input" placeholder="https://..." />
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAll()">Cancel</button>
+      <button class="btn-save" onclick="saveLink()">Save Link</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATE & WEEK ──────────────────────────────
+const START_DATE = new Date('2026-03-10');
+const today = new Date();
+const diffDays = Math.floor((today - START_DATE) / (1000*60*60*24));
+const currentWeek = Math.min(12, Math.max(1, Math.ceil((diffDays + 1) / 7)));
+
+document.getElementById('today-date').textContent =
+  today.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+document.getElementById('week-badge').textContent = `WEEK ${currentWeek} OF 12`;
+document.getElementById('stat-week').textContent = currentWeek;
+document.getElementById('progress-label').textContent = `Week ${currentWeek} of 12`;
+document.getElementById('progress-fill').style.width = `${Math.round(currentWeek/12*100)}%`;
+
+// ── FOCUS STRIP ──────────────────────────────
+const savedFocus = localStorage.getItem('casandra-focus') || '';
+if (savedFocus) document.getElementById('focus-input').value = savedFocus;
+function saveFocus() {
+  const v = document.getElementById('focus-input').value.trim();
+  if (v) localStorage.setItem('casandra-focus', v);
+}
+
+// ── BRAIN DUMP ──────────────────────────────
+let notes = JSON.parse(localStorage.getItem('casandra-notes') || '[]');
+function renderNotes() {
+  const c = document.getElementById('brain-notes');
+  const e = document.getElementById('brain-empty');
+  document.getElementById('stat-ideas').textContent = notes.length;
+  if (notes.length === 0) {
+    c.innerHTML = '';
+    c.appendChild(e);
+    e.style.display = '';
+    return;
+  }
+  e.style.display = 'none';
+  c.innerHTML = notes.map((n,i) => `
+    <div class="brain-note">
+      <span>${n}</span>
+      <button class="brain-note-del" onclick="deleteNote(${i})">✕</button>
+    </div>
+  `).join('');
+}
+function addBrainNote() {
+  const inp = document.getElementById('brain-input');
+  const v = inp.value.trim();
+  if (!v) return;
+  notes.unshift(v);
+  localStorage.setItem('casandra-notes', JSON.stringify(notes));
+  inp.value = '';
+  renderNotes();
+}
+function deleteNote(i) {
+  notes.splice(i,1);
+  localStorage.setItem('casandra-notes', JSON.stringify(notes));
+  renderNotes();
+}
+renderNotes();
+
+// ── AGENT TASKS ──────────────────────────────
+let agentTasks = JSON.parse(localStorage.getItem('casandra-agent-tasks') || '[]');
+let youTasks   = JSON.parse(localStorage.getItem('casandra-you-tasks') || '[]');
+
+function renderTaskStats() {
+  document.getElementById('stat-tasks').textContent = agentTasks.length + youTasks.length;
+}
+function addYouTask(inp) {
+  const v = inp.value.trim(); if (!v) return;
+  youTasks.unshift(v);
+  localStorage.setItem('casandra-you-tasks', JSON.stringify(youTasks));
+  inp.value = '';
+  renderTaskStats();
+  const el = document.getElementById('you-tasks');
+  const div = document.createElement('div');
+  div.className = 'agent-task';
+  div.innerHTML = `<div class="task-dot dot-pink"></div>
+    <div class="task-body"><div class="task-name">${v}</div></div>
+    <span class="task-status status-decide">Decide</span>`;
+  el.insertBefore(div, el.firstChild);
+}
+function addAgentTask(inp) {
+  const v = inp.value.trim(); if (!v) return;
+  agentTasks.unshift(v);
+  localStorage.setItem('casandra-agent-tasks', JSON.stringify(agentTasks));
+  inp.value = '';
+  renderTaskStats();
+  const el = document.getElementById('agent-tasks');
+  const div = document.createElement('div');
+  div.className = 'agent-task';
+  div.innerHTML = `<div class="task-dot dot-gold"></div>
+    <div class="task-body"><div class="task-name">${v}</div></div>
+    <span class="task-status status-doing">In Progress</span>`;
+  el.insertBefore(div, el.firstChild);
+}
+renderTaskStats();
+
+// ── MODALS ──────────────────────────────────
+function openBrainDump() { document.getElementById('brain-modal').classList.add('open'); }
+function openAgentTask() { document.getElementById('agent-modal').classList.add('open'); }
+function openAddLink()   { document.getElementById('link-modal').classList.add('open'); }
+function closeAll() {
+  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('open'));
+}
+function saveModalIdea() {
+  const v = document.getElementById('modal-brain-input').value.trim();
+  if (v) { notes.unshift(v); localStorage.setItem('casandra-notes', JSON.stringify(notes)); renderNotes(); }
+  document.getElementById('modal-brain-input').value = '';
+  closeAll();
+}
+function saveAgentTask() {
+  const v = document.getElementById('agent-task-input').value.trim();
+  const t = document.getElementById('agent-task-type').value;
+  if (v) {
+    if (t === 'agent') { agentTasks.unshift(v); localStorage.setItem('casandra-agent-tasks', JSON.stringify(agentTasks)); }
+    else               { youTasks.unshift(v);   localStorage.setItem('casandra-you-tasks', JSON.stringify(youTasks));     }
+    renderTaskStats();
+  }
+  document.getElementById('agent-task-input').value = '';
+  closeAll();
+}
+function saveLink() {
+  // Save as a brain note with the link for now
+  const t = document.getElementById('link-title-input').value.trim();
+  const u = document.getElementById('link-url-input').value.trim();
+  if (t && u) {
+    notes.unshift(`🔗 ${t}: ${u}`);
+    localStorage.setItem('casandra-notes', JSON.stringify(notes));
+    renderNotes();
+  }
+  document.getElementById('link-title-input').value = '';
+  document.getElementById('link-url-input').value = '';
+  closeAll();
+}
+// Close modal on overlay click
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) closeAll(); });
+});
+
+// Open add content = reuse add link modal for now
+function openAddContent() { openAddLink(); }
+</script>
+</body>
+</html>

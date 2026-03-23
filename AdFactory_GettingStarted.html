@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ad Factory — Getting Started | AI GlamTech Empire™</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#1D3557;--navy-dark:#0f1f33;--navy-mid:#162840;
+  --gold:#dec171;--pink:#f06292;--pink-soft:#f8a5c2;
+  --white:#fff;--muted:#6b8da8;--card:#1a3050;--border:#243d57;
+  --green:#4caf50;--teal:#4dd0e1;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--navy-dark);color:var(--white);min-height:100vh;}
+
+.header{background:var(--navy);border-bottom:3px solid var(--gold);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.header h1{font-size:1.05rem;font-weight:900;color:var(--gold);letter-spacing:2px;}
+.header p{font-size:0.68rem;color:var(--muted);margin-top:2px;letter-spacing:1px;}
+.back-btn{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:8px;font-size:0.75rem;cursor:pointer;text-decoration:none;transition:all 0.15s;}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+.main{max-width:860px;margin:0 auto;padding:28px 20px 60px;}
+
+.section-label{font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.path-title{font-size:1.1rem;font-weight:900;color:var(--white);margin-bottom:4px;}
+.path-sub{font-size:0.78rem;color:var(--muted);margin-bottom:20px;}
+
+.path-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px 24px;margin-bottom:24px;}
+.path-card.gold-accent{border-color:rgba(222,193,113,0.3);}
+.path-card.pink-accent{border-color:rgba(240,98,146,0.3);}
+
+.path-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.path-icon{font-size:1.6rem;}
+.path-header-text .name{font-size:1rem;font-weight:800;color:var(--white);}
+.path-header-text .desc{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+
+.step{display:flex;align-items:flex-start;gap:14px;padding:11px 0;border-bottom:1px solid rgba(36,61,87,0.6);cursor:pointer;transition:background 0.1s;}
+.step:last-child{border-bottom:none;}
+.step:hover{background:rgba(255,255,255,0.015);border-radius:8px;padding-left:6px;}
+
+.step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:900;flex-shrink:0;margin-top:1px;transition:all 0.2s;}
+.step-num.gold{background:rgba(222,193,113,0.12);color:var(--gold);border:1.5px solid rgba(222,193,113,0.25);}
+.step-num.pink{background:rgba(240,98,146,0.1);color:var(--pink);border:1.5px solid rgba(240,98,146,0.2);}
+.step-num.done-num{background:var(--green);color:#fff;border-color:var(--green);}
+
+.step-content{flex:1;}
+.step-title{font-size:0.88rem;font-weight:700;color:var(--white);margin-bottom:3px;}
+.step-title.done-text{text-decoration:line-through;color:var(--muted);}
+.step-detail{font-size:0.75rem;color:#8baabf;line-height:1.55;}
+.step-detail a{color:var(--gold);text-decoration:none;}
+.step-detail a:hover{text-decoration:underline;}
+
+.step-chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-size:0.75rem;transition:all 0.2s;}
+.step-chk.on{background:var(--green);border-color:var(--green);color:#fff;}
+
+.reset-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;font-size:0.68rem;cursor:pointer;margin-top:14px;transition:all 0.15s;}
+.reset-btn:hover{border-color:var(--pink);color:var(--pink);}
+
+.tip-box{background:rgba(77,208,225,0.05);border:1px solid rgba(77,208,225,0.18);border-radius:12px;padding:14px 18px;margin-bottom:22px;display:flex;gap:12px;align-items:flex-start;}
+.tip-box .tip-icon{font-size:1.1rem;flex-shrink:0;}
+.tip-box .tip-text{font-size:0.78rem;color:#8baabf;line-height:1.6;}
+.tip-box strong{color:var(--white);}
+
+.tools-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.tool-btn{padding:8px 16px;border-radius:8px;font-size:0.73rem;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s;border:none;cursor:pointer;}
+.tool-btn:hover{transform:translateY(-1px);opacity:0.85;}
+.t-whisk{background:rgba(222,193,113,0.1);color:var(--gold);border:1.5px solid rgba(222,193,113,0.25);}
+.t-flow{background:rgba(240,98,146,0.1);color:var(--pink);border:1.5px solid rgba(240,98,146,0.25);}
+.t-capcut{background:rgba(77,208,225,0.08);color:var(--teal);border:1.5px solid rgba(77,208,225,0.18);}
+.t-factory{background:rgba(222,193,113,0.08);color:var(--gold);border:1.5px solid rgba(222,193,113,0.2);}
+
+.footer{text-align:center;padding:40px 0 24px;font-size:0.68rem;color:var(--border);}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div>
+    <h1>🎬 Ad Factory — Getting Started</h1>
+    <p>Your step-by-step launch checklist · AI GlamTech Empire™</p>
+  </div>
+  <a href="CasandraAIPortal.html" class="back-btn">← Back to CAIP</a>
+</header>
+
+<div class="main">
+
+  <div class="tip-box">
+    <div class="tip-icon">💡</div>
+    <div class="tip-text">
+      <strong>Check off as you go.</strong> Progress saves automatically in your browser. Two paths below — pick the one you're starting today. You can do both!
+    </div>
+  </div>
+
+  <!-- PATH A: YOUR OWN AD -->
+  <div class="path-card gold-accent" id="pathA">
+    <div class="path-header">
+      <div class="path-icon">🌸</div>
+      <div class="path-header-text">
+        <div class="name">Path A — Produce Your Own Ad</div>
+        <div class="desc">Make an ad for your own offer using Pinky Floyd or ARIA</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('A',0)">
+      <div class="step-chk" id="chkA0"></div>
+      <div class="step-num gold" id="numA0">1</div>
+      <div class="step-content">
+        <div class="step-title" id="titleA0">Install the updated skill</div>
+        <div class="step-detail">In Claude Desktop → click "Copy to your skills" on the <strong>ad-production-bible.skill</strong> file → restart Claude Desktop. This gives you the intake button menus.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('A',1)">
+      <div class="step-chk" id="chkA1"></div>
+      <div class="step-num gold" id="numA1">2</div>
+      <div class="step-content">
+        <div class="step-title" id="titleA1">Add your photos to the Photo Vault</div>
+        <div class="step-detail">Drop your <strong>Pinky Floyd photos</strong> into your <code>HTML/PHOTO VAULT/Pinky Floyd/</code> folder. ARIA photos → ARIA folder. These are what you upload to Whisk for each scene.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('A',2)">
+      <div class="step-chk" id="chkA2"></div>
+      <div class="step-num gold" id="numA2">3</div>
+      <div class="step-content">
+        <div class="step-title" id="titleA2">Open Claude Desktop and say "make me an ad"</div>
+        <div class="step-detail">The skill pops up button menus — tap your answers for format, platform, tone, voice, and style. Claude builds your full production document automatically.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('A',3)">
+      <div class="step-chk" id="chkA3"></div>
+      <div class="step-num gold" id="numA3">4</div>
+      <div class="step-content">
+        <div class="step-title" id="titleA3">Open your Ad Factory HTML file</div>
+        <div class="step-detail">Claude saves it to your HTML folder. Open it in Brave and bookmark it. Your scenes, Whisk prompts, and progress tracker are all right there.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('A',4)">
+      <div class="step-chk" id="chkA4"></div>
+      <div class="step-num gold" id="numA4">5</div>
+      <div class="step-content">
+        <div class="step-title" id="titleA4">Generate images in Whisk — Scene by Scene</div>
+        <div class="step-detail">Click <strong>🖼️ Open Whisk</strong> on each scene → upload your photo from the Photo Vault → paste the Whisk prompt (copy button is right there) → generate. Save the image.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('A',5)">
+      <div class="step-chk" id="chkA5"></div>
+      <div class="step-num gold" id="numA5">6</div>
+      <div class="step-content">
+        <div class="step-title" id="titleA5">Run each image through Google Flow</div>
+        <div class="step-detail">Click <strong>▶️ Open Flow</strong> → upload your Whisk image → paste the Flow direction → render your 8-second clip. <strong>⚠️ Spoken voice only — NO text overlays in Flow.</strong></div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('A',6)">
+      <div class="step-chk" id="chkA6"></div>
+      <div class="step-num gold" id="numA6">7</div>
+      <div class="step-content">
+        <div class="step-title" id="titleA6">Assemble in CapCut</div>
+        <div class="step-detail">Click <strong>✂️ Open CapCut</strong> → import all your Flow clips in scene order → add music, captions, and your CTA text overlay HERE (not in Flow) → export and post. 👑</div>
+      </div>
+    </div>
+
+    <button class="reset-btn" onclick="resetPath('A')">↩ Reset Path A</button>
+
+    <div class="tools-row">
+      <a href="https://labs.google/fx/tools/whisk" target="_blank" class="tool-btn t-whisk">🖼️ Whisk</a>
+      <a href="https://app.genmo.ai" target="_blank" class="tool-btn t-flow">▶️ Flow</a>
+      <a href="https://www.capcut.com" target="_blank" class="tool-btn t-capcut">✂️ CapCut</a>
+      <a href="AdFactory_DigitalTwin.html" class="tool-btn t-factory">🎬 Ad Factory</a>
+    </div>
+  </div>
+
+  <!-- PATH B: DFY CLIENT ORDER -->
+  <div class="path-card pink-accent" id="pathB">
+    <div class="path-header">
+      <div class="path-icon">💼</div>
+      <div class="path-header-text">
+        <div class="name">Path B — Deliver a DFY Client Order ($1,500)</div>
+        <div class="desc">Intake → Build → Deliver the production bible to your client</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('B',0)">
+      <div class="step-chk" id="chkB0"></div>
+      <div class="step-num pink" id="numB0">1</div>
+      <div class="step-content">
+        <div class="step-title" id="titleB0">Send client the intake questions</div>
+        <div class="step-detail">Ask them: offer name, platform, tone (Funny &amp; Sassy / Sassy Professional / GlamTwin), visual style (Beyoncé / Designer Suit / etc.), their photo(s), solo or two-person format.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('B',1)">
+      <div class="step-chk" id="chkB1"></div>
+      <div class="step-num pink" id="numB1">2</div>
+      <div class="step-content">
+        <div class="step-title" id="titleB1">Open Claude and paste their answers</div>
+        <div class="step-detail">Say <strong>"make me an ad"</strong> and provide their brief. The skill builds the full 6-section production document for every scene automatically.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('B',2)">
+      <div class="step-chk" id="chkB2"></div>
+      <div class="step-num pink" id="numB2">3</div>
+      <div class="step-content">
+        <div class="step-title" id="titleB2">Review the script before building HTML</div>
+        <div class="step-detail">Read through all scenes. Check word counts (max 10 per dialogue scene). Make sure there's a B-Roll scene. Approve or tweak before Claude generates the HTML file.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('B',3)">
+      <div class="step-chk" id="chkB3"></div>
+      <div class="step-num pink" id="numB3">4</div>
+      <div class="step-content">
+        <div class="step-title" id="titleB3">Have Claude build the Ad Factory HTML</div>
+        <div class="step-detail">Say <strong>"now build the HTML file."</strong> Claude creates an <code>AdFactory_[ClientOffer].html</code> file in your HTML folder with everything — scenes, Whisk prompts, Flow directions, checkboxes, progress tracker.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('B',4)">
+      <div class="step-chk" id="chkB4"></div>
+      <div class="step-num pink" id="numB4">5</div>
+      <div class="step-content">
+        <div class="step-title" id="titleB4">Deliver the HTML file to your client</div>
+        <div class="step-detail">Send them the HTML file + a voice note walking them through it. That IS the $1,500 deliverable — their complete production bible, ready to execute.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggle('B',5)">
+      <div class="step-chk" id="chkB5"></div>
+      <div class="step-num pink" id="numB5">6</div>
+      <div class="step-content">
+        <div class="step-title" id="titleB5">Time your delivery — log it!</div>
+        <div class="step-detail">Track how long steps 2–5 take. This is your turnaround time for marketing the offer. Most DFY production bibles take 45–90 min once your process is dialed in.</div>
+      </div>
+    </div>
+
+    <button class="reset-btn" onclick="resetPath('B')">↩ Reset Path B</button>
+  </div>
+
+</div>
+
+<div class="footer">Ad Factory Getting Started · AI GlamTech Empire™ · Casandra 👑</div>
+
+<script>
+const KEYS = { A: 'gs-pathA', B: 'gs-pathB' };
+let state = {
+  A: JSON.parse(localStorage.getItem(KEYS.A) || '[]'),
+  B: JSON.parse(localStorage.getItem(KEYS.B) || '[]')
+};
+
+function toggle(path, idx) {
+  const arr = state[path];
+  if (arr.includes(idx)) {
+    state[path] = arr.filter(x => x !== idx);
+  } else {
+    state[path] = [...arr, idx];
+  }
+  localStorage.setItem(KEYS[path], JSON.stringify(state[path]));
+  render();
+}
+
+function resetPath(path) {
+  state[path] = [];
+  localStorage.setItem(KEYS[path], JSON.stringify([]));
+  render();
+}
+
+function render() {
+  ['A','B'].forEach(path => {
+    const total = path === 'A' ? 7 : 6;
+    for (let i = 0; i < total; i++) {
+      const done = state[path].includes(i);
+      const chk = document.getElementById('chk'+path+i);
+      const num = document.getElementById('num'+path+i);
+      const title = document.getElementById('title'+path+i);
+      if (!chk) continue;
+      chk.textContent = done ? '✓' : '';
+      chk.className = 'step-chk' + (done ? ' on' : '');
+      num.className = 'step-num ' + (done ? 'done-num' : (path === 'A' ? 'gold' : 'pink'));
+      title.className = 'step-title' + (done ? ' done-text' : '');
+    }
+  });
+}
+
+render();
+</script>
+</body>
+</html>

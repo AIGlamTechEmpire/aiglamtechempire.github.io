@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech Tuesday | Script + LinkedIn Article</title>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --navy: #1D3557;
+  --gold: #dec171;
+  --pink: #f06292;
+  --dark: #0f1f33;
+  --card: #1a3050;
+  --border: #243d57;
+  --muted: #6b8da8;
+  --white: #ffffff;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--dark);
+  color: var(--white);
+  line-height: 1.7;
+}
+/* ── HEADER ── */
+.header {
+  background: var(--navy);
+  border-bottom: 3px solid var(--gold);
+  padding: 24px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-title { font-size: 1.3rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; }
+.header-sub { font-size: 0.72rem; color: var(--muted); letter-spacing: 1.5px; margin-top: 2px; }
+.print-btn {
+  background: var(--gold); color: var(--navy);
+  border: none; padding: 10px 22px; border-radius: 8px;
+  font-weight: 700; font-size: 0.85rem; cursor: pointer;
+}
+/* ── TABS ── */
+.tabs {
+  background: var(--navy);
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+}
+.tab {
+  padding: 14px 28px; font-size: 0.82rem; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+  border-bottom: 3px solid transparent; color: var(--muted);
+  transition: all 0.15s;
+}
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+/* ── MAIN ── */
+.content { max-width: 860px; margin: 0 auto; padding: 48px 32px 80px; }
+.page { display: none; }
+.page.active { display: block; }
+/* ── SCRIPT STYLES ── */
+.script-banner {
+  background: linear-gradient(135deg, var(--navy) 0%, #16304f 100%);
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  padding: 24px 30px;
+  margin-bottom: 36px;
+  display: flex; align-items: center; gap: 16px;
+}
+.script-banner-icon { font-size: 2.2rem; }
+.script-banner-title { font-size: 1.1rem; font-weight: 800; color: var(--gold); margin-bottom: 2px; }
+.script-banner-meta { font-size: 0.8rem; color: var(--muted); }
+.segment {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.segment-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 20px;
+  background: rgba(222,193,113,0.08);
+  border-bottom: 1px solid var(--border);
+}
+.segment-title { font-size: 0.72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+.segment-time { font-size: 0.68rem; color: var(--muted); background: var(--dark); padding: 3px 10px; border-radius: 10px; }
+.segment-body { padding: 22px 24px; }
+.director-note {
+  background: rgba(240,98,146,0.1);
+  border-left: 3px solid var(--pink);
+  border-radius: 0 8px 8px 0;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  font-size: 0.78rem;
+  color: var(--pink);
+  font-style: italic;
+}
+.script-line {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+.script-line strong { color: var(--gold); }
+.script-line em { color: var(--pink); font-style: normal; font-weight: 600; }
+.pause {
+  display: inline-block;
+  background: rgba(222,193,113,0.12);
+  color: var(--gold);
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  margin: 0 4px;
+}
+.show-note {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(77,208,225,0.07);
+  border: 1px solid rgba(77,208,225,0.2);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 14px;
+  font-size: 0.78rem;
+  color: #7dd8e3;
+}
+.show-note-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.cta-block {
+  background: linear-gradient(135deg, var(--navy) 0%, #16304f 100%);
+  border: 2px solid var(--pink);
+  border-radius: 14px;
+  padding: 24px;
+  margin-top: 20px;
+  text-align: center;
+}
+.cta-block p { font-size: 1rem; line-height: 1.8; }
+.cta-block strong { color: var(--gold); }
+/* ── LINKEDIN STYLES ── */
+.li-banner {
+  background: linear-gradient(135deg, #0077b5 0%, #004f80 100%);
+  border-radius: 16px;
+  padding: 24px 30px;
+  margin-bottom: 36px;
+  display: flex; align-items: center; gap: 16px;
+}
+.li-banner-icon { font-size: 2rem; }
+.li-banner-title { font-size: 1rem; font-weight: 800; color: #fff; margin-bottom: 2px; }
+.li-banner-meta { font-size: 0.78rem; color: rgba(255,255,255,0.7); }
+.photo-prompt {
+  background: var(--card);
+  border: 1px dashed var(--gold);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 28px;
+}
+.photo-prompt-label {
+  font-size: 0.65rem; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 12px;
+}
+.photo-prompt-text {
+  font-size: 0.9rem; color: #c8dde8; line-height: 1.7;
+}
+.article-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px 38px;
+}
+.article-eyebrow {
+  font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 10px;
+}
+.article-title {
+  font-size: 1.6rem; font-weight: 900; color: var(--white);
+  line-height: 1.3; margin-bottom: 18px;
+}
+.article-body {
+  font-size: 0.95rem; color: #b8cedd; line-height: 1.85;
+}
+.article-body p { margin-bottom: 18px; }
+.article-body strong { color: var(--white); }
+.article-body em { color: var(--gold); font-style: normal; }
+.article-hashtags {
+  margin-top: 24px; padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem; color: #0077b5;
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.hashtag {
+  background: rgba(0,119,181,0.15);
+  padding: 4px 12px; border-radius: 20px;
+  font-size: 0.75rem; color: #5ab4e0;
+}
+.substack-cta {
+  background: linear-gradient(135deg, var(--navy) 0%, #16304f 100%);
+  border: 2px solid var(--gold);
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin-top: 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.substack-cta-text { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+.substack-cta-text strong { color: var(--white); font-size: 1rem; display: block; margin-bottom: 4px; }
+.substack-btn {
+  background: var(--gold); color: var(--navy);
+  border: none; padding: 12px 24px; border-radius: 10px;
+  font-weight: 800; font-size: 0.85rem; cursor: pointer; white-space: nowrap;
+}
+/* ── TELEPROMPTER MODE ── */
+.tp-toggle {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--gold); color: var(--navy);
+  border: none; padding: 12px 20px; border-radius: 12px;
+  font-weight: 800; font-size: 0.85rem; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  z-index: 100;
+}
+body.teleprompter { background: #000; }
+body.teleprompter .header, body.teleprompter .tabs,
+body.teleprompter .script-banner, body.teleprompter .segment-header,
+body.teleprompter .show-note, body.teleprompter .director-note,
+body.teleprompter .segment { background: transparent !important; border: none !important; }
+body.teleprompter .segment { border-bottom: 1px solid #222 !important; border-radius: 0 !important; }
+body.teleprompter .script-line { font-size: 1.5rem !important; color: #fff !important; line-height: 2.2 !important; }
+body.teleprompter .segment-title, body.teleprompter .segment-time { display: none; }
+body.teleprompter .director-note { display: none; }
+body.teleprompter .show-note { display: none; }
+body.teleprompter .content { padding-top: 60px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-title">👑 Tech Tuesday | Content Kit</div>
+    <div class="header-sub">Facebook Live Script · LinkedIn Teaser Article · Substack Lead</div>
+  </div>
+  <button class="print-btn" onclick="window.print()">🖨️ Print Script</button>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('script', this)">📺 Facebook Live Script</div>
+  <div class="tab" onclick="switchTab('linkedin', this)">💼 LinkedIn Article</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 1: FACEBOOK LIVE SCRIPT
+══════════════════════════════════════ -->
+<div class="content">
+<div class="page active" id="page-script">
+
+  <div class="script-banner">
+    <span class="script-banner-icon">🎙️</span>
+    <div>
+      <div class="script-banner-title">Tech Tuesday — Facebook Live Script</div>
+      <div class="script-banner-meta">Target: 7–9 minutes &nbsp;|&nbsp; Tone: Real, Bold, Persuasive &nbsp;|&nbsp; Audience: Entrepreneurs, Creators, Side-Hustlers</div>
+    </div>
+  </div>
+
+  <!-- SEGMENT 1: HOOK -->
+  <div class="segment">
+    <div class="segment-header">
+      <div class="segment-title">⚡ Hook — Grab Them Immediately</div>
+      <div class="segment-time">0:00 – 0:45</div>
+    </div>
+    <div class="segment-body">
+      <div class="director-note">📍 Go live. Wave. Let people join. Then hit them with this.</div>
+      <div class="script-line">
+        Hey, hey, hey — welcome to <strong>Tech Tuesday.</strong> <span class="pause">PAUSE</span>
+      </div>
+      <div class="script-line">
+        If you are watching this right now, I need you to stop scrolling — because what I'm about to show you
+        in the next <strong>7 minutes</strong> is going to completely change how you think about
+        <em>AI, your time, and your money.</em>
+      </div>
+      <div class="script-line">
+        I'm Casandra — <strong>GlamAI WomanKing™</strong> — and today I'm pulling back the curtain
+        on something I built for myself that I had <em>no idea</em> would become what it is right now.
+      </div>
+      <div class="show-note">
+        <span class="show-note-icon">📱</span>
+        <span><strong>Show on screen:</strong> Your Casandra AI Portal open in Brave browser.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEGMENT 2: THE STORY -->
+  <div class="segment">
+    <div class="segment-header">
+      <div class="segment-title">📖 The Story — How This Started</div>
+      <div class="segment-time">0:45 – 2:30</div>
+    </div>
+    <div class="segment-body">
+      <div class="director-note">📍 Get personal. This is where they connect with YOU.</div>
+      <div class="script-line">
+        Here's where it started. <span class="pause">PAUSE</span>
+        I needed to make <strong>$10,000 in 12 weeks.</strong>
+        Not "it would be nice." I <em>needed</em> it.
+      </div>
+      <div class="script-line">
+        And I'm sitting there with all of these ideas in my head —
+        I've got brands, I've got content, I've got strategies —
+        but <strong>no system.</strong> Just chaos.
+        A spaghetti bowl of genius with no fork. <span class="pause">PAUSE — let them laugh</span>
+      </div>
+      <div class="script-line">
+        So instead of going to a planner, or hiring someone,
+        or buying another course — <em>I went to AI.</em>
+        I sat down with <strong>Claude</strong> and <strong>ChatGPT</strong>
+        and I said — help me build a plan.
+        A real one. <strong>A 12-week execution plan</strong> that tells me
+        exactly what to do, when to do it, and how to track it.
+      </div>
+      <div class="script-line">
+        And then I took that plan — and I published it on <strong>GitHub.</strong>
+        For free. As a live website. That I can open on any device, anywhere.
+      </div>
+      <div class="show-note">
+        <span class="show-note-icon">📱</span>
+        <span><strong>Show on screen:</strong> Click the 12-Week WomanKing portal button — let them see it load.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEGMENT 3: THE TOOLS -->
+  <div class="segment">
+    <div class="segment-header">
+      <div class="segment-title">🛠️ The Tools — What I Used</div>
+      <div class="segment-time">2:30 – 4:00</div>
+    </div>
+    <div class="segment-body">
+      <div class="director-note">📍 Be confident. Don't overshare the tools you want to keep private — tease them.</div>
+      <div class="script-line">
+        Now let me tell you what I used to build this — and <em>none</em> of it cost me thousands of dollars.
+      </div>
+      <div class="script-line">
+        <strong>Claude by Anthropic</strong> — this is my executive project manager.
+        It writes, it thinks, it builds with me.
+        It literally built the portal you're looking at right now.
+      </div>
+      <div class="script-line">
+        <strong>ChatGPT</strong> — brainstorming, second opinions, content ideas.
+        I run them together. They are not rivals in MY empire — they both work FOR me.
+      </div>
+      <div class="script-line">
+        <strong>GitHub</strong> — and I know what you're thinking.
+        <em>"Casandra, I'm not a developer."</em> <span class="pause">PAUSE</span>
+        Neither am I. But I'm going to show you how I use GitHub to host
+        <strong>live websites — for free —</strong> that look like I paid a developer $5,000.
+      </div>
+      <div class="script-line">
+        And I'm using some other AI tools that — <em>I'm not disclosing yet.</em>
+        <span class="pause">PAUSE — smile</span>
+        Those are for my paid community. But trust me, when I share them?
+        Your workflow will never be the same.
+      </div>
+    </div>
+  </div>
+
+  <!-- SEGMENT 4: WHAT IT DOES -->
+  <div class="segment">
+    <div class="segment-header">
+      <div class="segment-title">💡 The Portal — What It Does & Why It Works</div>
+      <div class="segment-time">4:00 – 5:45</div>
+    </div>
+    <div class="segment-body">
+      <div class="director-note">📍 Screen share your portal here. Walk through it briefly — don't go deep, just show the value.</div>
+      <div class="script-line">
+        So what IS this portal? <span class="pause">PAUSE</span>
+        This is my <strong>AI-powered command center.</strong>
+        One place. Everything I need. No bouncing between 15 tabs,
+        no lost sticky notes, no "where did I put that idea?"
+      </div>
+      <div class="script-line">
+        It tells me my <strong>ONE focus for the day</strong> — because if you have ADHD like me,
+        ten priorities is the same as zero priorities.
+      </div>
+      <div class="script-line">
+        It shows me what <em>I</em> need to decide versus what the <em>AI agent</em> is already handling.
+        My brands. My 12-week execution plan. My idea vault — all right here.
+      </div>
+      <div class="script-line">
+        This is not just a dashboard. <strong>This is how I run a multi-brand AI empire
+        without burning out.</strong>
+      </div>
+      <div class="show-note">
+        <span class="show-note-icon">📱</span>
+        <span><strong>Show on screen:</strong> Scroll through the portal slowly — focus section, agent board, brand cards.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEGMENT 5: THE MONEY -->
+  <div class="segment">
+    <div class="segment-header">
+      <div class="segment-title">💰 The Money — How This Becomes Income</div>
+      <div class="segment-time">5:45 – 7:15</div>
+    </div>
+    <div class="segment-body">
+      <div class="director-note">📍 This is where you lean in. Speak slower. Let the weight of this land.</div>
+      <div class="script-line">
+        Now here's where it gets interesting — and why I wanted to share this with YOU today.
+      </div>
+      <div class="script-line">
+        What I built for <em>myself</em>? <strong>People are paying for this.</strong>
+        Business owners, coaches, content creators — they need exactly this.
+        A custom AI portal. A 12-week execution system.
+        The tools set up so THEY don't have to figure it out.
+      </div>
+      <div class="script-line">
+        You can build this for clients. <strong>I'm doing it right now.</strong>
+        You can teach it. You can package it as a course.
+        You can offer it as a done-for-you service.
+        And because AI is doing the heavy lifting — <em>your time investment is minimal.</em>
+      </div>
+      <div class="script-line">
+        GitHub hosting is <strong>free.</strong> Claude has a free tier.
+        ChatGPT has a free tier. The only thing between you and your first
+        paying client is <em>knowing how to use the tools.</em>
+        <span class="pause">PAUSE</span> And that? Is exactly what I'm teaching.
+      </div>
+    </div>
+  </div>
+
+  <!-- SEGMENT 6: GITHUB TEASER -->
+  <div class="segment">
+    <div class="segment-header">
+      <div class="segment-title">🖥️ GitHub Teaser — Plant the Seed</div>
+      <div class="segment-time">7:15 – 8:00</div>
+    </div>
+    <div class="segment-body">
+      <div class="director-note">📍 Keep this SHORT — just enough to make them want more.</div>
+      <div class="script-line">
+        Real quick — let me show you <strong>GitHub Pages.</strong>
+        This is a free tool from GitHub that lets you host a website —
+        for zero dollars — with your own link.
+      </div>
+      <div class="script-line">
+        My 12-week execution portal? <em>Hosted on GitHub. Free. Live right now.</em>
+        Anyone in the world can visit it. That's it. That simple.
+      </div>
+      <div class="script-line">
+        Next Tech Tuesday, I'm going to walk you through
+        <strong>step by step how to set yours up</strong> — even if you've
+        never touched code in your life.
+      </div>
+      <div class="show-note">
+        <span class="show-note-icon">📱</span>
+        <span><strong>Show on screen:</strong> Briefly flash the GitHub URL of your 12-week portal in the browser bar.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEGMENT 7: CLOSE & CTA -->
+  <div class="segment">
+    <div class="segment-header">
+      <div class="segment-title">🔥 Close — Send Them to Substack</div>
+      <div class="segment-time">8:00 – 9:00</div>
+    </div>
+    <div class="segment-body">
+      <div class="director-note">📍 High energy. Smile. Look directly into camera. This is your moment.</div>
+      <div class="cta-block">
+        <p>
+          <strong>If you want to see exactly how I built this —</strong>
+          the full breakdown, the tools, the templates, the step-by-step —
+          it's all going up on my <em>Substack.</em>
+        </p>
+        <br>
+        <p>
+          <strong>The link is in the comments. Go subscribe. It's free to start.</strong>
+        </p>
+        <br>
+        <p>
+          And if you're watching the replay — drop a 👑 in the comments
+          so I know you were here. Because WomanKings recognize each other.
+        </p>
+        <br>
+        <p>
+          I'm Casandra — <em>GlamAI WomanKing™</em> —
+          and this has been <strong>Tech Tuesday.</strong>
+          I'll see you next week. Go build something. 👑
+        </p>
+      </div>
+      <div class="show-note">
+        <span class="show-note-icon">📱</span>
+        <span><strong>Pin your Substack link in the comments immediately after going live.</strong></span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end page-script -->
+
+<!-- ══════════════════════════════════════
+     PAGE 2: LINKEDIN ARTICLE
+══════════════════════════════════════ -->
+<div class="page" id="page-linkedin">
+
+  <div class="li-banner">
+    <span class="li-banner-icon">💼</span>
+    <div>
+      <div class="li-banner-title">LinkedIn Teaser Article</div>
+      <div class="li-banner-meta">Goal: Intrigue → Click → Substack | Tone: Professional but Personal | Read time: 90 seconds</div>
+    </div>
+  </div>
+
+  <!-- PHOTO PROMPT -->
+  <div class="photo-prompt">
+    <div class="photo-prompt-label">📸 Suggested Photo / Image Prompt</div>
+    <div class="photo-prompt-text">
+      <strong>Option A — AI Image Prompt (Midjourney / DALL·E / Ideogram):</strong><br>
+      "A confident Black woman entrepreneur sitting at a sleek dark desk with a glowing dual-monitor setup,
+      dashboard on screen showing colorful project tracking cards in navy blue and gold.
+      Soft studio lighting, professional but warm, cinematic realism, 4K quality.
+      She is composed, powerful, in control. No text overlays."
+      <br><br>
+      <strong>Option B — Photo of YOU:</strong><br>
+      A clean, well-lit photo of you at your desk or laptop — looking AT the camera,
+      not at the screen. Serious but warm. Navy or gold outfit preferred.
+      Caption will do the storytelling — the photo just needs to stop the scroll.
+      <br><br>
+      <strong>Option C — Screenshot of your portal</strong> with a subtle frame or
+      graphic overlay that says: <em>"I built this with AI in one afternoon."</em>
+    </div>
+  </div>
+
+  <!-- ARTICLE -->
+  <div class="article-box">
+    <div class="article-eyebrow">💡 GlamAI WomanKing™ · AI Strategy · Entrepreneurship</div>
+    <div class="article-title">
+      I Needed $10K in 12 Weeks.<br>So I Built an AI-Powered Command Center to Make It Happen.
+    </div>
+
+    <div class="article-body">
+      <p>
+        Six weeks ago, I sat down with a very specific problem:<br>
+        I had <strong>too many ideas, not enough execution,</strong> and a deadline that wasn't moving.
+      </p>
+      <p>
+        So I did what any modern entrepreneur should do — I went to AI.
+        Not to ask it generic questions. Not to write a bland email.
+        I asked it to <em>help me build a system.</em>
+      </p>
+      <p>
+        What came out of that conversation was a <strong>12-week AI-powered execution portal</strong> —
+        a live, interactive dashboard that hosts my entire business roadmap,
+        tracks what my AI agents are doing versus what needs my personal decision,
+        and captures every idea before my ADHD brain loses it forever.
+      </p>
+      <p>
+        I built it using <strong>Claude, ChatGPT, and GitHub Pages</strong>
+        (yes — the free developer platform most non-developers don't know they can use).
+        Total cost: <em>my time and my intention.</em>
+      </p>
+      <p>
+        Here's what surprised me: <strong>this isn't just a tool for me.</strong>
+        The moment I showed it to one person, they wanted one.
+        Then another. And another.
+      </p>
+      <p>
+        Entrepreneurs, coaches, and content creators with big visions and
+        overwhelmed brains are <em>starving</em> for this kind of system.
+        And the skills to build it? They're learnable — even without a tech background.
+      </p>
+      <p>
+        <strong>This week on my Substack,</strong> I'm breaking down:
+      </p>
+      <p>
+        → The exact AI workflow I used to build my 12-week plan in one sitting<br>
+        → How GitHub Pages lets you host a professional web portal for free<br>
+        → Why this model is a legitimate income stream for service providers<br>
+        → The mindset shift that makes AI work FOR you, not around you
+      </p>
+      <p>
+        If you've been meaning to "figure out AI" but haven't known where to start —
+        <em>this is your sign.</em>
+      </p>
+      <p style="color:#dec171; font-weight:700;">
+        The link to my full Tech Tuesday breakdown is below. 👑<br>
+        See you on Substack.
+      </p>
+    </div>
+
+    <div class="article-hashtags">
+      <span class="hashtag">#AIStrategy</span>
+      <span class="hashtag">#WomanKing</span>
+      <span class="hashtag">#GlamAI</span>
+      <span class="hashtag">#TechTuesday</span>
+      <span class="hashtag">#AITools</span>
+      <span class="hashtag">#Entrepreneurship</span>
+      <span class="hashtag">#BlackWomenInTech</span>
+      <span class="hashtag">#ADHDEntrepreneur</span>
+      <span class="hashtag">#GitHub</span>
+      <span class="hashtag">#WorkSmarter</span>
+      <span class="hashtag">#ContentCreator</span>
+      <span class="hashtag">#AIEmpire</span>
+    </div>
+  </div>
+
+  <!-- SUBSTACK CTA BOX -->
+  <div class="substack-cta">
+    <div class="substack-cta-text">
+      <strong>📌 LinkedIn Post CTA — Copy & Paste at the Bottom of Your Article</strong>
+      "Full Tech Tuesday breakdown + video is live on my Substack.
+      Free to read. Link in comments. Drop a 👑 if you're already building with AI."
+    </div>
+    <button class="substack-btn">Copy CTA</button>
+  </div>
+
+</div><!-- end page-linkedin -->
+</div><!-- end content -->
+
+<!-- TELEPROMPTER TOGGLE -->
+<button class="tp-toggle" onclick="toggleTeleprompter()" id="tp-btn">🎙️ Teleprompter Mode</button>
+
+<script>
+// ── TABS ────────────────────────────────
+function switchTab(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── TELEPROMPTER ─────────────────────────
+let tp = false;
+function toggleTeleprompter() {
+  tp = !tp;
+  document.body.classList.toggle('teleprompter', tp);
+  document.getElementById('tp-btn').textContent = tp ? '❌ Exit Teleprompter' : '🎙️ Teleprompter Mode';
+}
+
+// ── COPY CTA ─────────────────────────────
+document.querySelector('.substack-btn').addEventListener('click', function() {
+  const text = 'Full Tech Tuesday breakdown + video is live on my Substack. Free to read. Link in comments. Drop a 👑 if you\'re already building with AI.';
+  navigator.clipboard.writeText(text).then(() => {
+    this.textContent = '✅ Copied!';
+    setTimeout(() => this.textContent = 'Copy CTA', 2000);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ad Production Bible | Digital Twin</title>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --navy:#1D3557; --navy-dark:#0f1f33; --navy-mid:#162840;
+  --gold:#dec171; --pink:#f06292; --pink-soft:#f8a5c2;
+  --white:#fff; --muted:#6b8da8; --card:#1a3050; --border:#243d57;
+  --green:#4caf50; --teal:#4dd0e1;
+}
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--navy-dark); color:var(--white); min-height:100vh; }
+::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-thumb{background:var(--navy);border-radius:3px;}
+
+/* HEADER */
+.header{background:var(--navy);border-bottom:3px solid var(--gold);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.header h1{font-size:1.05rem;font-weight:900;color:var(--gold);letter-spacing:2px;}
+.header p{font-size:0.68rem;color:var(--muted);margin-top:2px;letter-spacing:1px;}
+.back-btn{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:8px;font-size:0.75rem;cursor:pointer;text-decoration:none;transition:all 0.15s;}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* PROGRESS */
+.prog-bar{background:var(--navy-mid);padding:12px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;}
+.prog-track{flex:1;background:var(--border);border-radius:6px;height:8px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:6px;background:linear-gradient(to right,var(--gold),var(--pink));transition:width 0.4s ease;width:0%;}
+.prog-text{font-size:0.7rem;color:var(--muted);white-space:nowrap;}
+.prog-count{font-size:0.88rem;font-weight:800;color:var(--gold);white-space:nowrap;}
+
+/* AD SELECTOR */
+.ad-bar{background:var(--navy-mid);padding:10px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.ad-bar-label{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.ad-pill{padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:transparent;transition:all 0.15s;}
+.ad-pill.active{background:var(--gold);color:var(--navy);border-color:var(--gold);}
+.ad-pill:hover:not(.active){border-color:var(--gold);color:var(--gold);}
+
+/* REFERENCE BAR */
+.ref-bar{background:linear-gradient(135deg,#1a2a3a,#162030);border-bottom:1px solid var(--border);padding:12px 28px;display:flex;align-items:center;gap:16px;}
+.ref-photo{width:48px;height:48px;border-radius:10px;object-fit:cover;border:2px solid var(--gold);}
+.ref-label{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+.ref-desc{font-size:0.75rem;color:#8baabf;line-height:1.5;}
+
+/* MAIN */
+.main{max-width:980px;margin:0 auto;padding:24px 20px 60px;}
+
+/* AD TITLE */
+.ad-title-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.atc-left .name{font-size:1.05rem;font-weight:800;color:var(--white);}
+.atc-left .meta{font-size:0.72rem;color:var(--muted);margin-top:4px;}
+.atc-stats{display:flex;gap:14px;}
+.atc-stat{text-align:center;}
+.atc-stat .n{font-size:1.15rem;font-weight:900;color:var(--gold);}
+.atc-stat .l{font-size:0.6rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+
+/* SCENE CARD */
+.scene{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;transition:border-color 0.2s;}
+.scene.done{border-color:rgba(76,175,80,0.35);opacity:0.72;}
+
+.scene-hdr{padding:13px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;border-bottom:1px solid transparent;}
+.scene-hdr:hover{background:rgba(255,255,255,0.02);}
+.scene.done .scene-hdr{background:rgba(76,175,80,0.05);}
+
+.chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all 0.2s;font-size:0.78rem;}
+.chk.on{background:var(--green);border-color:var(--green);}
+
+.scene-num{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);flex-shrink:0;width:54px;}
+.scene-name{font-size:0.9rem;font-weight:700;color:var(--white);flex:1;}
+.scene-dur{font-size:0.65rem;color:var(--muted);background:var(--navy-dark);padding:2px 9px;border-radius:8px;flex-shrink:0;}
+.scene-badge{font-size:0.62rem;font-weight:700;padding:3px 10px;border-radius:10px;flex-shrink:0;}
+.badge-todo{background:rgba(107,141,168,0.12);color:var(--muted);}
+.badge-broll{background:rgba(77,208,225,0.12);color:var(--teal);}
+.badge-done{background:rgba(76,175,80,0.12);color:#81c784;}
+.scene-arr{color:var(--muted);font-size:0.85rem;transition:transform 0.2s;flex-shrink:0;}
+.scene-arr.open{transform:rotate(180deg);}
+
+/* SCENE BODY */
+.scene-body{display:none;padding:20px 22px;}
+.scene-body.open{display:block;}
+
+/* PRODUCTION SECTIONS */
+.prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.prod-block{background:var(--navy-mid);border-radius:10px;padding:14px 16px;border:1px solid var(--border);}
+.prod-block.full{grid-column:1/-1;}
+.prod-label{font-size:0.58rem;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.prod-text{font-size:0.84rem;color:var(--white);line-height:1.7;}
+.prod-text em{color:var(--pink);font-style:normal;font-weight:600;}
+.prod-text.muted{color:#8baabf;font-style:italic;}
+.prod-text.action{color:var(--pink-soft);}
+.word-count{display:inline-block;background:rgba(222,193,113,0.12);color:var(--gold);font-size:0.62rem;padding:2px 8px;border-radius:6px;margin-left:8px;font-weight:700;}
+
+/* WHISK BOX */
+.whisk-wrap{background:linear-gradient(135deg,#16243a,#1a3050);border:1.5px solid var(--gold);border-radius:12px;padding:16px;margin-bottom:12px;}
+.whisk-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.whisk-lbl{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);}
+.copy-btn{background:var(--gold);color:var(--navy);border:none;padding:6px 16px;border-radius:7px;font-size:0.7rem;font-weight:800;cursor:pointer;transition:all 0.15s;}
+.copy-btn:hover{opacity:0.85;}
+.copy-btn.ok{background:var(--green);color:#fff;}
+.whisk-text{font-size:0.82rem;color:#c8dde8;line-height:1.75;}
+
+/* FLOW BOX */
+.flow-wrap{background:rgba(240,98,146,0.06);border:1px solid rgba(240,98,146,0.2);border-radius:12px;padding:14px 16px;margin-bottom:12px;}
+.flow-lbl{font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--pink);margin-bottom:8px;}
+.flow-text{font-size:0.82rem;color:#c8dde8;line-height:1.65;}
+
+/* BROLL BOX */
+.broll-wrap{background:rgba(77,208,225,0.05);border:1px solid rgba(77,208,225,0.2);border-radius:12px;padding:16px;margin-bottom:12px;}
+.broll-lbl{font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;}
+.broll-text{font-size:0.84rem;color:#c8dde8;line-height:1.7;}
+
+/* ACTION ROW */
+.action-row{display:flex;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);flex-wrap:wrap;}
+.abtn{padding:8px 16px;border-radius:8px;font-size:0.73rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;text-decoration:none;border:none;transition:all 0.15s;}
+.abtn:hover{transform:translateY(-1px);opacity:0.85;}
+.abtn-whisk{background:rgba(222,193,113,0.1);color:var(--gold);border:1.5px solid rgba(222,193,113,0.25);}
+.abtn-flow{background:rgba(240,98,146,0.1);color:var(--pink);border:1.5px solid rgba(240,98,146,0.25);}
+.abtn-cap{background:rgba(77,208,225,0.08);color:var(--teal);border:1.5px solid rgba(77,208,225,0.18);}
+.abtn-done{background:rgba(76,175,80,0.1);color:#81c784;border:1.5px solid rgba(76,175,80,0.2);margin-left:auto;}
+
+/* SPOKEN ONLY BANNER */
+.spoken-rule{background:rgba(240,98,146,0.07);border:1.5px solid rgba(240,98,146,0.3);border-radius:12px;padding:12px 18px;margin-bottom:18px;display:flex;align-items:flex-start;gap:12px;}
+.spoken-rule .icon{font-size:1.2rem;flex-shrink:0;margin-top:1px;}
+.spoken-rule .sr-title{font-size:0.72rem;font-weight:800;color:var(--pink);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+.spoken-rule .sr-body{font-size:0.77rem;color:#b0c8db;line-height:1.55;}
+.spoken-rule strong{color:var(--white);}
+
+/* TONE BADGE */
+.tone-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(222,193,113,0.1);border:1px solid rgba(222,193,113,0.25);border-radius:20px;padding:4px 14px;font-size:0.68rem;font-weight:700;color:var(--gold);letter-spacing:0.5px;}
+.style-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(240,98,146,0.08);border:1px solid rgba(240,98,146,0.22);border-radius:20px;padding:4px 14px;font-size:0.68rem;font-weight:700;color:var(--pink-soft);letter-spacing:0.5px;}
+.badge-section-lbl{font-size:0.55rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:8px;margin-bottom:3px;display:block;}
+
+/* COMPLETE BANNER */
+.done-banner{display:none;background:linear-gradient(135deg,var(--navy),#16304f);border:2px solid var(--gold);border-radius:16px;padding:28px;text-align:center;margin-bottom:22px;}
+.done-banner.show{display:block;}
+.done-banner h2{font-size:1.3rem;color:var(--gold);margin-bottom:6px;}
+.done-banner p{color:var(--muted);font-size:0.85rem;}
+
+.footer{text-align:center;padding:40px 0 24px;font-size:0.68rem;color:var(--border);}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div>
+    <h1>🎬 Ad Production Bible</h1>
+    <p>Digital Twin Training · Pinky Floyd + Client · AI GlamTech Empire™</p>
+  </div>
+  <a href="CasandraAIPortal.html" class="back-btn">← Back to CAIP</a>
+</header>
+
+<!-- PROGRESS -->
+<div class="prog-bar">
+  <span class="prog-text">Progress:</span>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  <span class="prog-count"><span id="done-n">0</span> / <span id="tot-n">6</span> scenes done</span>
+</div>
+
+<!-- AD SELECTOR -->
+<div class="ad-bar">
+  <span class="ad-bar-label">Campaign:</span>
+  <button class="ad-pill active">Ad 1 — Digital Twin (Pinky + Client)</button>
+  <button class="ad-pill">Ad 2</button>
+  <button class="ad-pill">Ad 3</button>
+  <button class="ad-pill">Ad 4</button>
+  <button class="ad-pill">Ad 5</button>
+  <button class="ad-pill">Ad 6</button>
+  <button class="ad-pill">Ad 7</button>
+  <button class="ad-pill">Ad 8</button>
+</div>
+
+<!-- VISUAL REFERENCE BAR -->
+<div class="ref-bar">
+  <div>
+    <div class="ref-label">📸 Visual Reference — Pinky Floyd / GlamAI Architect™</div>
+    <div class="ref-desc">Hot pink sequin blazer · Crystal crown · Holographic glass table · Pink neon command center · Multiple data screens · Teal + pink neon lighting</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="done-banner" id="done-banner">
+    <h2>👑 Ad Complete!</h2>
+    <p>All 6 scenes done · 48 seconds total · Ready for CapCut assembly. WomanKing energy. 🔥</p>
+  </div>
+
+  <!-- SPOKEN WORD ONLY RULE -->
+  <div class="spoken-rule">
+    <div class="icon">🎙️</div>
+    <div>
+      <div class="sr-title">⚠️ Spoken Word Only — No On-Screen Text in Flow</div>
+      <div class="sr-body">Every word in the <strong>Spoken Line</strong> sections below is <strong>voice audio only</strong>. Google Flow distorts or skips text overlays. Do NOT add captions or words on screen inside Flow. If you want text overlays (like your CTA), add them in <strong>CapCut after</strong> Flow renders the clip.</div>
+    </div>
+  </div>
+
+  <!-- AD INFO -->
+  <div class="ad-title-card">
+    <div class="atc-left">
+      <div class="name">🎬 Ad 1 — Digital Twin Training</div>
+      <div class="meta">2-Person Dialogue · Pinky Floyd + Client Avatar · Cookie Lyon x Bushra Persuasion · Hook → Pain → Value</div>
+      <span class="badge-section-lbl">🎭 Voice Tone</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="tone-badge">🔥 Funny &amp; Sassy</span>
+        <span class="tone-badge">👑 Cookie Lyon Energy</span>
+        <span class="tone-badge">📘 Platform: Facebook</span>
+      </div>
+      <span class="badge-section-lbl">👗 Visual Style</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="style-badge">💎 Designer Suit</span>
+        <span class="style-badge">✨ Beyoncé Glam</span>
+      </div>
+    </div>
+    <div class="atc-stats">
+      <div class="atc-stat"><div class="n">6</div><div class="l">Scenes</div></div>
+      <div class="atc-stat"><div class="n">48s</div><div class="l">Total</div></div>
+      <div class="atc-stat"><div class="n" id="pct-n">0%</div><div class="l">Done</div></div>
+    </div>
+  </div>
+
+  <!-- SCENES -->
+  <div id="scenes"></div>
+
+</div>
+<div class="footer">Ad Production Bible · AI GlamTech Empire™ · Casandra 👑</div>
+
+<script>
+const scenes = [
+  {
+    num:"Scene 01", name:"Hook — Client's Pain", dur:"8 sec", type:"dialogue",
+    spoken:`CLIENT: "I know I need video. I just hate the camera."`,
+    words:12,
+    camera:`Medium Shot (MS) · Client centered · Eye level · Slightly handheld for relatable feel`,
+    action:`CLIENT looks down at phone, scrolling, sighs, then looks up frustrated. Natural, relatable energy. NOT over-acted.`,
+    visual:`Futuristic setting — CLIENT appears slightly out of place, like she just walked into Pinky's world. Soft pink neon glow in background. Client dressed professional but not as glam as Pinky — so the contrast POPS when Pinky enters.`,
+    whisk:`Professional Black woman standing in a futuristic pink neon studio, looking down at her phone with a frustrated expression, soft holographic screens visible in background, pink and teal ambient lighting, cinematic medium shot, photorealistic, relatable everyday energy — [UPLOAD CLIENT PHOTO]`,
+    flow:`Handheld slight wobble for authenticity. Warm frustrated sigh. Soft pink neon glow visible. 8 seconds. No music swell yet — keep it grounded.`
+  },
+  {
+    num:"Scene 02", name:"Pinky Claps Back — Hook Payoff", dur:"8 sec", type:"dialogue",
+    spoken:`PINKY: "Honey. Your 47 deleted drafts hate you too."`,
+    words:9,
+    camera:`Medium Shot (MS) · Pinky at holographic table · Slight low angle (power shot) · She turns toward CLIENT`,
+    action:`PINKY is at her holographic glass table, turns slowly toward CLIENT. Raises ONE eyebrow. Slight smirk. One hand rests on the glowing table. Adjusts crown with other hand. Pure Cookie Lyon energy — unbothered, confident, slightly amused.`,
+    visual:`FULL Pinky world visible — hot pink sequin blazer, crystal crown, holographic glass table glowing with data, multiple screens behind her showing analytics. Pink + teal neon lighting. This is HER kingdom and she knows it.`,
+    whisk:`Glamorous confident Black woman wearing hot pink sequin blazer with crystal shoulder details, diamond tiara crown, GlamAI Architect shirt, standing at a glowing holographic glass table, one eyebrow raised, slight smirk, hand resting on table, futuristic pink neon command center, multiple data screens behind her, teal and pink neon lighting, cinematic low-angle medium shot, photorealistic, Cookie Lyon energy — [UPLOAD YOUR PHOTO]`,
+    flow:`Dramatic slow turn. Slight cinematic push-in as she raises eyebrow. Golden shimmer on crown. Data pulses on holographic table. 8 seconds. Music begins — low, building.`
+  },
+  {
+    num:"Scene 03", name:"B-Roll — The Pain Visualized", dur:"8 sec", type:"broll",
+    spoken:`NO DIALOGUE — Pure visual. Music only.`,
+    words:0,
+    camera:`Tight shots on screens behind Pinky · Quick cuts · Dynamic angles`,
+    action:`NO people in frame. Focus 100% on the SCREENS. Show competitor content flooding in — videos, likes, comments, views ticking up fast. Make the audience FEEL the urgency.`,
+    visual:`Close-up of glowing holographic screens showing fast-scrolling social media feeds. Competitor videos stacking up. Like counts exploding. Comment notifications flying. Pink and teal neon reflections. Data streams. This is what the client is MISSING while she sits on 47 drafts.`,
+    whisk:`N/A — This is a pure video/animation scene. No photo needed. Use Flow to create screen animations only.`,
+    flow:`Fast cut sequence — 3-4 quick cuts of different screens. Competitor video thumbnails animate in. Like counters spin up rapidly. Comment bubbles pop. Urgency music swell. No faces — just data and feeds. Ends on a beat drop. 8 seconds.`
+  },
+  {
+    num:"Scene 04", name:"Solution — The Digital Twin Reveal", dur:"8 sec", type:"dialogue",
+    spoken:`PINKY: "Your Digital Twin. Your face. Your brand. 24/7."`,
+    words:9,
+    camera:`Wide Shot (WS) · Full Pinky visible · Holographic table in foreground · Screens visible behind · Epic framing`,
+    action:`PINKY spreads both hands wide across the holographic table. Data and visuals animate as she touches it. She looks directly into camera — this line is for the AUDIENCE, not the client. Commanding. Generous. This is the gift she's offering.`,
+    visual:`Full wide shot of the entire command center. Holographic table glowing bright as she touches it. All screens illuminate behind her. Pink sequin outfit catches the neon light. Crown sparkles. This is the most visually stunning shot of the ad.`,
+    whisk:`Full wide shot of glamorous Black woman in hot pink sequin blazer and crystal crown, both hands spread across a large glowing holographic glass table covered in data visualizations and maps, multiple illuminated screens behind her showing dashboards, futuristic pink neon command center, cinematic wide shot, photorealistic, powerful empire energy, teal and gold data glow — [UPLOAD YOUR PHOTO]`,
+    flow:`Holographic data animates spreading from her hands across the table. Screens behind her all illuminate simultaneously. Slow cinematic camera pull-back to reveal full room. Epic music swell. 8 seconds.`
+  },
+  {
+    num:"Scene 05", name:"Reaction + Payoff", dur:"8 sec", type:"dialogue",
+    spoken:`CLIENT: "Wait — it's actually ME? Without filming?"\nPINKY smiles, touches crown: "Welcome to the future, darling."`,
+    words:14,
+    camera:`Two-Shot · Both women in frame · CLIENT left, PINKY right · Eye level · Warm framing`,
+    action:`CLIENT turns to Pinky with wide eyes, genuinely shocked. PINKY turns to face CLIENT, warm smile (not smug — generous). She lightly touches her crown. The energy shifts from "pitch" to "welcome." This is the emotional payoff of the whole ad.`,
+    visual:`Both women in the futuristic command center. CLIENT now looks like she BELONGS there — the pink neon glow flatters her too. Pinky's world is becoming hers. Warm golden light begins to mix with the pink neon — signals transformation and hope.`,
+    whisk:`Two glamorous Black women standing together in a futuristic pink neon command center, left woman in professional attire looking amazed, right woman in hot pink sequin blazer with diamond crown smiling warmly and touching her crown, holographic screens glowing behind them, warm golden and pink lighting, cinematic two-shot, photorealistic, emotional transformation moment — [UPLOAD BOTH PHOTOS]`,
+    flow:`Warm music tone. Soft golden light wash over both women. Pinky's smile is slow, genuine. CLIENT's shocked expression holds then softens into possibility. Crown sparkle effect on "darling." 8 seconds.`
+  },
+  {
+    num:"Scene 06", name:"CTA — Direct to Camera", dur:"8 sec", type:"dialogue",
+    spoken:`PINKY: "Book your call. Link below. Don't wait."`,
+    words:8,
+    camera:`Medium Close-Up (MCU) · PINKY only · Direct to camera · 4th wall break · Slight low angle`,
+    action:`PINKY turns directly to camera — breaks the 4th wall. Points one finger toward lens. Confident warm smile. This is personal. She's talking directly to the person watching. Not performing — connecting. Animated CTA button appears in lower third.`,
+    visual:`Pinky close-up — crown, sequin blazer, brilliant smile. Screens still glowing behind her. A glowing button animates in foreground: "Book Your Discovery Call →" in gold. Keep it clean — don't clutter the frame.`,
+    whisk:`Close-up of glamorous Black woman in hot pink sequin blazer and diamond crown, pointing directly at camera with a warm confident smile, futuristic pink neon screens visible behind her, photorealistic, direct eye contact, cinematic medium close-up, bold and inviting — [UPLOAD YOUR PHOTO]`,
+    flow:`Direct cut from Scene 5. She turns to camera — feel the shift in energy. Finger point on "Book." Animated gold button fades in lower third: "Book Your Discovery Call →" with gentle pulse. Hold on her smile. Freeze frame last 2 seconds. 8 seconds total.`
+  }
+];
+
+let checked = JSON.parse(localStorage.getItem('dt-ad1') || '[]');
+
+function render() {
+  const c = document.getElementById('scenes');
+  c.innerHTML = scenes.map((s,i) => {
+    const isDone = checked.includes(i);
+    const isBroll = s.type === 'broll';
+    return `
+    <div class="scene ${isDone?'done':''}" id="sc-${i}">
+      <div class="scene-hdr" onclick="toggle(${i})">
+        <div class="chk ${isDone?'on':''}" onclick="check(event,${i})">${isDone?'✓':''}</div>
+        <div class="scene-num">${s.num}</div>
+        <div class="scene-name">${s.name}</div>
+        <div class="scene-dur">⏱ ${s.dur}</div>
+        <span class="scene-badge ${isDone?'badge-done':isBroll?'badge-broll':'badge-todo'}">
+          ${isDone?'✅ Done':isBroll?'🎥 B-Roll':'⬜ To Do'}
+        </span>
+        <span class="scene-arr" id="arr-${i}">▼</span>
+      </div>
+      <div class="scene-body" id="bd-${i}">
+
+        ${isBroll ? `
+        <div class="broll-wrap">
+          <div class="broll-lbl">🎥 B-Roll — No Dialogue</div>
+          <div class="broll-text">${s.spoken}</div>
+        </div>` : `
+        <div class="prod-block" style="margin-bottom:14px;">
+          <div class="prod-label" style="color:var(--gold);">🎙️ Spoken Line <span class="word-count">${s.words} words · fits 8 sec</span></div>
+          <div class="prod-text" style="font-size:0.92rem;font-weight:600;">${s.spoken.replace(/\n/g,'<br>')}</div>
+        </div>`}
+
+        <div class="prod-grid">
+          <div class="prod-block">
+            <div class="prod-label" style="color:#7dd8e3;">📸 Camera Angle</div>
+            <div class="prod-text muted">${s.camera}</div>
+          </div>
+          <div class="prod-block">
+            <div class="prod-label" style="color:var(--pink-soft);">🎭 Action Direction</div>
+            <div class="prod-text action">${s.action}</div>
+          </div>
+          <div class="prod-block full">
+            <div class="prod-label" style="color:var(--gold);">🎨 Set & Visual Direction</div>
+            <div class="prod-text muted">${s.visual}</div>
+          </div>
+        </div>
+
+        <div class="whisk-wrap">
+          <div class="whisk-top">
+            <div class="whisk-lbl">🖼️ Whisk Image Prompt — Upload Your Photo + Paste This</div>
+            <button class="copy-btn" onclick="cp(event,${i},'whisk')">Copy Prompt</button>
+          </div>
+          <div class="whisk-text" id="wt-${i}">${s.whisk}</div>
+        </div>
+
+        <div class="flow-wrap">
+          <div class="flow-lbl">▶️ Flow Video Direction &nbsp;<span style="background:rgba(240,98,146,0.15);color:var(--pink);font-size:0.58rem;padding:2px 8px;border-radius:6px;font-weight:700;letter-spacing:1px;">🎙️ SPOKEN ONLY · NO TEXT OVERLAYS IN FLOW</span></div>
+          <div class="flow-text" id="ft-${i}">${s.flow}</div>
+          <div style="margin-top:8px;font-size:0.68rem;color:var(--muted);font-style:italic;">💡 Need on-screen text? Add it in CapCut after Flow renders.</div>
+        </div>
+
+        <div class="action-row">
+          ${!isBroll?`<a href="https://labs.google/fx/tools/whisk" target="_blank" class="abtn abtn-whisk">🖼️ Open Whisk</a>`:''}
+          <a href="https://app.genmo.ai" target="_blank" class="abtn abtn-flow">▶️ Open Flow</a>
+          <a href="https://www.capcut.com" target="_blank" class="abtn abtn-cap">✂️ Open CapCut</a>
+          <button class="abtn abtn-done" onclick="check(event,${i})">
+            ${isDone?'↩ Undo':'✅ Mark Scene Done'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  updProg();
+}
+
+function toggle(i){
+  const bd=document.getElementById('bd-'+i);
+  const ar=document.getElementById('arr-'+i);
+  bd.classList.toggle('open');
+  ar.classList.toggle('open');
+}
+function check(e,i){
+  e.stopPropagation();
+  checked=checked.includes(i)?checked.filter(x=>x!==i):[...checked,i];
+  localStorage.setItem('dt-ad1',JSON.stringify(checked));
+  render();
+  if(checked.includes(i)&&i<scenes.length-1){
+    setTimeout(()=>{
+      const nb=document.getElementById('bd-'+(i+1));
+      const na=document.getElementById('arr-'+(i+1));
+      if(nb&&!nb.classList.contains('open')){nb.classList.add('open');na.classList.add('open');}
+      document.getElementById('sc-'+(i+1)).scrollIntoView({behavior:'smooth',block:'start'});
+    },300);
+  }
+}
+function cp(e,i,type){
+  e.stopPropagation();
+  const text=type==='whisk'?scenes[i].whisk:scenes[i].flow;
+  navigator.clipboard.writeText(text).then(()=>{
+    const b=e.target;b.textContent='✅ Copied!';b.classList.add('ok');
+    setTimeout(()=>{b.textContent='Copy Prompt';b.classList.remove('ok');},2000);
+  });
+}
+function updProg(){
+  const d=checked.length,t=scenes.length,p=Math.round(d/t*100);
+  document.getElementById('prog-fill').style.width=p+'%';
+  document.getElementById('done-n').textContent=d;
+  document.getElementById('tot-n').textContent=t;
+  document.getElementById('pct-n').textContent=p+'%';
+  document.getElementById('done-banner').classList.toggle('show',d===t);
+}
+
+render();
+// Auto-open first unchecked
+const first=scenes.findIndex((_,i)=>!checked.includes(i));
+if(first>=0){
+  document.getElementById('bd-'+first).classList.add('open');
+  document.getElementById('arr-'+first).classList.add('open');
+}
+</script>
+</body>
+</html>
