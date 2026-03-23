@@ -1,6 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+(function(){
+  var PW = 'Candi-Kane50!';
+  if(sessionStorage.getItem('caip_auth') === '1') return;
+  document.documentElement.style.visibility = 'hidden';
+  var overlay = document.createElement('div');
+  overlay.id = 'pw-gate';
+  overlay.style.cssText = 'position:fixed;inset:0;background:#0f1f33;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;font-family:-apple-system,BlinkMacSystemFont,sans-serif;';
+  overlay.innerHTML = '<div style="text-align:center;padding:40px;">' +
+    '<div style="font-size:2rem;margin-bottom:8px;">👑</div>' +
+    '<div style="color:#dec171;font-size:1.1rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">AI GlamTech Empire™</div>' +
+    '<div style="color:#6b8da8;font-size:0.75rem;letter-spacing:1px;margin-bottom:32px;">Private Portal — Authorized Access Only</div>' +
+    '<input id="pw-input" type="password" placeholder="Enter password" style="background:#1a3050;border:1.5px solid #243d57;color:#fff;padding:12px 20px;border-radius:8px;font-size:1rem;width:260px;outline:none;text-align:center;margin-bottom:12px;" />' +
+    '<br><button id="pw-btn" style="background:#dec171;color:#0f1f33;border:none;padding:12px 40px;border-radius:8px;font-size:0.9rem;font-weight:800;cursor:pointer;letter-spacing:1px;margin-top:4px;">ENTER</button>' +
+    '<div id="pw-err" style="color:#f06292;font-size:0.8rem;margin-top:12px;min-height:18px;"></div>' +
+    '</div>';
+  document.body ? document.body.appendChild(overlay) : document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(overlay); });
+  function check(){
+    if(document.getElementById('pw-input').value === PW){
+      sessionStorage.setItem('caip_auth','1');
+      document.getElementById('pw-gate').remove();
+      document.documentElement.style.visibility = '';
+    } else {
+      document.getElementById('pw-err').textContent = 'Incorrect password. Try again.';
+      document.getElementById('pw-input').value = '';
+    }
+  }
+  setTimeout(function(){
+    document.getElementById('pw-btn').addEventListener('click', check);
+    document.getElementById('pw-input').addEventListener('keydown', function(e){ if(e.key==='Enter') check(); });
+    document.getElementById('pw-input').focus();
+    document.documentElement.style.visibility = '';
+  }, 100);
+})();
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ad Production Bible | Digital Twin</title>
