@@ -602,6 +602,35 @@
       </div>
     </div>
 
+    <!-- PER-VIDEO ADD-ON -->
+    <div style="background:linear-gradient(135deg,rgba(222,193,113,0.1),rgba(222,193,113,0.04));border:2px solid rgba(222,193,113,0.45);border-radius:12px;padding:24px 28px;margin:16px 0;">
+      <div style="color:#dec171;font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;">⚡ Per-Video Add-Ons</div>
+      <div style="color:#cce0f5;font-size:0.82rem;margin-bottom:20px;">Select which add-ons you want and how many videos to apply them to. Your total updates automatically.</div>
+
+      <!-- PI Add-On -->
+      <div style="background:rgba(222,193,113,0.06);border:1px solid rgba(222,193,113,0.25);border-radius:8px;padding:18px 20px;margin-bottom:14px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;">
+          <input type="checkbox" id="pi-addon-check" name="addon" value="pi-addon" onchange="calcPiTotal()" style="margin-top:4px;accent-color:#dec171;width:18px;height:18px;flex-shrink:0;">
+          <div>
+            <div style="color:#dec171;font-weight:700;font-size:0.92rem;margin-bottom:3px;">🔒 Private / IP Protection Add-On — $250 per video</div>
+            <div style="color:#cce0f5;font-size:0.87rem;line-height:1.6;">Applies full IP protection and private licensing to selected videos. Your content stays off our portfolio — guaranteed. Choose how many videos to apply this to.</div>
+          </div>
+        </div>
+        <div id="pi-qty-block" style="display:none;margin-left:30px;">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <label style="color:#dec171;font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Apply to how many videos?</label>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <button type="button" onclick="adjustPi(-1)" style="width:32px;height:32px;background:rgba(222,193,113,0.15);border:1px solid rgba(222,193,113,0.4);color:#dec171;font-size:1.1rem;font-weight:800;border-radius:6px;cursor:pointer;line-height:1;">−</button>
+              <input type="number" id="pi-qty" value="1" min="1" max="10" oninput="calcPiTotal()" style="width:52px;text-align:center;background:rgba(255,255,255,0.05);border:1px solid rgba(222,193,113,0.4);color:#f0f0f0;font-size:1rem;font-weight:700;border-radius:6px;padding:6px 4px;outline:none;">
+              <button type="button" onclick="adjustPi(1)" style="width:32px;height:32px;background:rgba(222,193,113,0.15);border:1px solid rgba(222,193,113,0.4);color:#dec171;font-size:1.1rem;font-weight:800;border-radius:6px;cursor:pointer;line-height:1;">+</button>
+            </div>
+            <div style="color:#dec171;font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;">= <span id="pi-total">$250</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
     <!-- UPSELL ADD-ONS -->
     <div style="background:linear-gradient(135deg,rgba(77,208,225,0.12),rgba(77,208,225,0.05));border:2px solid rgba(77,208,225,0.5);border-radius:12px;padding:26px 28px;margin:24px 0;">
       <div style="color:#4dd0e1;font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">✨ Upgrade Your Package</div>
@@ -716,6 +745,23 @@
 </div>
 
 <script>
+  // PI Add-On calculator
+  function calcPiTotal() {
+    const checked = document.getElementById('pi-addon-check').checked;
+    const block = document.getElementById('pi-qty-block');
+    block.style.display = checked ? 'block' : 'none';
+    if (checked) {
+      const qty = parseInt(document.getElementById('pi-qty').value) || 1;
+      document.getElementById('pi-total').textContent = '$' + (qty * 250).toLocaleString();
+    }
+  }
+  function adjustPi(delta) {
+    const input = document.getElementById('pi-qty');
+    const newVal = Math.max(1, Math.min(10, (parseInt(input.value) || 1) + delta));
+    input.value = newVal;
+    calcPiTotal();
+  }
+
   // Date
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
