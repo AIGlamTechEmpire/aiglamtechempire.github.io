@@ -402,9 +402,16 @@
     }
 
     /* Calendly inline widget */
+    .calendly-embed-wrap {
+      padding: 20px;
+    }
+
     .calendly-inline-widget {
       min-width: 320px;
       height: 700px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #ffffff;
     }
 
     /* ── Documents Tab ───────────────────────────────────────────── */
@@ -1176,17 +1183,20 @@
       </div>
     </div>
 
-    <!-- ── ElevenLabs AI Concierge ──────────────────────────── -->
-    <div class="video-box" style="margin-bottom:32px;">
-      <div class="video-box-header">
+    <!-- ── ElevenLabs AI Concierge — Live Test ──────────────────────────── -->
+    <div class="video-box" style="margin-bottom:32px; border-color: var(--gold); border-width: 2px;">
+      <div class="video-box-header" style="background: rgba(212,160,23,0.1);">
         <div class="dot"></div>
-        <span>Talk to My AI — Ask Me Anything</span>
+        <span>🎙️ Need Help? Test Your AI Agent — Live Demo</span>
       </div>
-      <div style="padding:28px 24px;display:flex;flex-direction:column;align-items:center;gap:10px;">
-        <p style="font-size:0.84rem;color:var(--muted);text-align:center;margin-bottom:8px;">
-          Have a question before you sign? My AI is here 24/7 — just click and speak.
+      <div style="padding:32px 24px;display:flex;flex-direction:column;align-items:center;gap:16px;">
+        <p style="font-size:0.95rem;color:var(--text);text-align:center;max-width:520px;line-height:1.6;">
+          This is the exact AI receptionist you're considering for your business.
+          <strong style="color:var(--gold-light);">Click below and talk to it right now</strong> — ask it anything a customer would ask.
         </p>
-        <elevenlabs-convai agent-id="agent_0201kw59qa62ed4rb8hbce21pc3q"></elevenlabs-convai>
+        <div style="width:100%;max-width:480px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;display:flex;justify-content:center;">
+          <elevenlabs-convai agent-id="agent_0201kw59qa62ed4rb8hbce21pc3q"></elevenlabs-convai>
+        </div>
       </div>
     </div>
 
@@ -1228,18 +1238,12 @@
         </div>
       </div>
 
-      <!--
-        ═══════════════════════════════════════════════════════════
-        CALENDLY INLINE EMBED
-        Replace YOUR_CALENDLY_LINK below with your scheduling URL.
-        Example: https://calendly.com/casandra/30min
-        ═══════════════════════════════════════════════════════════
-      -->
-      <div class="calendly-inline-widget"
-           data-url="https://calendly.com/YOUR_CALENDLY_LINK?hide_event_type_details=1&hide_gdpr_banner=1&background_color=10101a&text_color=e8e0d0&primary_color=c9a84c"
-           style="min-width:320px;height:700px;">
+      <!-- Calendly inline widget begin -->
+      <div class="calendly-embed-wrap">
+        <div class="calendly-inline-widget" data-url="https://calendly.com/agents-avatars-automations/15min" style="min-width:320px;height:700px;"></div>
       </div>
       <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+      <!-- Calendly inline widget end -->
     </div>
 
   </div>
