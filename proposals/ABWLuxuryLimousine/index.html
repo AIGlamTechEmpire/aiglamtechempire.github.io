@@ -3,33 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI GlamTech Empire — Client Portal</title>
+  <title>AI GlamTech Empire™ — Client Portal</title>
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <style>
     /* ── Reset & Tokens ─────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --gold:       #c9a84c;
-      --gold-light: #e8c96e;
-      --gold-dim:   #7a5f28;
-      --black:      #0a0a0f;
-      --surface:    #10101a;
-      --card:       #161622;
-      --border:     rgba(201,168,76,0.25);
-      --text:       #e8e0d0;
-      --muted:      #8a7f6e;
+      --gold:       #dec171;
+      --gold-light: #dec171;
+      --gold-dim:   #b89a4e;
+      --black:      #0f1f33;
+      --surface:    #1D3557;
+      --card:       #1a3050;
+      --border:     #243d57;
+      --text:       #ffffff;
+      --muted:      #6b8da8;
       --white:      #ffffff;
+      --blush:      #f1b1c1;
+      --blush-light: #ff9db6;
+      --gold-deep:  #c9a830;
       --radius:     14px;
+    }
+
+    /* ── Click glow effect ── */
+    .hero-cta:active, .cta-btn:active, .sign-submit-btn:active,
+    .tab-btn:active, .pay-btn:active {
+      box-shadow: 0 0 0 4px rgba(255,157,182,0.35), 0 0 24px rgba(255,157,182,0.5) !important;
+    }
+
+    /* ── Signature gradient accent stripe — used across all cards ── */
+    .video-box, .proposal-card, .calendar-section, .sig-block, .link-card {
+      position: relative;
+    }
+    .video-box::before, .proposal-card::before, .calendar-section::before,
+    .sig-block::before, .link-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(to right, var(--gold), var(--blush), var(--gold-dim));
+      z-index: 1;
+    }
+    .video-box:hover, .proposal-card:hover, .calendar-section:hover, .link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+    .video-box, .proposal-card, .calendar-section, .link-card {
+      transition: transform 0.15s ease, border-color 0.15s ease;
     }
 
     html, body {
       background: var(--black);
       color: var(--text);
-      font-family: 'Inter', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       font-size: 16px;
       line-height: 1.6;
       min-height: 100vh;
@@ -37,7 +66,7 @@
 
     /* ── Header ─────────────────────────────────────────────────── */
     header {
-      background: linear-gradient(135deg, #0a0a0f 0%, #16101e 100%);
+      background: linear-gradient(135deg, #0d1b2a 0%, #1D3557 100%);
       border-bottom: 1px solid var(--border);
       padding: 18px 32px;
       display: flex;
@@ -73,7 +102,7 @@
     }
 
     .brand-text h1 {
-      font-family: 'Playfair Display', serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
       font-size: 1.2rem;
       color: var(--gold-light);
       letter-spacing: 0.03em;
@@ -116,7 +145,7 @@
       border: none;
       border-bottom: 3px solid transparent;
       color: var(--muted);
-      font-family: 'Inter', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       font-size: 0.82rem;
       font-weight: 500;
       letter-spacing: 0.06em;
@@ -130,12 +159,12 @@
       white-space: nowrap;
     }
 
-    .tab-btn:hover { color: var(--gold-light); background: rgba(201,168,76,0.05); }
+    .tab-btn:hover { color: var(--gold-light); background: rgba(212,160,23,0.05); }
 
     .tab-btn.active {
       color: var(--gold-light);
       border-bottom-color: var(--gold);
-      background: rgba(201,168,76,0.07);
+      background: rgba(212,160,23,0.07);
     }
 
     .tab-btn .tab-icon {
@@ -165,12 +194,14 @@
 
     .welcome-title {
       text-align: center;
-      font-family: 'Playfair Display', serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
       font-size: clamp(1.8rem, 4vw, 2.8rem);
-      color: var(--white);
       margin-bottom: 12px;
       line-height: 1.2;
     }
+
+    .welcome-title .wt-cream { color: #eeebe0; }
+    .welcome-title .wt-pink  { color: var(--blush); }
 
     .welcome-sub {
       text-align: center;
@@ -195,7 +226,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(201,168,76,0.05);
+      background: rgba(212,160,23,0.05);
     }
 
     .video-box-header .dot {
@@ -230,7 +261,7 @@
       position: relative;
       width: 100%;
       padding-bottom: 56.25%; /* 16:9 */
-      background: #050508;
+      background: #0d1b2a;
     }
 
     .video-player-wrap iframe,
@@ -249,7 +280,7 @@
       align-items: center;
       justify-content: center;
       gap: 14px;
-      background: radial-gradient(ellipse at center, #1a1128 0%, #050508 100%);
+      background: radial-gradient(ellipse at center, #16294a 0%, #0d1b2a 100%);
     }
 
     .video-placeholder .play-ring {
@@ -261,7 +292,7 @@
       justify-content: center;
       font-size: 2rem;
       color: var(--gold);
-      box-shadow: 0 0 32px rgba(201,168,76,0.3);
+      box-shadow: 0 0 32px rgba(212,160,23,0.3);
     }
 
     .video-placeholder p {
@@ -311,7 +342,7 @@
       gap: 12px;
       background: linear-gradient(135deg, var(--gold) 0%, #a87c2a 100%);
       color: var(--black);
-      font-family: 'Inter', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       font-size: 1rem;
       font-weight: 700;
       letter-spacing: 0.04em;
@@ -320,14 +351,14 @@
       border-radius: 50px;
       border: none;
       cursor: pointer;
-      box-shadow: 0 6px 32px rgba(201,168,76,0.4), 0 2px 8px rgba(0,0,0,0.4);
+      box-shadow: 0 6px 32px rgba(212,160,23,0.4), 0 2px 8px rgba(0,0,0,0.4);
       transition: all 0.25s ease;
       text-transform: uppercase;
     }
 
     .cta-btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 12px 48px rgba(201,168,76,0.55), 0 4px 12px rgba(0,0,0,0.5);
+      box-shadow: 0 12px 48px rgba(212,160,23,0.55), 0 4px 12px rgba(0,0,0,0.5);
     }
 
     .cta-btn .btn-icon { font-size: 1.2rem; }
@@ -351,7 +382,7 @@
     .calendar-header-icon {
       width: 38px; height: 38px;
       border-radius: 10px;
-      background: rgba(201,168,76,0.12);
+      background: rgba(212,160,23,0.12);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -359,7 +390,7 @@
     }
 
     .calendar-header-text h3 {
-      font-family: 'Playfair Display', serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
       font-size: 1.05rem;
       color: var(--gold-light);
       margin-bottom: 2px;
@@ -389,7 +420,7 @@
     }
 
     .docs-header h2 {
-      font-family: 'Playfair Display', serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
       font-size: clamp(1.5rem, 3.5vw, 2.2rem);
       color: var(--white);
       margin-bottom: 8px;
@@ -422,7 +453,7 @@
     .sign-step:last-child { border-right: none; }
 
     .sign-step.done .step-num { background: var(--gold); color: var(--black); }
-    .sign-step.active .step-num { background: rgba(201,168,76,0.15); color: var(--gold); border-color: var(--gold); }
+    .sign-step.active .step-num { background: rgba(212,160,23,0.15); color: var(--gold); border-color: var(--gold); }
 
     .step-num {
       width: 28px; height: 28px;
@@ -452,7 +483,7 @@
 
     .card-head {
       padding: 18px 24px;
-      background: rgba(201,168,76,0.06);
+      background: rgba(212,160,23,0.06);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -461,7 +492,7 @@
     }
 
     .card-head h3 {
-      font-family: 'Playfair Display', serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
       font-size: 1rem;
       color: var(--gold-light);
     }
@@ -469,7 +500,7 @@
     .card-badge {
       font-size: 0.68rem;
       color: var(--gold);
-      background: rgba(201,168,76,0.12);
+      background: rgba(212,160,23,0.12);
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 3px 12px;
@@ -484,24 +515,41 @@
 
     /* Parties table */
     .info-grid {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 10px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
       margin-bottom: 24px;
     }
 
+    .info-grid > div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-grid > div:last-child {
+      border-bottom: none;
+    }
+
     .info-grid dt {
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding-top: 2px;
+      letter-spacing: 0.08em;
       white-space: nowrap;
+      margin: 0;
     }
 
     .info-grid dd {
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       color: var(--text);
+      font-weight: 600;
+      text-align: right;
+      margin: 0;
     }
 
     /* Service scope list */
@@ -560,7 +608,7 @@
     .pricing-table td {
       padding: 12px 12px;
       font-size: 0.88rem;
-      border-bottom: 1px solid rgba(201,168,76,0.08);
+      border-bottom: 1px solid rgba(212,160,23,0.08);
       color: var(--text);
     }
 
@@ -573,7 +621,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 14px 12px;
-      background: rgba(201,168,76,0.06);
+      background: rgba(212,160,23,0.06);
       border: 1px solid var(--border);
       border-radius: 8px;
       font-size: 0.88rem;
@@ -586,7 +634,7 @@
     /* Contract clauses */
     .clause {
       padding: 16px 0;
-      border-bottom: 1px solid rgba(201,168,76,0.08);
+      border-bottom: 1px solid rgba(212,160,23,0.08);
     }
 
     .clause:last-of-type { border-bottom: none; }
@@ -622,15 +670,17 @@
 
     /* Signature Block */
     .sig-block {
-      background: linear-gradient(135deg, #0e0e1a 0%, #16101e 100%);
+      background: linear-gradient(135deg, #0f1f33 0%, #1D3557 100%);
       border: 1px solid var(--gold);
       border-radius: var(--radius);
       padding: 32px;
       margin-top: 32px;
+      position: relative;
+      overflow: hidden;
     }
 
     .sig-block h3 {
-      font-family: 'Playfair Display', serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
       font-size: 1.15rem;
       color: var(--gold-light);
       margin-bottom: 20px;
@@ -658,7 +708,7 @@
       border-radius: 8px;
       padding: 12px 16px;
       color: var(--text);
-      font-family: 'Inter', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       font-size: 0.92rem;
       transition: border-color 0.2s;
       outline: none;
@@ -670,7 +720,7 @@
     }
 
     .sig-field input[type="text"].sig-name {
-      font-family: 'Playfair Display', serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
       font-size: 1.15rem;
       text-align: center;
       letter-spacing: 0.04em;
@@ -706,7 +756,7 @@
       padding: 18px;
       background: linear-gradient(135deg, var(--gold) 0%, #a87c2a 100%);
       color: var(--black);
-      font-family: 'Inter', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       font-size: 1rem;
       font-weight: 700;
       letter-spacing: 0.04em;
@@ -715,13 +765,13 @@
       border-radius: 50px;
       cursor: pointer;
       transition: all 0.25s ease;
-      box-shadow: 0 6px 32px rgba(201,168,76,0.35);
+      box-shadow: 0 6px 32px rgba(212,160,23,0.35);
       position: relative;
     }
 
     .sign-submit-btn:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 10px 44px rgba(201,168,76,0.5);
+      box-shadow: 0 10px 44px rgba(212,160,23,0.5);
     }
 
     .sign-submit-btn:disabled {
@@ -787,7 +837,7 @@
       transition: all 0.2s;
     }
 
-    .pay-btn:hover { border-color: var(--gold); color: var(--gold-light); background: rgba(201,168,76,0.07); }
+    .pay-btn:hover { border-color: var(--gold); color: var(--gold-light); background: rgba(212,160,23,0.07); }
 
     .pay-btn.primary {
       grid-column: 1/-1;
@@ -811,7 +861,7 @@
     }
 
     .links-header h2 {
-      font-family: 'Playfair Display', serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
       font-size: clamp(1.5rem, 3.5vw, 2.2rem);
       color: var(--white);
       margin-bottom: 8px;
@@ -830,18 +880,20 @@
       text-decoration: none;
       margin-bottom: 14px;
       transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
     }
 
     .link-card:hover {
       border-color: var(--gold);
-      background: rgba(201,168,76,0.05);
+      background: rgba(212,160,23,0.05);
       transform: translateX(4px);
     }
 
     .link-card-icon {
       width: 48px; height: 48px;
       border-radius: 12px;
-      background: rgba(201,168,76,0.1);
+      background: rgba(212,160,23,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -912,15 +964,20 @@
       text-align: center;
       overflow: hidden;
       background:
-        linear-gradient(180deg, rgba(10,10,15,0.55) 0%, rgba(10,10,15,0.82) 100%),
-        url('hero-bg.jpg') center center / cover no-repeat;
+        radial-gradient(ellipse 70% 55% at 20% 15%, rgba(240,98,146,0.22) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 85% 20%, rgba(222,193,113,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 80% 70% at 50% 100%, rgba(29,53,87,0.9) 0%, transparent 60%),
+        linear-gradient(160deg, #0f1f33 0%, #1D3557 45%, #16294a 100%);
     }
 
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.12) 0%, transparent 70%);
+      background:
+        repeating-linear-gradient(90deg, rgba(222,193,113,0.05) 0px, rgba(222,193,113,0.05) 1px, transparent 1px, transparent 60px),
+        repeating-linear-gradient(0deg, rgba(240,98,146,0.04) 0px, rgba(240,98,146,0.04) 1px, transparent 1px, transparent 60px),
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(222,193,113,0.14) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -940,7 +997,7 @@
     }
 
     .hero-title {
-      font-family: 'Playfair Display', serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
       font-size: clamp(2.2rem, 6vw, 3.8rem);
       color: #fff;
       line-height: 1.15;
@@ -977,13 +1034,13 @@
       border-radius: 50px;
       border: none;
       cursor: pointer;
-      box-shadow: 0 6px 32px rgba(201,168,76,0.45);
+      box-shadow: 0 6px 32px rgba(212,160,23,0.45);
       transition: all 0.25s ease;
     }
 
     .hero-cta:hover {
       transform: translateY(-3px);
-      box-shadow: 0 12px 48px rgba(201,168,76,0.6);
+      box-shadow: 0 12px 48px rgba(212,160,23,0.6);
     }
 
     .hero-scroll-hint {
@@ -996,23 +1053,26 @@
       animation: bounce 1.6s ease-in-out infinite;
     }
 
-    /* ── Tab Background Images ──────────────────────────────────── */
+    /* ── Tab Background Accents ──────────────────────────────────── */
     #tab-welcome {
       background:
-        linear-gradient(180deg, rgba(10,10,15,0.88) 0%, rgba(10,10,15,0.96) 100%),
-        url('bg-data.jpg') center top / cover no-repeat fixed;
+        radial-gradient(ellipse 50% 40% at 90% 0%, rgba(222,193,113,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 0% 100%, rgba(240,98,146,0.08) 0%, transparent 60%),
+        #0f1f33;
     }
 
     #tab-documents {
       background:
-        linear-gradient(180deg, rgba(10,10,15,0.90) 0%, rgba(10,10,15,0.97) 100%),
-        url('bg-holo.jpg') center center / cover no-repeat fixed;
+        radial-gradient(ellipse 50% 40% at 10% 0%, rgba(240,98,146,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 100% 100%, rgba(222,193,113,0.08) 0%, transparent 60%),
+        #0f1f33;
     }
 
     #tab-links {
       background:
-        linear-gradient(180deg, rgba(10,10,15,0.88) 0%, rgba(10,10,15,0.96) 100%),
-        url('bg-media.jpg') center center / cover no-repeat fixed;
+        radial-gradient(ellipse 50% 40% at 50% 0%, rgba(222,193,113,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 50% 100%, rgba(240,98,146,0.08) 0%, transparent 60%),
+        #0f1f33;
     }
 
     /* ── Utility ────────────────────────────────────────────────── */
@@ -1031,15 +1091,15 @@
 <body>
 
 <!-- ── Password Gate ────────────────────────────────────────────── -->
-<div id="password-gate" style="position:fixed;inset:0;z-index:9999;background:#0a0a0f;display:flex;align-items:center;justify-content:center;padding:24px;">
+<div id="password-gate" style="position:fixed;inset:0;z-index:9999;background:#0d1b2a;display:flex;align-items:center;justify-content:center;padding:24px;">
   <div style="max-width:360px;width:100%;text-align:center;">
     <div style="width:56px;height:56px;border-radius:50%;border:2px solid #c9a84c;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 20px;color:#c9a84c;">🔒</div>
     <h2 style="font-family:'Playfair Display',serif;color:#e8c96e;font-size:1.4rem;margin-bottom:8px;">Private Client Portal</h2>
     <p style="color:#8a7f6e;font-size:0.88rem;margin-bottom:24px;">Enter your access code to continue.</p>
     <input type="password" id="gate-password" placeholder="Access Code" autocomplete="off"
-      style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:14px 16px;color:#e8e0d0;font-size:1rem;text-align:center;margin-bottom:14px;outline:none;" />
+      style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,160,23,0.25);border-radius:8px;padding:14px 16px;color:#e8e0d0;font-size:1rem;text-align:center;margin-bottom:14px;outline:none;" />
     <button onclick="checkGatePassword()"
-      style="width:100%;padding:14px;background:linear-gradient(135deg,#c9a84c 0%,#a87c2a 100%);color:#0a0a0f;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border:none;border-radius:50px;cursor:pointer;font-size:0.9rem;">
+      style="width:100%;padding:14px;background:linear-gradient(135deg,#c9a84c 0%,#a87c2a 100%);color:#0d1b2a;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border:none;border-radius:50px;cursor:pointer;font-size:0.9rem;">
       Enter Portal
     </button>
     <p id="gate-error" style="color:#e07a7a;font-size:0.8rem;margin-top:12px;display:none;">Incorrect code — please try again.</p>
@@ -1050,11 +1110,11 @@
 <header>
   <div class="brand">
     <div class="brand-logo">
-      <img src="../NewGTElogo.png" alt="AI GlamTech Empire" onerror="this.style.display='none';this.parentElement.textContent='✦'" />
+      <img src="../NewGTElogo.png" alt="AI GlamTech Empire™" onerror="this.style.display='none';this.parentElement.textContent='✦'" />
     </div>
     <div class="brand-text">
-      <h1>AI GlamTech Empire</h1>
-      <p>The 1Social Media Diva · Casandra</p>
+      <h1>AI GlamTech Empire™</h1>
+      <p>Pinky Floyd</p>
     </div>
   </div>
   <div class="header-badge">Client Portal</div>
@@ -1064,7 +1124,7 @@
 <section class="hero">
   <div class="hero-inner">
     <p class="hero-eyebrow">✦ Your Exclusive Client Portal ✦</p>
-    <h1 class="hero-title">Welcome to<br><span>AI GlamTech Empire</span></h1>
+    <h1 class="hero-title">Welcome to<br><span>AI GlamTech Empire™</span></h1>
     <p class="hero-sub">Your personalized command center for signing, scheduling, and staying connected — built just for you.</p>
     <button class="hero-cta" onclick="switchTab('documents', document.querySelector('[data-tab=documents]'))">
       ✍️ &nbsp;View Your Proposal &amp; Sign
@@ -1093,14 +1153,14 @@
   <div class="welcome-wrap">
 
     <p class="welcome-eyebrow">Welcome to Your AI Command Center</p>
-    <h2 class="welcome-title">I'm So Excited<br>to Work With You</h2>
+    <h2 class="welcome-title"><span class="wt-cream">I'm So Excited</span><br><span class="wt-pink">to Work With You</span></h2>
     <p class="welcome-sub">Watch my personal message below, then book your onboarding call.</p>
 
     <!-- ── Video / ElevenLabs Widget ─────────────────────────── -->
     <div class="video-box">
       <div class="video-box-header">
         <div class="dot"></div>
-        <span>Personal Message from Casandra</span>
+        <span>Personal Message from Pinky Floyd</span>
       </div>
 
       <!--
@@ -1110,13 +1170,13 @@
         inside the div below and uncomment the script tag.
         ═══════════════════════════════════════════════════════════
       -->
-      <div style="position:relative;width:100%;padding-bottom:56.25%;background:#050508;">
+      <div style="position:relative;width:100%;padding-bottom:56.25%;background:#0d1b2a;">
         <video
           src="welcome.mp4"
           controls
           playsinline
           poster="../NewGTElogo.png"
-          style="position:absolute;top:0;left:0;width:100%;height:100%;background:#050508;"
+          style="position:absolute;top:0;left:0;width:100%;height:100%;background:#0d1b2a;"
         ></video>
       </div>
     </div>
@@ -1226,23 +1286,17 @@
     <div class="proposal-card">
       <div class="card-head">
         <h3>✦ Proposal</h3>
-        <span class="card-badge">AI GlamTech Empire</span>
+        <span class="card-badge">AI GlamTech Empire™</span>
       </div>
       <div class="card-body">
 
         <dl class="info-grid">
-          <dt>Provider</dt>
-          <dd>Casandra · The 1Social Media Diva · AI GlamTech Empire</dd>
-          <dt>Client</dt>
-          <dd id="prop-client-name">{{client_legal_name}}</dd>
-          <dt>Business</dt>
-          <dd id="prop-business">{{client_business_name}}</dd>
-          <dt>Client Email</dt>
-          <dd id="prop-email">{{client_email}}</dd>
-          <dt>Effective Date</dt>
-          <dd>Date of Signature</dd>
-          <dt>Agreement</dt>
-          <dd id="prop-version">{{agreement_version}}</dd>
+          <div><dt>Provider</dt><dd>Pinky Floyd · AI GlamTech Empire™</dd></div>
+          <div><dt>Client</dt><dd id="prop-client-name">Brian Walcott</dd></div>
+          <div><dt>Business</dt><dd id="prop-business">ABW Luxury Limousine</dd></div>
+          <div><dt>Client Email</dt><dd id="prop-email">To Be Provided</dd></div>
+          <div><dt>Effective Date</dt><dd>Date of Signature</dd></div>
+          <div><dt>Agreement</dt><dd id="prop-version">v1.0</dd></div>
         </dl>
 
         <div class="gold-divider"><span>Scope of Services</span></div>
@@ -1250,12 +1304,12 @@
         <div class="scope-section">
           <h4>Phase 1 — Included in Setup</h4>
           <ul class="scope-list">
-            <li>Custom AI system deployment built for <strong id="scope-biz">{{client_business_name}}</strong> — branded, configured, and ready to run.</li>
+            <li>Custom AI system deployment built for <strong id="scope-biz">ABW Luxury Limousine</strong> — branded, configured, and ready to run.</li>
             <li>Branded greeting / landing with your approved voice. Never references the backend platform.</li>
             <li>Calendar / booking integration with live availability from your existing system.</li>
             <li>Service menu configuration with your confirmed service lines.</li>
             <li>FAQ boundary enforcement — system answers only from your approved FAQ.</li>
-            <li>Lead capture &amp; email routing to <strong id="scope-email">{{client_email}}</strong>. Every interaction logged.</li>
+            <li>Lead capture &amp; email routing to <strong id="scope-email">To Be Provided</strong>. Every interaction logged.</li>
           </ul>
         </div>
 
@@ -1270,7 +1324,7 @@
         </div>
 
         <div class="scope-section">
-          <h4>Optional Add-On — $<span id="scope-optional">{{optional_fee}}</span></h4>
+          <h4>Optional Add-On — $<span id="scope-optional">TBD</span></h4>
           <ul class="scope-list">
             <li>Technical evaluation to determine how your AI Command Center can connect to your existing tech stack.</li>
             <li>Written compatibility report with recommended integration path.</li>
@@ -1292,24 +1346,24 @@
             <tr>
               <td>Initial System Setup Fee</td>
               <td>Charged immediately upon signing — non-refundable once build begins</td>
-              <td>$<span id="price-setup">{{setup_fee}}</span></td>
+              <td>$<span id="price-setup">TBD</span></td>
             </tr>
             <tr>
               <td>Monthly Recurring Service</td>
-              <td>Autopay, starting day 30 · minimum <span id="price-term">{{minimum_term}}</span> months</td>
-              <td>$<span id="price-monthly">{{monthly_fee}}</span>/mo</td>
+              <td>Autopay, starting day 30 · minimum <span id="price-term">TBD</span> months</td>
+              <td>$<span id="price-monthly">TBD</span>/mo</td>
             </tr>
             <tr>
               <td>Optional Integration Add-On</td>
               <td>Billed separately only if selected</td>
-              <td>$<span id="price-optional">{{optional_fee}}</span></td>
+              <td>$<span id="price-optional">TBD</span></td>
             </tr>
           </tbody>
         </table>
 
         <div class="pricing-total">
           <span class="total-label">Year-One Total (Setup + 12 months)</span>
-          <span class="total-val" id="price-year-total">${{setup_fee}} + (${{monthly_fee}} × 12)</span>
+          <span class="total-val" id="price-year-total">$TBD + ($TBD × 12)</span>
         </div>
 
       </div>
@@ -1323,9 +1377,14 @@
       </div>
       <div class="card-body">
 
+        <p style="font-size:0.84rem;color:var(--muted);margin-bottom:12px;">
+          For purposes of this Agreement, every reference to <strong style="color:var(--text);">"Provider"</strong> means
+          <strong style="color:var(--gold-light);">Pinky Floyd (Casandra Riley)</strong>, AI GlamTech Empire™.
+        </p>
+
         <p style="font-size:0.84rem;color:var(--muted);margin-bottom:20px;">
           For purposes of this Agreement, every reference to <strong style="color:var(--text);">"Client"</strong> means
-          <strong style="color:var(--gold-light);" id="contract-client-def">{{client_legal_name}} and {{client_business_name}}</strong>,
+          <strong style="color:var(--gold-light);" id="contract-client-def">Brian Walcott and ABW Luxury Limousine</strong>,
           the named person and business identified in this Agreement.
         </p>
 
@@ -1336,7 +1395,7 @@
 
         <div class="clause">
           <div class="clause-title"><span class="cn">2</span> Payment Terms &amp; Autopay Authorization</div>
-          <p>Autopay is mandatory. By signing, Client authorizes Provider (through Stripe) to keep Client's payment card on file and automatically charge it for every fee under this Agreement. The one-time setup fee of <strong style="color:var(--text);">$<span class="contract-setup">{{setup_fee}}</span>.00</strong> is charged immediately upon signing and is non-refundable once build work has begun. The card will be automatically charged <strong style="color:var(--text);">$<span class="contract-monthly">{{monthly_fee}}</span>.00 every month starting on day 30</strong> for a minimum term of <strong style="color:var(--text);"><span class="contract-term">{{minimum_term}}</span> months</strong>. If a charge fails or is reversed, Provider may pause service until the account is current.</p>
+          <p>Autopay is mandatory. By signing, Client authorizes Provider (through Stripe) to keep Client's payment card on file and automatically charge it for every fee under this Agreement. The one-time setup fee of <strong style="color:var(--text);">$<span class="contract-setup">TBD</span>.00</strong> is charged immediately upon signing and is non-refundable once build work has begun. The card will be automatically charged <strong style="color:var(--text);">$<span class="contract-monthly">TBD</span>.00 every month starting on day 30</strong> for a minimum term of <strong style="color:var(--text);"><span class="contract-term">TBD</span> months</strong>. If a charge fails or is reversed, Provider may pause service until the account is current.</p>
         </div>
 
         <div class="clause">
@@ -1351,7 +1410,7 @@
 
         <div class="clause">
           <div class="clause-title"><span class="cn">5</span> Intellectual Property &amp; Proprietary Rights</div>
-          <p>All scripts, conversational flows, prompt logic, system configurations, and underlying methods developed by Provider remain the intellectual property of Provider. Client receives a non-exclusive license to use the configured system for <span class="contract-biz">{{client_business_name}}</span> only, for the duration of this Agreement. Client may not copy, resell, reverse-engineer, or distribute the system logic to any third party.</p>
+          <p>All scripts, conversational flows, prompt logic, system configurations, and underlying methods developed by Provider remain the intellectual property of Provider. Client receives a non-exclusive license to use the configured system for <span class="contract-biz">ABW Luxury Limousine</span> only, for the duration of this Agreement. Client may not copy, resell, reverse-engineer, or distribute the system logic to any third party.</p>
         </div>
 
         <div class="clause">
@@ -1366,7 +1425,7 @@
 
         <div class="clause">
           <div class="clause-title"><span class="cn">8</span> Term &amp; Termination</div>
-          <p>This Agreement begins on the date of signature and continues month-to-month after the <span class="contract-term">{{minimum_term}}</span>-month minimum term. Either party may terminate with 30 days' written notice after the minimum term. The one-time setup fee is non-refundable once build work has begun.</p>
+          <p>This Agreement begins on the date of signature and continues month-to-month after the <span class="contract-term">TBD</span>-month minimum term. Either party may terminate with 30 days' written notice after the minimum term. The one-time setup fee is non-refundable once build work has begun.</p>
         </div>
 
         <div class="clause">
@@ -1418,9 +1477,9 @@
         <input type="checkbox" id="consent-box" onchange="checkSigReady()" />
         <label for="consent-box">
           <strong>I agree to conduct this transaction electronically.</strong> I confirm that my typed name is my electronic signature. I acknowledge the proposal and contract terms above, and I authorize autopay on the card I provide at checkout for
-          <strong>$<span class="contract-setup">{{setup_fee}}</span> today</strong> and
-          <strong>$<span class="contract-monthly">{{monthly_fee}}</span>/month starting day 30</strong>
-          for a minimum of <strong><span class="contract-term">{{minimum_term}}</span> months</strong>.
+          <strong>$<span class="contract-setup">TBD</span> today</strong> and
+          <strong>$<span class="contract-monthly">TBD</span>/month starting day 30</strong>
+          for a minimum of <strong><span class="contract-term">TBD</span> months</strong>.
         </label>
       </div>
 
@@ -1441,7 +1500,7 @@
           Add / remove buttons as needed.
         -->
         <a href="#" class="pay-btn primary" id="stripe-main" target="_blank">
-          💳 Pay with Card via Stripe — $<span class="contract-setup">{{setup_fee}}</span>
+          💳 Pay with Card via Stripe — $<span class="contract-setup">TBD</span>
         </a>
         <a href="#" class="pay-btn" id="klarna-btn" target="_blank">
           🛍 Klarna — Pay Later
@@ -1516,7 +1575,7 @@
     <a href="mailto:admin@glamtechempire.com" class="link-card">
       <div class="link-card-icon">✉️</div>
       <div class="link-card-text">
-        <h4>Email Casandra Directly</h4>
+        <h4>Email Pinky Floyd Directly</h4>
         <p>admin@glamtechempire.com</p>
       </div>
       <div class="link-card-arrow">→</div>
@@ -1527,7 +1586,7 @@
 
 <!-- ── Footer ─────────────────────────────────────────────────── -->
 <footer>
-  Prepared by <a href="mailto:admin@glamtechempire.com">Casandra</a> · The 1Social Media Diva · AI GlamTech Empire
+  Prepared by <a href="mailto:admin@glamtechempire.com">Pinky Floyd</a> · AI GlamTech Empire™
   &nbsp;·&nbsp; All rights reserved.
 </footer>
 
@@ -1573,7 +1632,7 @@
     document.getElementById('sig-email').disabled = true;
     document.getElementById('consent-box').disabled = true;
     document.getElementById('signature-section').style.borderColor = 'var(--gold)';
-    document.getElementById('signature-section').style.boxShadow = '0 0 32px rgba(201,168,76,0.25)';
+    document.getElementById('signature-section').style.boxShadow = '0 0 32px rgba(212,160,23,0.25)';
 
     // Unlock payment
     document.getElementById('payment-lock').classList.add('hidden');
@@ -1599,9 +1658,9 @@
           name:    name,
           email:   email,
           date:    date,
-          version: '{{agreement_version}}',
-          setup:   '{{setup_fee}}',
-          monthly: '{{monthly_fee}}',
+          version: 'v1.0',
+          setup:   'TBD',
+          monthly: 'TBD',
         })
       });
       ══════════════════════════════════════════════════════════
