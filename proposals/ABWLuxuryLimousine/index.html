@@ -1150,7 +1150,7 @@
     <p class="hero-sub">Your personalized command center for signing, scheduling, and staying connected — built just for you.</p>
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;">
       <button class="hero-cta" onclick="switchTab('documents', document.querySelector('[data-tab=documents]'))">
-        ✍️ &nbsp;Review &amp; Sign Agreement
+        📋 &nbsp;Proposal &amp; Contract Coming Soon
       </button>
       <button class="hero-cta" onclick="switchTab('welcome', document.querySelector('[data-tab=welcome]'))">
         🎙️ &nbsp;Test Your AI Receptionist
@@ -1226,8 +1226,8 @@
       -->
       <a href="#documents" class="cta-btn" id="main-cta-btn"
          onclick="event.preventDefault(); switchTab('documents', document.querySelector('[data-tab=documents]'))">
-        <span class="btn-icon">✦</span>
-        Review &amp; Sign Agreement
+        <span class="btn-icon">📋</span>
+        Proposal &amp; Contract Coming Soon
         <span class="btn-icon">→</span>
       </a>
 
@@ -1275,168 +1275,19 @@
   <div class="docs-wrap">
 
     <div class="docs-header">
-      <h2>Service Agreement</h2>
-      <p>Review the agreement below, then sign and unlock payment.</p>
+      <h2>Proposal &amp; Contract</h2>
+      <p>Coming soon.</p>
     </div>
 
-    <!-- Progress steps -->
-    <div class="sign-steps">
-      <div class="sign-step active" id="step2">
-        <div class="step-num">1</div>
-        <p>Review Contract</p>
-      </div>
-      <div class="sign-step" id="step3">
-        <div class="step-num">2</div>
-        <p>Sign</p>
-      </div>
-      <div class="sign-step" id="step4">
-        <div class="step-num">3</div>
-        <p>Pay</p>
-      </div>
-    </div>
-
-    <!-- ── Contract ──────────────────────────────────────────────── -->
-    <div class="proposal-card">
-      <div class="card-head">
-        <h3>📋 Service Agreement</h3>
-        <span class="card-badge">Read Carefully</span>
-      </div>
+    <div class="proposal-card" style="text-align:center;padding:60px 24px;">
       <div class="card-body">
-
-        <p style="font-size:0.84rem;color:var(--muted);margin-bottom:12px;">
-          For purposes of this Agreement, every reference to <strong style="color:var(--text);">"Provider"</strong> means
-          <strong style="color:var(--gold-light);">Pinky Floyd (Casandra Riley)</strong>, AI GlamTech Empire™.
+        <div style="font-size:2.5rem;margin-bottom:16px;">📋</div>
+        <h3 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-weight:800;font-size:1.3rem;color:var(--gold-light);margin-bottom:10px;">
+          Proposal &amp; Contract Coming Soon
+        </h3>
+        <p style="color:var(--muted);font-size:0.95rem;max-width:420px;margin:0 auto;">
+          We're putting together your custom proposal and service agreement. Check back soon, or reach out anytime with questions.
         </p>
-
-        <p style="font-size:0.84rem;color:var(--muted);margin-bottom:20px;">
-          For purposes of this Agreement, every reference to <strong style="color:var(--text);">"Client"</strong> means
-          <strong style="color:var(--gold-light);" id="contract-client-def">Brian Walcott and ABW Luxury Limousine</strong>,
-          the named person and business identified in this Agreement.
-        </p>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">1</span> Scope of Services</div>
-          <p>Provider will deliver Phase 1 and Phase 2 services: initial build, configuration, calendar or CRM integration, branded greeting, FAQ-bounded responses, lead capture, email routing, 60-day onboarding support, and self-paced video training. Detailed scripts, objection handling, deposit language, and scenario-specific flows are proprietary assets delivered only after this Agreement is executed and initial payment is received.</p>
-        </div>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">2</span> Payment Terms &amp; Autopay Authorization</div>
-          <p>Autopay is mandatory. By signing, Client authorizes Provider (through Stripe) to keep Client's payment card on file and automatically charge it for every fee under this Agreement. The one-time setup fee of <strong style="color:var(--text);">$<span class="contract-setup">TBD</span>.00</strong> is charged immediately upon signing and is non-refundable once build work has begun. The card will be automatically charged <strong style="color:var(--text);">$<span class="contract-monthly">TBD</span>.00 every month starting on day 30</strong> for a minimum term of <strong style="color:var(--text);"><span class="contract-term">TBD</span> months</strong>. If a charge fails or is reversed, Provider may pause service until the account is current.</p>
-        </div>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">3</span> Electronic Transaction Consent</div>
-          <p>Client agrees to conduct this transaction electronically and understands that typing their full legal name, checking the consent box, and clicking the signature button constitutes Client's electronic signature under the federal Electronic Signatures in Global and National Commerce Act (15 U.S.C. § 7001).</p>
-        </div>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">4</span> Authorization and Activation</div>
-          <p>This signature process is connected to the payment workflow. Successful signature will unlock the payment step. Service activation begins only after signature, successful payment, and submitted intake.</p>
-        </div>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">5</span> Intellectual Property &amp; Proprietary Rights</div>
-          <p>All scripts, conversational flows, prompt logic, system configurations, and underlying methods developed by Provider remain the intellectual property of Provider. Client receives a non-exclusive license to use the configured system for <span class="contract-biz">ABW Luxury Limousine</span> only, for the duration of this Agreement. Client may not copy, resell, reverse-engineer, or distribute the system logic to any third party.</p>
-        </div>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">6</span> Client Responsibilities</div>
-          <p>Client agrees to: provide an active booking or CRM account with calendar access; provide confirmed service list and FAQ content; forward business phone or web traffic to Provider's endpoint; approve greeting, FAQ-bounded responses, and demo within 48 hours of delivery; and maintain email addresses where leads are routed.</p>
-        </div>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">7</span> Change Management</div>
-          <p>Adjustments to greeting, hours, services, and FAQ-bounded responses during the 60-day onboarding window are included. Any work outside the Scope of Services requires a written change order signed by both parties before work begins.</p>
-        </div>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">8</span> Term &amp; Termination</div>
-          <p>This Agreement begins on the date of signature and continues month-to-month after the <span class="contract-term">TBD</span>-month minimum term. Either party may terminate with 30 days' written notice after the minimum term. The one-time setup fee is non-refundable once build work has begun.</p>
-        </div>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">9</span> Limitation of Liability</div>
-          <p>Provider's total liability under this Agreement is limited to the amount Client paid Provider in the 90 days preceding the claim. Provider is not liable for indirect, consequential, or incidental damages. The system does not give professional, clinical, legal, financial, medical, or otherwise regulated advice.</p>
-        </div>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">10</span> Confidentiality &amp; Record Retention</div>
-          <p>Both parties agree to keep confidential any business, client, financial, or technical information shared during this engagement. The final signed record may be stored electronically by Provider and delivered by email to Client and to Provider's admin inbox. Both parties consent to electronic record retention as the official copy.</p>
-        </div>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">11</span> Governing Law &amp; Entire Agreement</div>
-          <p>This Agreement is governed by the laws of the State of Florida. Any dispute will be settled by binding arbitration in the State of Florida. This Agreement constitutes the entire understanding between the parties and supersedes all prior discussions and proposals. Any modification must be in writing and signed by both parties.</p>
-        </div>
-
-        <div class="clause">
-          <div class="clause-title"><span class="cn">12</span> Client Acknowledgments</div>
-          <p>By signing, Client confirms: (1) reviewed the proposal in its entirety; (2) accepts the pricing and billing structure shown; (3) agrees autopay is required; (4) agrees service activation begins only after signature and successful payment; (5) agrees the signed copy may be emailed to the administrative record.</p>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ── Signature Block ───────────────────────────────────────── -->
-    <div class="sig-block" id="signature-section">
-      <h3>✦ Electronic Signature &amp; Autopay Authorization</h3>
-
-      <div class="sig-field">
-        <label for="sig-name">Type your full legal name to sign</label>
-        <input type="text" id="sig-name" class="sig-name" placeholder="Full Legal Name"
-               oninput="checkSigReady()" autocomplete="name" />
-      </div>
-
-      <div class="sig-field">
-        <label for="sig-email">Your email address</label>
-        <input type="email" id="sig-email" placeholder="email@example.com"
-               oninput="checkSigReady()" autocomplete="email" />
-      </div>
-
-      <div class="sig-field">
-        <label>Date</label>
-        <input type="text" id="sig-date" readonly
-               style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--muted);font-size:0.92rem;width:100%;" />
-      </div>
-
-      <div class="consent-row" style="margin-top:20px;">
-        <input type="checkbox" id="consent-box" onchange="checkSigReady()" />
-        <label for="consent-box">
-          <strong>I agree to conduct this transaction electronically.</strong> I confirm that my typed name is my electronic signature. I acknowledge the proposal and contract terms above, and I authorize autopay on the card I provide at checkout for
-          <strong>$<span class="contract-setup">TBD</span> today</strong> and
-          <strong>$<span class="contract-monthly">TBD</span>/month starting day 30</strong>
-          for a minimum of <strong><span class="contract-term">TBD</span> months</strong>.
-        </label>
-      </div>
-
-      <button class="sign-submit-btn" id="sign-btn" disabled onclick="handleSign()">
-        ✦ I Agree — Sign &amp; Unlock Payment
-      </button>
-    </div>
-
-    <!-- ── Payment (locked until signed) ────────────────────────── -->
-    <div class="payment-section" id="payment-section" style="margin-top:28px;">
-      <div class="payment-lock-overlay" id="payment-lock">
-        <div class="lock-icon">🔒</div>
-        <div class="lock-label">Sign the agreement above to unlock payment options</div>
-      </div>
-      <div class="payment-grid">
-        <!--
-          Replace all href="#" values with your actual Stripe payment links.
-          Add / remove buttons as needed.
-        -->
-        <a href="#" class="pay-btn primary" id="stripe-main" target="_blank">
-          💳 Pay with Card via Stripe — $<span class="contract-setup">TBD</span>
-        </a>
-        <a href="#" class="pay-btn" id="klarna-btn" target="_blank">
-          🛍 Klarna — Pay Later
-        </a>
-        <a href="#" class="pay-btn" id="afterpay-btn" target="_blank">
-          💚 Afterpay
-        </a>
-        <a href="#" class="pay-btn" id="affirm-btn" target="_blank">
-          🔵 Affirm
-        </a>
       </div>
     </div>
 
