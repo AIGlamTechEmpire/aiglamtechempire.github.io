@@ -264,11 +264,12 @@
 
     /* — ElevenLabs widget container — */
     .elevenlabs-embed {
-      min-height: 120px;
+      min-height: 160px;
       padding: 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 12px;
     }
 
@@ -1151,7 +1152,7 @@
       <button class="hero-cta" onclick="switchTab('documents', document.querySelector('[data-tab=documents]'))">
         ✍️ &nbsp;Review &amp; Sign Agreement
       </button>
-      <button class="hero-cta" onclick="switchTab('welcome', document.querySelector('[data-tab=welcome]')); setTimeout(() => document.getElementById('test-ai-box').scrollIntoView({behavior:'smooth', block:'center'}), 100);">
+      <button class="hero-cta" onclick="switchTab('welcome', document.querySelector('[data-tab=welcome]'))">
         🎙️ &nbsp;Test Your AI Receptionist
       </button>
     </div>
@@ -1180,13 +1181,6 @@
 
     <p class="welcome-eyebrow">Welcome to Your AI Command Center</p>
     <h2 class="welcome-title"><span class="wt-cream">I'm So Excited</span><br><span class="wt-pink">to Work With You</span></h2>
-    <div style="display:flex;justify-content:center;margin-bottom:32px;">
-      <a href="#personal-video" onclick="event.preventDefault(); document.getElementById('personal-video').scrollIntoView({behavior:'smooth', block:'center'});"
-         style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.95rem;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;padding:15px 34px;border-radius:50px;box-shadow:0 6px 28px rgba(241,177,193,0.4), 0 6px 28px rgba(212,160,23,0.25);transition:transform 0.2s ease;"
-         onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
-        🎬 Watch My Personal Message
-      </a>
-    </div>
 
     <!-- ── Video ─────────────────────────────────────────────── -->
     <div id="personal-video" class="video-box">
@@ -1209,34 +1203,13 @@
 
     <!-- ── Test AI Button ─────────────────────────────────────── -->
     <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:24px;margin-bottom:32px;">
-      <a href="#test-ai-box" onclick="event.preventDefault(); document.getElementById('test-ai-box').scrollIntoView({behavior:'smooth', block:'center'});"
-         style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:1rem;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;padding:16px 36px;border-radius:50px;box-shadow:0 6px 32px rgba(241,177,193,0.4), 0 6px 32px rgba(212,160,23,0.25);transition:transform 0.2s ease;"
-         onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+      <span style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.95rem;letter-spacing:0.04em;text-transform:uppercase;padding:15px 34px;border-radius:50px;box-shadow:0 6px 28px rgba(241,177,193,0.4), 0 6px 28px rgba(212,160,23,0.25);">
         🎙️ Test Your AI Receptionist
-      </a>
-      <div class="arrow-bounce">↓</div>
+      </span>
+      <p style="font-size:0.8rem;color:var(--muted);text-align:center;">Click the chat orb on this page to talk to it live.</p>
     </div>
 
-    <!-- ── ElevenLabs AI Concierge — Live Test ──────────────────────────── -->
-    <div id="test-ai-box" class="video-box" style="margin-bottom:32px; border-color: var(--gold); border-width: 2px;">
-      <div class="video-box-header" style="background: rgba(212,160,23,0.1);">
-        <div class="dot"></div>
-        <span>🎙️ Need Help? Test Your AI Agent — Live Demo</span>
-      </div>
-      <div style="padding:32px 24px;display:flex;flex-direction:column;align-items:center;gap:16px;">
-        <p style="font-size:0.95rem;color:var(--text);text-align:center;max-width:520px;line-height:1.6;">
-          This is the exact AI receptionist you're considering for your business.
-          <strong style="color:var(--gold-light);">Talk to it right now</strong> — ask it anything a customer would ask.
-        </p>
-
-        <div id="elevenlabs-wrap" style="width:100%;max-width:480px;min-height:500px;">
-          <elevenlabs-convai
-            agent-id="agent_0201kw59qa62ed4rb8hbce21pc3q"
-            variant="expanded"
-          ></elevenlabs-convai>
-        </div>
-      </div>
-    </div>
+    <elevenlabs-convai agent-id="agent_0201kw59qa62ed4rb8hbce21pc3q"></elevenlabs-convai>
 
     <!-- ── CTA Button ─────────────────────────────────────────── -->
     <div class="cta-section">
