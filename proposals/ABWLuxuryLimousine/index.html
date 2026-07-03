@@ -34,6 +34,15 @@
       box-shadow: 0 0 0 4px rgba(255,157,182,0.35), 0 0 24px rgba(255,157,182,0.5) !important;
     }
 
+    /* ── Pulsing animated glow ── */
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 6px 24px rgba(241,177,193,0.35), 0 0 0 0 rgba(222,193,113,0.4); }
+      50%      { box-shadow: 0 6px 28px rgba(241,177,193,0.5), 0 0 0 8px rgba(222,193,113,0); }
+    }
+    .pulse-btn {
+      animation: pulseGlow 2.2s ease-in-out infinite;
+    }
+
     /* ── Signature gradient accent stripe — used across all cards ── */
     .video-box, .proposal-card, .calendar-section, .sig-block, .link-card {
       position: relative;
@@ -185,8 +194,9 @@
 
     .welcome-eyebrow {
       text-align: center;
-      font-size: 0.72rem;
-      letter-spacing: 0.14em;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--gold);
       margin-bottom: 10px;
@@ -195,7 +205,7 @@
     .welcome-title {
       text-align: center;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-size: clamp(2.2rem, 6vw, 3.6rem);
       margin-bottom: 12px;
       line-height: 1.2;
       position: relative;
@@ -214,12 +224,12 @@
 
     .welcome-title .wt-cream {
       color: #f2e6cf;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 4px 24px rgba(222,193,113,0.35), 0 1px 0 rgba(255,255,255,0.2);
+      text-shadow: 0 2px 24px rgba(0,0,0,0.7);
     }
 
     .welcome-title .wt-pink {
       color: var(--blush);
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 4px 28px rgba(241,177,193,0.45), 0 1px 0 rgba(255,255,255,0.15);
+      text-shadow: 0 2px 24px rgba(0,0,0,0.7);
     }
 
     .welcome-sub {
@@ -1014,8 +1024,9 @@
     }
 
     .hero-eyebrow {
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--gold);
       margin-bottom: 14px;
@@ -1148,14 +1159,6 @@
     <p class="hero-eyebrow">✦ Your Exclusive Client Portal ✦</p>
     <h1 class="hero-title">Welcome to<br><span>AI GlamTech Empire™</span></h1>
     <p class="hero-sub">Your personalized command center for signing, scheduling, and staying connected — built just for you.</p>
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;">
-      <button class="hero-cta" onclick="switchTab('documents', document.querySelector('[data-tab=documents]'))">
-        📋 &nbsp;Proposal &amp; Contract Coming Soon
-      </button>
-      <button class="hero-cta" onclick="switchTab('welcome', document.querySelector('[data-tab=welcome]'))">
-        🎙️ &nbsp;Test Your AI Receptionist
-      </button>
-    </div>
   </div>
   <div class="hero-scroll-hint">⌄</div>
 </section>
@@ -1182,6 +1185,8 @@
     <p class="welcome-eyebrow">Welcome to Your AI Command Center</p>
     <h2 class="welcome-title"><span class="wt-cream">I'm So Excited</span><br><span class="wt-pink">to Work With You</span></h2>
 
+    <elevenlabs-convai agent-id="agent_0201kw59qa62ed4rb8hbce21pc3q"></elevenlabs-convai>
+
     <!-- ── Video ─────────────────────────────────────────────── -->
     <div id="personal-video" class="video-box">
       <div class="video-box-header">
@@ -1201,51 +1206,6 @@
       </div>
     </div>
 
-    <!-- ── Test AI Button ─────────────────────────────────────── -->
-    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:24px;margin-bottom:32px;">
-      <span style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.95rem;letter-spacing:0.04em;text-transform:uppercase;padding:15px 34px;border-radius:50px;box-shadow:0 6px 28px rgba(241,177,193,0.4), 0 6px 28px rgba(212,160,23,0.25);">
-        🎙️ Test Your AI Receptionist
-      </span>
-      <p style="font-size:0.8rem;color:var(--muted);text-align:center;">Click the chat orb on this page to talk to it live.</p>
-    </div>
-
-    <elevenlabs-convai agent-id="agent_0201kw59qa62ed4rb8hbce21pc3q"></elevenlabs-convai>
-
-    <!-- ── CTA Button ─────────────────────────────────────────── -->
-    <div class="cta-section">
-      <div class="cta-arrow-label">
-        <span>Ready to get started?</span>
-        <div class="arrow-bounce">↓</div>
-      </div>
-
-      <!--
-        Replace href with your primary CTA link — could be:
-        • A Stripe payment link
-        • The "Sign & Pay" tab (use onclick="switchTab('documents',document.querySelector('[data-tab=documents]'))" )
-        • An intake form link
-      -->
-      <a href="#documents" class="cta-btn" id="main-cta-btn"
-         onclick="event.preventDefault(); switchTab('documents', document.querySelector('[data-tab=documents]'))">
-        <span class="btn-icon">📋</span>
-        Proposal &amp; Contract Coming Soon
-        <span class="btn-icon">→</span>
-      </a>
-
-      <!--
-        ── OPTIONAL SECOND BUTTON (e.g. direct Stripe link) ──
-        <a href="https://buy.stripe.com/YOUR_LINK" class="cta-btn" style="background:transparent;border:1px solid var(--gold);color:var(--gold);" target="_blank">
-          Pay Now via Stripe →
-        </a>
-      -->
-    </div>
-
-    <!-- ── Proposal Coming Soon ──────────────────────────────── -->
-    <div style="display:flex;justify-content:center;margin-bottom:20px;">
-      <span style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.85rem;letter-spacing:0.04em;text-transform:uppercase;padding:12px 28px;border-radius:50px;box-shadow:0 6px 24px rgba(241,177,193,0.35);">
-        📋 Proposal Coming Soon
-      </span>
-    </div>
-
     <!-- ── Calendly Embed ─────────────────────────────────────── -->
     <div class="calendar-section">
       <div class="calendar-header">
@@ -1262,6 +1222,19 @@
       </div>
       <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
       <!-- Calendly inline widget end -->
+    </div>
+
+    <!-- ── Bottom Button Row ─────────────────────────────────── -->
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:14px;margin-top:28px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <span class="pulse-btn" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.85rem;letter-spacing:0.04em;text-transform:uppercase;padding:14px 28px;border-radius:50px;">
+          🎙️ Test Your AI Receptionist
+        </span>
+        <p style="font-size:0.72rem;color:var(--muted);text-align:center;">Click the chat orb on this page to talk to it live.</p>
+      </div>
+      <span class="pulse-btn" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.85rem;letter-spacing:0.04em;text-transform:uppercase;padding:14px 28px;border-radius:50px;">
+        📋 Proposal &amp; Contract Coming Soon
+      </span>
     </div>
 
   </div>
