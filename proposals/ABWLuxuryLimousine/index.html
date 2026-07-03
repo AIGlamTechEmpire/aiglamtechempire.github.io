@@ -200,8 +200,15 @@
       line-height: 1.2;
     }
 
-    .welcome-title .wt-cream { color: #eeebe0; }
-    .welcome-title .wt-pink  { color: var(--blush); }
+    .welcome-title .wt-cream {
+      color: #f2e6cf;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 4px 24px rgba(222,193,113,0.35), 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .welcome-title .wt-pink {
+      color: var(--blush);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 4px 28px rgba(241,177,193,0.45), 0 1px 0 rgba(255,255,255,0.15);
+    }
 
     .welcome-sub {
       text-align: center;
@@ -1189,12 +1196,18 @@
         <div class="dot"></div>
         <span>🎙️ Need Help? Test Your AI Agent — Live Demo</span>
       </div>
-      <div style="padding:32px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div style="padding:32px 24px;display:flex;flex-direction:column;align-items:center;gap:16px;">
         <p style="font-size:0.95rem;color:var(--text);text-align:center;max-width:520px;line-height:1.6;">
           This is the exact AI receptionist you're considering for your business.
-          <strong style="color:var(--gold-light);">Click the chat bubble in the bottom-right corner of your screen</strong> and talk to it right now — ask it anything a customer would ask.
+          <strong style="color:var(--gold-light);">Talk to it right now</strong> — ask it anything a customer would ask.
         </p>
-        <elevenlabs-convai agent-id="agent_0201kw59qa62ed4rb8hbce21pc3q" variant="expanded" dismissible="false"></elevenlabs-convai>
+        <iframe
+          src="https://elevenlabs.io/convai/agent_0201kw59qa62ed4rb8hbce21pc3q"
+          width="100%"
+          height="600"
+          style="border:none;border-radius:var(--radius);max-width:480px;background:var(--surface);"
+          allow="microphone"
+        ></iframe>
       </div>
     </div>
 
