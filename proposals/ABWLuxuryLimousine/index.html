@@ -366,6 +366,18 @@
       50%       { transform: translateY(10px); }
     }
 
+    .arrow-bounce-h {
+      font-size: 1.3rem;
+      color: var(--gold);
+      animation: bounceH 1.2s ease-in-out infinite;
+      line-height: 1;
+    }
+
+    @keyframes bounceH {
+      0%, 100% { transform: translateX(0); }
+      50%       { transform: translateX(-8px); }
+    }
+
     .cta-btn {
       display: inline-flex;
       align-items: center;
@@ -1150,7 +1162,13 @@
       <p>Pinky Floyd</p>
     </div>
   </div>
-  <div class="header-badge">Client Portal</div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span class="arrow-bounce-h">←</span>
+    <span class="pulse-btn" style="display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.66rem;letter-spacing:0.03em;text-transform:uppercase;padding:7px 14px;border-radius:50px;white-space:nowrap;">
+      🎙️ Talk Live to Your AI Receptionist
+    </span>
+    <div class="header-badge">Client Portal</div>
+  </div>
 </header>
 
 <!-- ── Hero Section ─────────────────────────────────────────────── -->
@@ -1169,7 +1187,7 @@
     <span class="tab-icon">✦</span> Welcome
   </button>
   <button class="tab-btn" role="tab" data-tab="documents" onclick="switchTab('documents', this)">
-    <span class="tab-icon">📋</span> Sign &amp; Pay
+    <span class="tab-icon">📋</span> Coming Soon
   </button>
   <button class="tab-btn" role="tab" data-tab="links" onclick="switchTab('links', this)">
     <span class="tab-icon">🔗</span> Resources
@@ -1224,18 +1242,6 @@
       <!-- Calendly inline widget end -->
     </div>
 
-    <!-- ── Bottom Button Row ─────────────────────────────────── -->
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:14px;margin-top:28px;">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-        <span class="pulse-btn" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.85rem;letter-spacing:0.04em;text-transform:uppercase;padding:14px 28px;border-radius:50px;">
-          🎙️ Test Your AI Receptionist
-        </span>
-        <p style="font-size:0.72rem;color:var(--muted);text-align:center;">Click the chat orb on this page to talk to it live.</p>
-      </div>
-      <span class="pulse-btn" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.85rem;letter-spacing:0.04em;text-transform:uppercase;padding:14px 28px;border-radius:50px;">
-        📋 Proposal &amp; Contract Coming Soon
-      </span>
-    </div>
 
   </div>
 </div>
@@ -1247,20 +1253,16 @@
 <div id="tab-documents" class="tab-panel">
   <div class="docs-wrap">
 
-    <div class="docs-header">
-      <h2>Proposal &amp; Contract</h2>
-      <p>Coming soon.</p>
-    </div>
-
     <div class="proposal-card" style="text-align:center;padding:60px 24px;">
       <div class="card-body">
         <div style="font-size:2.5rem;margin-bottom:16px;">📋</div>
         <h3 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-weight:800;font-size:1.3rem;color:var(--gold-light);margin-bottom:10px;">
-          Proposal &amp; Contract Coming Soon
+          Coming Soon
         </h3>
-        <p style="color:var(--muted);font-size:0.95rem;max-width:420px;margin:0 auto;">
+        <p style="color:var(--muted);font-size:0.95rem;max-width:420px;margin:0 auto 20px;">
           We're putting together your custom proposal and service agreement. Check back soon, or reach out anytime with questions.
         </p>
+        <p style="color:var(--gold-light);font-size:0.9rem;font-weight:600;">🎙️ Click the orb on this page to talk to your AI receptionist live.</p>
       </div>
     </div>
 
