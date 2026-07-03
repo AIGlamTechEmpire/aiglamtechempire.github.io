@@ -347,8 +347,8 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      background: linear-gradient(135deg, var(--gold) 0%, #a87c2a 100%);
-      color: var(--black);
+      background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
+      color: #1D3557;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       font-size: 1rem;
       font-weight: 700;
@@ -768,8 +768,8 @@
     .sign-submit-btn {
       width: 100%;
       padding: 18px;
-      background: linear-gradient(135deg, var(--gold) 0%, #a87c2a 100%);
-      color: var(--black);
+      background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
+      color: #1D3557;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       font-size: 1rem;
       font-weight: 700;
@@ -855,12 +855,12 @@
 
     .pay-btn.primary {
       grid-column: 1/-1;
-      background: var(--gold);
-      color: var(--black);
+      background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
+      color: #1D3557;
       border-color: var(--gold);
     }
 
-    .pay-btn.primary:hover { background: var(--gold-light); }
+    .pay-btn.primary:hover { opacity: 0.9; }
 
     /* ── Links Tab ───────────────────────────────────────────────── */
     .links-wrap {
@@ -1036,8 +1036,8 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: linear-gradient(135deg, var(--gold) 0%, #a87c2a 100%);
-      color: var(--black);
+      background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
+      color: #1D3557;
       font-weight: 700;
       font-size: 0.92rem;
       letter-spacing: 0.06em;
@@ -1068,19 +1068,19 @@
     /* ── Tab Background Images ──────────────────────────────────── */
     #tab-welcome {
       background:
-        linear-gradient(180deg, rgba(15,31,51,0.88) 0%, rgba(15,31,51,0.96) 100%),
+        linear-gradient(180deg, rgba(15,31,51,0.55) 0%, rgba(15,31,51,0.72) 100%),
         url('bg-data.jpg') center top / cover no-repeat fixed;
     }
 
     #tab-documents {
       background:
-        linear-gradient(180deg, rgba(15,31,51,0.90) 0%, rgba(15,31,51,0.97) 100%),
+        linear-gradient(180deg, rgba(15,31,51,0.58) 0%, rgba(15,31,51,0.75) 100%),
         url('bg-holo.jpg') center center / cover no-repeat fixed;
     }
 
     #tab-links {
       background:
-        linear-gradient(180deg, rgba(15,31,51,0.88) 0%, rgba(15,31,51,0.96) 100%),
+        linear-gradient(180deg, rgba(15,31,51,0.55) 0%, rgba(15,31,51,0.72) 100%),
         url('bg-media.jpg') center center / cover no-repeat fixed;
     }
 
@@ -1135,9 +1135,14 @@
     <p class="hero-eyebrow">✦ Your Exclusive Client Portal ✦</p>
     <h1 class="hero-title">Welcome to<br><span>AI GlamTech Empire™</span></h1>
     <p class="hero-sub">Your personalized command center for signing, scheduling, and staying connected — built just for you.</p>
-    <button class="hero-cta" onclick="switchTab('documents', document.querySelector('[data-tab=documents]'))">
-      ✍️ &nbsp;View Your Proposal &amp; Sign
-    </button>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;">
+      <button class="hero-cta" onclick="switchTab('documents', document.querySelector('[data-tab=documents]'))">
+        ✍️ &nbsp;View Your Proposal &amp; Sign
+      </button>
+      <button class="hero-cta" onclick="switchTab('welcome', document.querySelector('[data-tab=welcome]')); setTimeout(() => document.getElementById('test-ai-box').scrollIntoView({behavior:'smooth', block:'center'}), 100);">
+        🎙️ &nbsp;Test Your AI Receptionist
+      </button>
+    </div>
   </div>
   <div class="hero-scroll-hint">⌄</div>
 </section>
@@ -1165,20 +1170,12 @@
     <h2 class="welcome-title"><span class="wt-cream">I'm So Excited</span><br><span class="wt-pink">to Work With You</span></h2>
     <p class="welcome-sub">Watch my personal message below, then book your onboarding call.</p>
 
-    <!-- ── Video / ElevenLabs Widget ─────────────────────────── -->
+    <!-- ── Video ─────────────────────────────────────────────── -->
     <div class="video-box">
       <div class="video-box-header">
         <div class="dot"></div>
         <span>Personal Message from Pinky Floyd</span>
       </div>
-
-      <!--
-        ═══════════════════════════════════════════════════════════
-        OPTION A — ElevenLabs Conversational AI Widget
-        Paste your <elevenlabs-convai agent-id="YOUR_AGENT_ID"> tag
-        inside the div below and uncomment the script tag.
-        ═══════════════════════════════════════════════════════════
-      -->
       <div style="position:relative;width:100%;padding-bottom:56.25%;background:#0d1b2a;">
         <video
           src="welcome.mp4"
@@ -1190,8 +1187,18 @@
       </div>
     </div>
 
+    <!-- ── Test AI Button ─────────────────────────────────────── -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:24px;margin-bottom:32px;">
+      <a href="#test-ai-box" onclick="event.preventDefault(); document.getElementById('test-ai-box').scrollIntoView({behavior:'smooth', block:'center'});"
+         style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:1rem;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;padding:16px 36px;border-radius:50px;box-shadow:0 6px 32px rgba(241,177,193,0.4), 0 6px 32px rgba(212,160,23,0.25);transition:transform 0.2s ease;"
+         onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+        🎙️ Test Your AI Receptionist
+      </a>
+      <div class="arrow-bounce">↓</div>
+    </div>
+
     <!-- ── ElevenLabs AI Concierge — Live Test ──────────────────────────── -->
-    <div class="video-box" style="margin-bottom:32px; border-color: var(--gold); border-width: 2px;">
+    <div id="test-ai-box" class="video-box" style="margin-bottom:32px; border-color: var(--gold); border-width: 2px;">
       <div class="video-box-header" style="background: rgba(212,160,23,0.1);">
         <div class="dot"></div>
         <span>🎙️ Need Help? Test Your AI Agent — Live Demo</span>
@@ -1201,6 +1208,8 @@
           This is the exact AI receptionist you're considering for your business.
           <strong style="color:var(--gold-light);">Talk to it right now</strong> — ask it anything a customer would ask.
         </p>
+
+        <p style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Option A — Inline iframe</p>
         <iframe
           src="https://elevenlabs.io/convai/agent_0201kw59qa62ed4rb8hbce21pc3q"
           width="100%"
@@ -1208,6 +1217,13 @@
           style="border:none;border-radius:var(--radius);max-width:480px;background:var(--surface);"
           allow="microphone"
         ></iframe>
+
+        <p style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:12px;">Option B — Widget (floats bottom-right regardless of placement)</p>
+        <elevenlabs-convai
+          agent-id="agent_0201kw59qa62ed4rb8hbce21pc3q"
+          variant="expanded"
+          dismissible="false"
+        ></elevenlabs-convai>
       </div>
     </div>
 
@@ -1239,6 +1255,13 @@
       -->
     </div>
 
+    <!-- ── Proposal Coming Soon ──────────────────────────────── -->
+    <div style="display:flex;justify-content:center;margin-bottom:20px;">
+      <span style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.85rem;letter-spacing:0.04em;text-transform:uppercase;padding:12px 28px;border-radius:50px;box-shadow:0 6px 24px rgba(241,177,193,0.35);">
+        📋 Proposal Coming Soon
+      </span>
+    </div>
+
     <!-- ── Calendly Embed ─────────────────────────────────────── -->
     <div class="calendar-section">
       <div class="calendar-header">
@@ -1268,114 +1291,23 @@
   <div class="docs-wrap">
 
     <div class="docs-header">
-      <h2>Your Proposal &amp; Agreement</h2>
-      <p>Review your custom proposal below, then sign and unlock payment.</p>
+      <h2>Service Agreement</h2>
+      <p>Review the agreement below, then sign and unlock payment.</p>
     </div>
 
     <!-- Progress steps -->
     <div class="sign-steps">
-      <div class="sign-step active" id="step1">
+      <div class="sign-step active" id="step2">
         <div class="step-num">1</div>
-        <p>Review Proposal</p>
-      </div>
-      <div class="sign-step" id="step2">
-        <div class="step-num">2</div>
         <p>Review Contract</p>
       </div>
       <div class="sign-step" id="step3">
-        <div class="step-num">3</div>
+        <div class="step-num">2</div>
         <p>Sign</p>
       </div>
       <div class="sign-step" id="step4">
-        <div class="step-num">4</div>
+        <div class="step-num">3</div>
         <p>Pay</p>
-      </div>
-    </div>
-
-    <!-- ── Proposal ─────────────────────────────────────────────── -->
-    <div class="proposal-card">
-      <div class="card-head">
-        <h3>✦ Proposal</h3>
-        <span class="card-badge">AI GlamTech Empire™</span>
-      </div>
-      <div class="card-body">
-
-        <dl class="info-grid">
-          <div><dt>Provider</dt><dd>Pinky Floyd · AI GlamTech Empire™</dd></div>
-          <div><dt>Client</dt><dd id="prop-client-name">Brian Walcott</dd></div>
-          <div><dt>Business</dt><dd id="prop-business">ABW Luxury Limousine</dd></div>
-          <div><dt>Client Email</dt><dd id="prop-email">To Be Provided</dd></div>
-          <div><dt>Effective Date</dt><dd>Date of Signature</dd></div>
-          <div><dt>Agreement</dt><dd id="prop-version">v1.0</dd></div>
-        </dl>
-
-        <div class="gold-divider"><span>Scope of Services</span></div>
-
-        <div class="scope-section">
-          <h4>Phase 1 — Included in Setup</h4>
-          <ul class="scope-list">
-            <li>Custom AI system deployment built for <strong id="scope-biz">ABW Luxury Limousine</strong> — branded, configured, and ready to run.</li>
-            <li>Branded greeting / landing with your approved voice. Never references the backend platform.</li>
-            <li>Calendar / booking integration with live availability from your existing system.</li>
-            <li>Service menu configuration with your confirmed service lines.</li>
-            <li>FAQ boundary enforcement — system answers only from your approved FAQ.</li>
-            <li>Lead capture &amp; email routing to <strong id="scope-email">To Be Provided</strong>. Every interaction logged.</li>
-          </ul>
-        </div>
-
-        <div class="scope-section">
-          <h4>Phase 2 — Included in Monthly Management</h4>
-          <ul class="scope-list">
-            <li>Script refinement from real call/lead data — improving accuracy and conversion over time.</li>
-            <li>60-day onboarding support with adjustments and performance reviews included.</li>
-            <li>Weekly schedule / content updates so the system always reflects what's actually live.</li>
-            <li>Self-paced video training so you and your team can monitor and manage without technical overwhelm.</li>
-          </ul>
-        </div>
-
-        <div class="scope-section">
-          <h4>Optional Add-On — $<span id="scope-optional">TBD</span></h4>
-          <ul class="scope-list">
-            <li>Technical evaluation to determine how your AI Command Center can connect to your existing tech stack.</li>
-            <li>Written compatibility report with recommended integration path.</li>
-            <li>Billed as an evaluation — you only pay for the analysis you receive.</li>
-          </ul>
-        </div>
-
-        <div class="gold-divider"><span>Pricing</span></div>
-
-        <table class="pricing-table">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Terms</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Initial System Setup Fee</td>
-              <td>Charged immediately upon signing — non-refundable once build begins</td>
-              <td>$<span id="price-setup">TBD</span></td>
-            </tr>
-            <tr>
-              <td>Monthly Recurring Service</td>
-              <td>Autopay, starting day 30 · minimum <span id="price-term">TBD</span> months</td>
-              <td>$<span id="price-monthly">TBD</span>/mo</td>
-            </tr>
-            <tr>
-              <td>Optional Integration Add-On</td>
-              <td>Billed separately only if selected</td>
-              <td>$<span id="price-optional">TBD</span></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="pricing-total">
-          <span class="total-label">Year-One Total (Setup + 12 months)</span>
-          <span class="total-val" id="price-year-total">$TBD + ($TBD × 12)</span>
-        </div>
-
       </div>
     </div>
 
