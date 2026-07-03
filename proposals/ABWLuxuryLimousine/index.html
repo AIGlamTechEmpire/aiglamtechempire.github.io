@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI GlamTech Empire™ — Client Portal</title>
+  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
 
   <style>
@@ -1228,14 +1229,11 @@
           <strong style="color:var(--gold-light);">Talk to it right now</strong> — ask it anything a customer would ask.
         </p>
 
-        <div id="elevenlabs-wrap" style="width:100%;max-width:480px;">
-          <iframe
-            src="https://elevenlabs.io/convai/agent_0201kw59qa62ed4rb8hbce21pc3q"
-            width="100%"
-            height="600"
-            style="border:none;border-radius:var(--radius);background:var(--surface);"
-            allow="microphone"
-          ></iframe>
+        <div id="elevenlabs-wrap" style="width:100%;max-width:480px;min-height:500px;">
+          <elevenlabs-convai
+            agent-id="agent_0201kw59qa62ed4rb8hbce21pc3q"
+            variant="expanded"
+          ></elevenlabs-convai>
         </div>
       </div>
     </div>
