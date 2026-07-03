@@ -197,6 +197,18 @@
       font-size: clamp(1.8rem, 4vw, 2.8rem);
       margin-bottom: 12px;
       line-height: 1.2;
+      position: relative;
+      padding: 24px 16px;
+    }
+
+    .welcome-title::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(222,193,113,0.18) 0%, rgba(241,177,193,0.10) 45%, transparent 75%);
+      filter: blur(6px);
+      z-index: -1;
+      pointer-events: none;
     }
 
     .welcome-title .wt-cream {
@@ -1136,7 +1148,7 @@
     <p class="hero-sub">Your personalized command center for signing, scheduling, and staying connected — built just for you.</p>
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;">
       <button class="hero-cta" onclick="switchTab('documents', document.querySelector('[data-tab=documents]'))">
-        ✍️ &nbsp;View Your Proposal &amp; Sign
+        ✍️ &nbsp;Review &amp; Sign Agreement
       </button>
       <button class="hero-cta" onclick="switchTab('welcome', document.querySelector('[data-tab=welcome]')); setTimeout(() => document.getElementById('test-ai-box').scrollIntoView({behavior:'smooth', block:'center'}), 100);">
         🎙️ &nbsp;Test Your AI Receptionist
@@ -1167,10 +1179,16 @@
 
     <p class="welcome-eyebrow">Welcome to Your AI Command Center</p>
     <h2 class="welcome-title"><span class="wt-cream">I'm So Excited</span><br><span class="wt-pink">to Work With You</span></h2>
-    <p class="welcome-sub">Watch my personal message below, then book your onboarding call.</p>
+    <div style="display:flex;justify-content:center;margin-bottom:32px;">
+      <a href="#personal-video" onclick="event.preventDefault(); document.getElementById('personal-video').scrollIntoView({behavior:'smooth', block:'center'});"
+         style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.95rem;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;padding:15px 34px;border-radius:50px;box-shadow:0 6px 28px rgba(241,177,193,0.4), 0 6px 28px rgba(212,160,23,0.25);transition:transform 0.2s ease;"
+         onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+        🎬 Watch My Personal Message
+      </a>
+    </div>
 
     <!-- ── Video ─────────────────────────────────────────────── -->
-    <div class="video-box">
+    <div id="personal-video" class="video-box">
       <div class="video-box-header">
         <div class="dot"></div>
         <span>Personal Message from Pinky Floyd</span>
@@ -1180,6 +1198,8 @@
           src="welcome.mp4"
           controls
           playsinline
+          autoplay
+          muted
           poster="../NewGTElogo.png"
           style="position:absolute;top:0;left:0;width:100%;height:100%;background:#0d1b2a;"
         ></video>
@@ -1208,13 +1228,15 @@
           <strong style="color:var(--gold-light);">Talk to it right now</strong> — ask it anything a customer would ask.
         </p>
 
-        <iframe
-          src="https://elevenlabs.io/convai/agent_0201kw59qa62ed4rb8hbce21pc3q"
-          width="100%"
-          height="600"
-          style="border:none;border-radius:var(--radius);max-width:480px;background:var(--surface);"
-          allow="microphone"
-        ></iframe>
+        <div id="elevenlabs-wrap" style="width:100%;max-width:480px;">
+          <iframe
+            src="https://elevenlabs.io/convai/agent_0201kw59qa62ed4rb8hbce21pc3q"
+            width="100%"
+            height="600"
+            style="border:none;border-radius:var(--radius);background:var(--surface);"
+            allow="microphone"
+          ></iframe>
+        </div>
       </div>
     </div>
 
@@ -1234,7 +1256,7 @@
       <a href="#documents" class="cta-btn" id="main-cta-btn"
          onclick="event.preventDefault(); switchTab('documents', document.querySelector('[data-tab=documents]'))">
         <span class="btn-icon">✦</span>
-        View My Proposal &amp; Sign
+        Review &amp; Sign Agreement
         <span class="btn-icon">→</span>
       </a>
 
