@@ -1,1447 +1,1646 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI GlamTech Empire™ — Client Portal</title>
-  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-
-  <style>
-    /* ── Reset & Tokens ─────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --gold:       #dec171;
-      --gold-light: #dec171;
-      --gold-dim:   #b89a4e;
-      --black:      #0f1f33;
-      --surface:    #1D3557;
-      --card:       #1a3050;
-      --border:     #243d57;
-      --text:       #ffffff;
-      --muted:      #6b8da8;
-      --white:      #ffffff;
-      --blush:      #f1b1c1;
-      --blush-light: #ff9db6;
-      --gold-deep:  #c9a830;
-      --radius:     14px;
-    }
-
-    /* ── Click glow effect ── */
-    .hero-cta:active, .cta-btn:active, .sign-submit-btn:active,
-    .tab-btn:active, .pay-btn:active {
-      box-shadow: 0 0 0 4px rgba(255,157,182,0.35), 0 0 24px rgba(255,157,182,0.5) !important;
-    }
-
-    /* ── Pulsing animated glow ── */
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 6px 24px rgba(241,177,193,0.35), 0 0 0 0 rgba(222,193,113,0.4); }
-      50%      { box-shadow: 0 6px 28px rgba(241,177,193,0.5), 0 0 0 8px rgba(222,193,113,0); }
-    }
-    .pulse-btn {
-      animation: pulseGlow 2.2s ease-in-out infinite;
-    }
-
-    /* ── Signature gradient accent stripe — used across all cards ── */
-    .video-box, .proposal-card, .calendar-section, .sig-block, .link-card {
-      position: relative;
-    }
-    .video-box::before, .proposal-card::before, .calendar-section::before,
-    .sig-block::before, .link-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 3px;
-      background: linear-gradient(to right, var(--gold), var(--blush), var(--gold-dim));
-      z-index: 1;
-    }
-    .video-box:hover, .proposal-card:hover, .calendar-section:hover, .link-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--gold);
-    }
-    .video-box, .proposal-card, .calendar-section, .link-card {
-      transition: transform 0.15s ease, border-color 0.15s ease;
-    }
-
-    html, body {
-      background: var(--black);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    /* ── Header ─────────────────────────────────────────────────── */
-    header {
-      background: linear-gradient(135deg, #0d1b2a 0%, #1D3557 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 18px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .brand-logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 2px solid var(--gold);
-      object-fit: cover;
-      background: var(--gold-dim);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      overflow: hidden;
-    }
-
-    .brand-logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .brand-text h1 {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
-      font-size: 1.2rem;
-      color: var(--gold-light);
-      letter-spacing: 0.03em;
-    }
-
-    .brand-text p {
-      font-size: 0.72rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .header-badge {
-      font-size: 0.72rem;
-      color: var(--gold);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 4px 14px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    /* ── Tab Nav ─────────────────────────────────────────────────── */
-    .tab-nav {
-      display: flex;
-      gap: 0;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    .tab-nav::-webkit-scrollbar { display: none; }
-
-    .tab-btn {
-      flex: 1;
-      min-width: 140px;
-      padding: 16px 24px;
-      background: transparent;
-      border: none;
-      border-bottom: 3px solid transparent;
-      color: var(--muted);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 0.82rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-
-    .tab-btn:hover { color: var(--gold-light); background: rgba(212,160,23,0.05); }
-
-    .tab-btn.active {
-      color: var(--gold-light);
-      border-bottom-color: var(--gold);
-      background: rgba(212,160,23,0.07);
-    }
-
-    .tab-btn .tab-icon {
-      font-size: 1rem;
-      line-height: 1;
-    }
-
-    /* ── Tab Panels ─────────────────────────────────────────────── */
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    /* ── Welcome Tab ─────────────────────────────────────────────── */
-    .welcome-wrap {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 48px 24px 64px;
-    }
-
-    .welcome-eyebrow {
-      text-align: center;
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 10px;
-    }
-
-    .welcome-title {
-      text-align: center;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
-      font-size: clamp(2.2rem, 6vw, 3.6rem);
-      margin-bottom: 12px;
-      line-height: 1.2;
-      position: relative;
-      padding: 24px 16px;
-    }
-
-    .welcome-title::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(222,193,113,0.18) 0%, rgba(241,177,193,0.10) 45%, transparent 75%);
-      filter: blur(6px);
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .welcome-title .wt-cream {
-      color: #f2e6cf;
-      text-shadow: 0 2px 24px rgba(0,0,0,0.7);
-    }
-
-    .welcome-title .wt-pink {
-      color: var(--blush);
-      text-shadow: 0 2px 24px rgba(0,0,0,0.7);
-    }
-
-    .welcome-sub {
-      text-align: center;
-      color: var(--muted);
-      font-size: 1rem;
-      margin-bottom: 40px;
-    }
-
-    /* ── Video Box ────────────────────────────────────────────────── */
-    .video-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 32px;
-      position: relative;
-    }
-
-    .video-box-header {
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(212,160,23,0.05);
-    }
-
-    .video-box-header .dot {
-      width: 9px; height: 9px;
-      border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 0 8px var(--gold-dim);
-    }
-
-    .video-box-header span {
-      font-size: 0.78rem;
-      color: var(--gold);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    /* — ElevenLabs widget container — */
-    .elevenlabs-embed {
-      min-height: 160px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    /* Paste your <elevenlabs-convai> tag inside .elevenlabs-embed.
-       The widget auto-sizes; the surrounding box keeps it branded. */
-
-    /* — OR use a video player — */
-    .video-player-wrap {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%; /* 16:9 */
-      background: #0d1b2a;
-    }
-
-    .video-player-wrap iframe,
-    .video-player-wrap video {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      border: none;
-    }
-
-    .video-placeholder {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      background: radial-gradient(ellipse at center, #16294a 0%, #0d1b2a 100%);
-    }
-
-    .video-placeholder .play-ring {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      border: 2px solid var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      color: var(--gold);
-      box-shadow: 0 0 32px rgba(212,160,23,0.3);
-    }
-
-    .video-placeholder p {
-      font-size: 0.84rem;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-    }
-
-    /* ── CTA Section ─────────────────────────────────────────────── */
-    .cta-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 48px;
-    }
-
-    .cta-arrow-label {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .cta-arrow-label span {
-      font-size: 0.76rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .arrow-bounce {
-      font-size: 2rem;
-      color: var(--gold);
-      animation: bounce 1.4s ease-in-out infinite;
-      line-height: 1;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(10px); }
-    }
-
-    .arrow-bounce-h {
-      font-size: 1.3rem;
-      color: var(--gold);
-      animation: bounceH 1.2s ease-in-out infinite;
-      line-height: 1;
-    }
-
-    @keyframes bounceH {
-      0%, 100% { transform: translateX(0); }
-      50%       { transform: translateX(-8px); }
-    }
-
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
-      color: #1D3557;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-decoration: none;
-      padding: 18px 42px;
-      border-radius: 50px;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 6px 32px rgba(212,160,23,0.4), 0 2px 8px rgba(0,0,0,0.4);
-      transition: all 0.25s ease;
-      text-transform: uppercase;
-    }
-
-    .cta-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 48px rgba(212,160,23,0.55), 0 4px 12px rgba(0,0,0,0.5);
-    }
-
-    .cta-btn .btn-icon { font-size: 1.2rem; }
-
-    /* ── Calendly Block ───────────────────────────────────────────── */
-    .calendar-section {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .calendar-header {
-      padding: 20px 24px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .calendar-header-icon {
-      width: 38px; height: 38px;
-      border-radius: 10px;
-      background: rgba(212,160,23,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-    }
-
-    .calendar-header-text h3 {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
-      font-size: 1.05rem;
-      color: var(--gold-light);
-      margin-bottom: 2px;
-    }
-
-    .calendar-header-text p {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    /* Calendly inline widget */
-    .calendly-embed-wrap {
-      padding: 20px;
-    }
-
-    .calendly-inline-widget {
-      min-width: 320px;
-      height: 700px;
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: #ffffff;
-    }
-
-    /* ── Documents Tab ───────────────────────────────────────────── */
-    .docs-wrap {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 48px 24px 64px;
-    }
-
-    .docs-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .docs-header h2 {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
-      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
-      color: var(--white);
-      margin-bottom: 8px;
-    }
-
-    .docs-header p {
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    /* Progress Steps */
-    .sign-steps {
-      display: flex;
-      gap: 0;
-      margin-bottom: 40px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .sign-step {
-      flex: 1;
-      padding: 16px 12px;
-      text-align: center;
-      border-right: 1px solid var(--border);
-      position: relative;
-    }
-
-    .sign-step:last-child { border-right: none; }
-
-    .sign-step.done .step-num { background: var(--gold); color: var(--black); }
-    .sign-step.active .step-num { background: rgba(212,160,23,0.15); color: var(--gold); border-color: var(--gold); }
-
-    .step-num {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.78rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 6px;
-    }
-
-    .sign-step p { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-    .sign-step.active p { color: var(--gold); }
-
-    /* Proposal Card */
-    .proposal-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 24px;
-      overflow: hidden;
-    }
-
-    .card-head {
-      padding: 18px 24px;
-      background: rgba(212,160,23,0.06);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .card-head h3 {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
-      font-size: 1rem;
-      color: var(--gold-light);
-    }
-
-    .card-badge {
-      font-size: 0.68rem;
-      color: var(--gold);
-      background: rgba(212,160,23,0.12);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 3px 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      white-space: nowrap;
-    }
-
-    .card-body {
-      padding: 24px;
-    }
-
-    /* Parties table */
-    .info-grid {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 24px;
-    }
-
-    .info-grid > div {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .info-grid > div:last-child {
-      border-bottom: none;
-    }
-
-    .info-grid dt {
-      font-size: 0.72rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      white-space: nowrap;
-      margin: 0;
-    }
-
-    .info-grid dd {
-      font-size: 0.95rem;
-      color: var(--text);
-      font-weight: 600;
-      text-align: right;
-      margin: 0;
-    }
-
-    /* Service scope list */
-    .scope-section { margin-bottom: 24px; }
-
-    .scope-section h4 {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--gold);
-      margin-bottom: 12px;
-    }
-
-    .scope-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .scope-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 0.88rem;
-      color: var(--text);
-    }
-
-    .scope-list li::before {
-      content: '✦';
-      color: var(--gold);
-      font-size: 0.6rem;
-      margin-top: 5px;
-      flex-shrink: 0;
-    }
-
-    /* Pricing table */
-    .pricing-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 16px;
-    }
-
-    .pricing-table th {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      padding: 8px 12px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .pricing-table th:last-child { text-align: right; }
-
-    .pricing-table td {
-      padding: 12px 12px;
-      font-size: 0.88rem;
-      border-bottom: 1px solid rgba(212,160,23,0.08);
-      color: var(--text);
-    }
-
-    .pricing-table td:last-child { text-align: right; color: var(--gold-light); font-weight: 600; }
-
-    .pricing-table tr:last-child td { border-bottom: none; }
-
-    .pricing-total {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 12px;
-      background: rgba(212,160,23,0.06);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.88rem;
-    }
-
-    .pricing-total .total-label { color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.76rem; }
-
-    .pricing-total .total-val { color: var(--gold-light); font-weight: 700; font-size: 1.05rem; }
-
-    /* Contract clauses */
-    .clause {
-      padding: 16px 0;
-      border-bottom: 1px solid rgba(212,160,23,0.08);
-    }
-
-    .clause:last-of-type { border-bottom: none; }
-
-    .clause-title {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--gold);
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .clause-title .cn {
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      border: 1px solid var(--gold-dim);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.68rem;
-      color: var(--gold);
-      flex-shrink: 0;
-    }
-
-    .clause p {
-      font-size: 0.86rem;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    /* Signature Block */
-    .sig-block {
-      background: linear-gradient(135deg, #0f1f33 0%, #1D3557 100%);
-      border: 1px solid var(--gold);
-      border-radius: var(--radius);
-      padding: 32px;
-      margin-top: 32px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .sig-block h3 {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
-      font-size: 1.15rem;
-      color: var(--gold-light);
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .sig-field {
-      margin-bottom: 18px;
-    }
-
-    .sig-field label {
-      display: block;
-      font-size: 0.76rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .sig-field input[type="text"],
-    .sig-field input[type="email"] {
-      width: 100%;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 0.92rem;
-      transition: border-color 0.2s;
-      outline: none;
-    }
-
-    .sig-field input[type="text"]:focus,
-    .sig-field input[type="email"]:focus {
-      border-color: var(--gold);
-    }
-
-    .sig-field input[type="text"].sig-name {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
-      font-size: 1.15rem;
-      text-align: center;
-      letter-spacing: 0.04em;
-    }
-
-    .consent-row {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      margin-bottom: 24px;
-    }
-
-    .consent-row input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--gold);
-      margin-top: 2px;
-      flex-shrink: 0;
-      cursor: pointer;
-    }
-
-    .consent-row label {
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.6;
-      cursor: pointer;
-    }
-
-    .consent-row label strong { color: var(--gold-light); }
-
-    .sign-submit-btn {
-      width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
-      color: #1D3557;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      box-shadow: 0 6px 32px rgba(212,160,23,0.35);
-      position: relative;
-    }
-
-    .sign-submit-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 44px rgba(212,160,23,0.5);
-    }
-
-    .sign-submit-btn:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-
-    /* Payment unlock */
-    .payment-section {
-      margin-top: 28px;
-      position: relative;
-    }
-
-    .payment-lock-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(10,10,15,0.82);
-      backdrop-filter: blur(6px);
-      border-radius: var(--radius);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      z-index: 2;
-      border: 1px solid var(--border);
-      transition: opacity 0.4s ease;
-    }
-
-    .payment-lock-overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .lock-icon { font-size: 2rem; }
-    .lock-label { font-size: 0.8rem; color: var(--muted); text-align: center; padding: 0 20px; }
-
-    .payment-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      padding: 20px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-    }
-
-    @media (max-width: 500px) { .payment-grid { grid-template-columns: 1fr; } }
-
-    .pay-btn {
-      display: block;
-      text-align: center;
-      text-decoration: none;
-      padding: 14px 16px;
-      border-radius: 10px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      border: 1px solid var(--border);
-      color: var(--text);
-      background: rgba(255,255,255,0.04);
-      transition: all 0.2s;
-    }
-
-    .pay-btn:hover { border-color: var(--gold); color: var(--gold-light); background: rgba(212,160,23,0.07); }
-
-    .pay-btn.primary {
-      grid-column: 1/-1;
-      background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
-      color: #1D3557;
-      border-color: var(--gold);
-    }
-
-    .pay-btn.primary:hover { opacity: 0.9; }
-
-    /* ── Links Tab ───────────────────────────────────────────────── */
-    .links-wrap {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 48px 24px 64px;
-    }
-
-    .links-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .links-header h2 {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
-      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
-      color: var(--white);
-      margin-bottom: 8px;
-    }
-
-    .links-header p { color: var(--muted); font-size: 0.92rem; }
-
-    .link-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 22px 24px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      text-decoration: none;
-      margin-bottom: 14px;
-      transition: all 0.2s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .link-card:hover {
-      border-color: var(--gold);
-      background: rgba(212,160,23,0.05);
-      transform: translateX(4px);
-    }
-
-    .link-card-icon {
-      width: 48px; height: 48px;
-      border-radius: 12px;
-      background: rgba(212,160,23,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-    }
-
-    .link-card-text h4 {
-      font-size: 0.96rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 3px;
-    }
-
-    .link-card-text p { font-size: 0.8rem; color: var(--muted); }
-
-    .link-card-arrow {
-      margin-left: auto;
-      color: var(--gold-dim);
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-
-    /* ── Footer ─────────────────────────────────────────────────── */
-    footer {
-      text-align: center;
-      padding: 28px 24px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.76rem;
-      letter-spacing: 0.04em;
-      margin-top: 20px;
-    }
-
-    footer a { color: var(--gold-dim); text-decoration: none; }
-
-    /* ── Divider ─────────────────────────────────────────────────── */
-    .gold-divider {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin: 32px 0;
-    }
-
-    .gold-divider::before,
-    .gold-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .gold-divider span {
-      font-size: 0.66rem;
-      color: var(--gold-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      white-space: nowrap;
-    }
-
-    /* ── Hero Section ───────────────────────────────────────────── */
-    .hero {
-      position: relative;
-      min-height: 420px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      overflow: hidden;
-      background:
-        linear-gradient(180deg, rgba(15,31,51,0.55) 0%, rgba(15,31,51,0.85) 100%),
-        url('hero-bg.jpg') center center / cover no-repeat;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(90deg, rgba(222,193,113,0.05) 0px, rgba(222,193,113,0.05) 1px, transparent 1px, transparent 60px),
-        repeating-linear-gradient(0deg, rgba(240,98,146,0.04) 0px, rgba(240,98,146,0.04) 1px, transparent 1px, transparent 60px),
-        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(222,193,113,0.14) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      padding: 72px 24px 80px;
-      max-width: 760px;
-    }
-
-    .hero-eyebrow {
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 14px;
-    }
-
-    .hero-title {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      color: #fff;
-      line-height: 1.15;
-      margin-bottom: 18px;
-      text-shadow: 0 2px 24px rgba(0,0,0,0.7);
-    }
-
-    .hero-title span {
-      background: linear-gradient(90deg, var(--gold-light), #f7e09a, var(--gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-sub {
-      color: rgba(232,224,208,0.8);
-      font-size: 1.08rem;
-      max-width: 520px;
-      margin: 0 auto 36px;
-      line-height: 1.65;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
-      color: #1D3557;
-      font-weight: 700;
-      font-size: 0.92rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 15px 36px;
-      border-radius: 50px;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 6px 32px rgba(212,160,23,0.45);
-      transition: all 0.25s ease;
-    }
-
-    .hero-cta:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 48px rgba(212,160,23,0.6);
-    }
-
-    .hero-scroll-hint {
-      position: absolute;
-      bottom: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--gold-dim);
-      font-size: 1.5rem;
-      animation: bounce 1.6s ease-in-out infinite;
-    }
-
-    /* ── Tab Background Images ──────────────────────────────────── */
-    #tab-welcome {
-      background:
-        linear-gradient(180deg, rgba(15,31,51,0.55) 0%, rgba(15,31,51,0.72) 100%),
-        url('bg-data.jpg') center top / cover no-repeat fixed;
-    }
-
-    #tab-documents {
-      background:
-        linear-gradient(180deg, rgba(15,31,51,0.58) 0%, rgba(15,31,51,0.75) 100%),
-        url('bg-holo.jpg') center center / cover no-repeat fixed;
-    }
-
-    #tab-links {
-      background:
-        linear-gradient(180deg, rgba(15,31,51,0.55) 0%, rgba(15,31,51,0.72) 100%),
-        url('bg-media.jpg') center center / cover no-repeat fixed;
-    }
-
-    /* ── Utility ────────────────────────────────────────────────── */
-    .hidden { display: none !important; }
-
-    @media (max-width: 600px) {
-      header { padding: 14px 16px; }
-      .welcome-wrap, .docs-wrap, .links-wrap { padding: 28px 16px 48px; }
-      .sign-steps { flex-direction: column; border-radius: var(--radius); }
-      .sign-step { border-right: none; border-bottom: 1px solid var(--border); }
-      .sign-step:last-child { border-bottom: none; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI GlamTech Empire™ — Client Portal</title>
+<script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+
+<style>
+/* ── Reset & Tokens ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+--gold: #dec171;
+--gold-light: #dec171;
+--gold-dim: #b89a4e;
+--black: #0f1f33;
+--surface: #1D3557;
+--card: #1a3050;
+--border: #243d57;
+--text: #ffffff;
+--muted: #6b8da8;
+--white: #ffffff;
+--blush: #f1b1c1;
+--blush-light: #ff9db6;
+--gold-deep: #c9a830;
+--radius: 14px;
+}
+
+/* ── Click glow effect ── */
+.hero-cta:active, .cta-btn:active, .sign-submit-btn:active,
+.tab-btn:active, .pay-btn:active {
+box-shadow: 0 0 0 4px rgba(255,157,182,0.35), 0 0 24px rgba(255,157,182,0.5) !important;
+}
+
+/* ── Pulsing animated glow ── */
+@keyframes pulseGlow {
+0%, 100% { box-shadow: 0 6px 24px rgba(241,177,193,0.35), 0 0 0 0 rgba(222,193,113,0.4); }
+50% { box-shadow: 0 6px 28px rgba(241,177,193,0.5), 0 0 0 8px rgba(222,193,113,0); }
+}
+.pulse-btn {
+animation: pulseGlow 2.2s ease-in-out infinite;
+}
+
+/* ── Signature gradient accent stripe — used across all cards ── */
+.video-box, .proposal-card, .calendar-section, .sig-block, .link-card {
+position: relative;
+}
+.video-box::before, .proposal-card::before, .calendar-section::before,
+.sig-block::before, .link-card::before {
+content: '';
+position: absolute;
+top: 0; left: 0;
+width: 100%; height: 3px;
+background: linear-gradient(to right, var(--gold), var(--blush), var(--gold-dim));
+z-index: 1;
+}
+.video-box:hover, .proposal-card:hover, .calendar-section:hover, .link-card:hover {
+transform: translateY(-2px);
+border-color: var(--gold);
+}
+.video-box, .proposal-card, .calendar-section, .link-card {
+transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+html, body {
+background: var(--black);
+color: var(--text);
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+font-size: 16px;
+line-height: 1.6;
+min-height: 100vh;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+header {
+background: linear-gradient(135deg, #0d1b2a 0%, #1D3557 100%);
+border-bottom: 1px solid var(--border);
+padding: 18px 32px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 16px;
+}
+
+.brand {
+display: flex;
+align-items: center;
+gap: 14px;
+}
+
+.brand-logo {
+width: 48px;
+height: 48px;
+border-radius: 50%;
+border: 2px solid var(--gold);
+object-fit: cover;
+background: var(--gold-dim);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 22px;
+overflow: hidden;
+}
+
+.brand-logo img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.brand-text h1 {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
+font-size: 1.2rem;
+color: var(--gold-light);
+letter-spacing: 0.03em;
+}
+
+.brand-text p {
+font-size: 0.72rem;
+color: var(--muted);
+letter-spacing: 0.08em;
+text-transform: uppercase;
+}
+
+.header-badge {
+font-size: 0.72rem;
+color: var(--gold);
+border: 1px solid var(--border);
+border-radius: 20px;
+padding: 4px 14px;
+letter-spacing: 0.06em;
+text-transform: uppercase;
+}
+
+/* ── Tab Nav ─────────────────────────────────────────────────── */
+.tab-nav {
+display: flex;
+gap: 0;
+border-bottom: 1px solid var(--border);
+background: var(--surface);
+overflow-x: auto;
+scrollbar-width: none;
+}
+
+.tab-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+flex: 1;
+min-width: 140px;
+padding: 16px 24px;
+background: transparent;
+border: none;
+border-bottom: 3px solid transparent;
+color: var(--muted);
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+font-size: 0.82rem;
+font-weight: 500;
+letter-spacing: 0.06em;
+text-transform: uppercase;
+cursor: pointer;
+transition: all 0.25s ease;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+white-space: nowrap;
+}
+
+.tab-btn:hover { color: var(--gold-light); background: rgba(212,160,23,0.05); }
+
+.tab-btn.active {
+color: var(--gold-light);
+border-bottom-color: var(--gold);
+background: rgba(212,160,23,0.07);
+}
+
+.tab-btn .tab-icon {
+font-size: 1rem;
+line-height: 1;
+}
+
+/* ── Tab Panels ─────────────────────────────────────────────── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Welcome Tab ─────────────────────────────────────────────── */
+.welcome-wrap {
+max-width: 860px;
+margin: 0 auto;
+padding: 48px 24px 64px;
+}
+
+.welcome-eyebrow {
+text-align: center;
+font-size: 1.05rem;
+font-weight: 700;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--gold);
+margin-bottom: 10px;
+}
+
+.welcome-title {
+text-align: center;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
+font-size: clamp(2.2rem, 6vw, 3.6rem);
+margin-bottom: 12px;
+line-height: 1.2;
+position: relative;
+padding: 24px 16px;
+}
+
+.welcome-title::before {
+content: '';
+position: absolute;
+inset: 0;
+background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(222,193,113,0.18) 0%, rgba(241,177,193,0.10) 45%, transparent 75%);
+filter: blur(6px);
+z-index: -1;
+pointer-events: none;
+}
+
+.welcome-title .wt-cream {
+color: #f2e6cf;
+text-shadow: 0 2px 24px rgba(0,0,0,0.7);
+}
+
+.welcome-title .wt-pink {
+color: var(--blush);
+text-shadow: 0 2px 24px rgba(0,0,0,0.7);
+}
+
+.welcome-sub {
+text-align: center;
+color: var(--muted);
+font-size: 1rem;
+margin-bottom: 40px;
+}
+
+/* ── Video Box ────────────────────────────────────────────────── */
+.video-box {
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+overflow: hidden;
+margin-bottom: 32px;
+position: relative;
+}
+
+.video-box-header {
+padding: 14px 20px;
+border-bottom: 1px solid var(--border);
+display: flex;
+align-items: center;
+gap: 10px;
+background: rgba(212,160,23,0.05);
+}
+
+.video-box-header .dot {
+width: 9px; height: 9px;
+border-radius: 50%;
+background: var(--gold);
+box-shadow: 0 0 8px var(--gold-dim);
+}
+
+.video-box-header span {
+font-size: 0.78rem;
+color: var(--gold);
+letter-spacing: 0.08em;
+text-transform: uppercase;
+}
+
+/* — ElevenLabs widget container — */
+.elevenlabs-embed {
+min-height: 160px;
+padding: 24px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 12px;
+}
+
+/* — OR use a video player — */
+.video-player-wrap {
+position: relative;
+width: 100%;
+padding-bottom: 56.25%; /* 16:9 */
+background: #0d1b2a;
+}
+
+.video-player-wrap iframe,
+.video-player-wrap video {
+position: absolute;
+top: 0; left: 0;
+width: 100%; height: 100%;
+border: none;
+}
+
+.video-placeholder {
+position: absolute;
+top: 0; left: 0; right: 0; bottom: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 14px;
+background: radial-gradient(ellipse at center, #16294a 0%, #0d1b2a 100%);
+}
+
+.video-placeholder .play-ring {
+width: 72px; height: 72px;
+border-radius: 50%;
+border: 2px solid var(--gold);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 2rem;
+color: var(--gold);
+box-shadow: 0 0 32px rgba(212,160,23,0.3);
+}
+
+.video-placeholder p {
+font-size: 0.84rem;
+color: var(--muted);
+letter-spacing: 0.04em;
+}
+
+/* ── CTA Section ─────────────────────────────────────────────── */
+.cta-section {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 14px;
+margin-bottom: 48px;
+}
+
+.cta-arrow-label {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 4px;
+}
+
+.cta-arrow-label span {
+font-size: 0.76rem;
+color: var(--muted);
+letter-spacing: 0.08em;
+text-transform: uppercase;
+}
+
+.arrow-bounce {
+font-size: 2rem;
+color: var(--gold);
+animation: bounce 1.4s ease-in-out infinite;
+line-height: 1;
+}
+
+@keyframes bounce {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(10px); }
+}
+
+.arrow-bounce-h {
+font-size: 1.3rem;
+color: var(--gold);
+animation: bounceH 1.2s ease-in-out infinite;
+line-height: 1;
+}
+
+@keyframes bounceH {
+0%, 100% { transform: translateX(0); }
+50% { transform: translateX(-8px); }
+}
+
+.cta-btn {
+display: inline-flex;
+align-items: center;
+gap: 12px;
+background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
+color: #1D3557;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+font-size: 1rem;
+font-weight: 700;
+letter-spacing: 0.04em;
+text-decoration: none;
+padding: 18px 42px;
+border-radius: 50px;
+border: none;
+cursor: pointer;
+box-shadow: 0 6px 32px rgba(212,160,23,0.4), 0 2px 8px rgba(0,0,0,0.4);
+transition: all 0.25s ease;
+text-transform: uppercase;
+}
+
+.cta-btn:hover {
+transform: translateY(-3px);
+box-shadow: 0 12px 48px rgba(212,160,23,0.55), 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.cta-btn .btn-icon { font-size: 1.2rem; }
+
+/* ── Calendly Block ───────────────────────────────────────────── */
+.calendar-section {
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+overflow: hidden;
+}
+
+.calendar-header {
+padding: 20px 24px 16px;
+border-bottom: 1px solid var(--border);
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.calendar-header-icon {
+width: 38px; height: 38px;
+border-radius: 10px;
+background: rgba(212,160,23,0.12);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1.1rem;
+}
+
+.calendar-header-text h3 {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
+font-size: 1.05rem;
+color: var(--gold-light);
+margin-bottom: 2px;
+}
+
+.calendar-header-text p {
+font-size: 0.78rem;
+color: var(--muted);
+}
+
+/* Calendly inline widget */
+.calendly-embed-wrap {
+padding: 20px;
+}
+
+.calendly-inline-widget {
+min-width: 320px;
+height: 700px;
+border-radius: var(--radius);
+overflow: hidden;
+background: #ffffff;
+}
+
+/* ── Documents Tab ───────────────────────────────────────────── */
+.docs-wrap {
+max-width: 860px;
+margin: 0 auto;
+padding: 48px 24px 64px;
+}
+
+.docs-header {
+text-align: center;
+margin-bottom: 40px;
+}
+
+.docs-header h2 {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
+font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+color: var(--white);
+margin-bottom: 8px;
+}
+
+.docs-header p {
+color: var(--muted);
+font-size: 0.92rem;
+}
+
+/* Progress Steps */
+.sign-steps {
+display: flex;
+gap: 0;
+margin-bottom: 40px;
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+overflow: hidden;
+}
+
+.sign-step {
+flex: 1;
+padding: 16px 12px;
+text-align: center;
+border-right: 1px solid var(--border);
+position: relative;
+}
+
+.sign-step:last-child { border-right: none; }
+
+.sign-step.done .step-num { background: var(--gold); color: var(--black); }
+.sign-step.active .step-num { background: rgba(212,160,23,0.15); color: var(--gold); border-color: var(--gold); }
+
+.step-num {
+width: 28px; height: 28px;
+border-radius: 50%;
+background: rgba(255,255,255,0.06);
+border: 1px solid var(--border);
+color: var(--muted);
+font-size: 0.78rem;
+font-weight: 600;
+display: flex;
+align-items: center;
+justify-content: center;
+margin: 0 auto 6px;
+}
+
+.sign-step p { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.sign-step.active p { color: var(--gold); }
+.sign-step.done p { color: var(--gold-light); }
+
+/* Proposal Card */
+.proposal-card {
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+margin-bottom: 24px;
+overflow: hidden;
+}
+
+.card-head {
+padding: 18px 24px;
+background: rgba(212,160,23,0.06);
+border-bottom: 1px solid var(--border);
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+}
+
+.card-head h3 {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
+font-size: 1rem;
+color: var(--gold-light);
+}
+
+.card-badge {
+font-size: 0.68rem;
+color: var(--gold);
+background: rgba(212,160,23,0.12);
+border: 1px solid var(--border);
+border-radius: 20px;
+padding: 3px 12px;
+text-transform: uppercase;
+letter-spacing: 0.06em;
+white-space: nowrap;
+}
+
+.card-body {
+padding: 24px;
+}
+
+/* Parties table */
+.info-grid {
+background: var(--surface);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+overflow: hidden;
+margin-bottom: 24px;
+}
+
+.info-grid > div {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 16px;
+padding: 14px 20px;
+border-bottom: 1px solid var(--border);
+}
+
+.info-grid > div:last-child {
+border-bottom: none;
+}
+
+.info-grid dt {
+font-size: 0.72rem;
+color: var(--muted);
+text-transform: uppercase;
+letter-spacing: 0.08em;
+white-space: nowrap;
+margin: 0;
+}
+
+.info-grid dd {
+font-size: 0.95rem;
+color: var(--text);
+font-weight: 600;
+text-align: right;
+margin: 0;
+}
+
+/* Service scope list */
+.scope-section { margin-bottom: 24px; }
+
+.scope-section h4 {
+font-size: 0.78rem;
+text-transform: uppercase;
+letter-spacing: 0.08em;
+color: var(--gold);
+margin-bottom: 12px;
+}
+
+.scope-list {
+list-style: none;
+display: flex;
+flex-direction: column;
+gap: 14px;
+}
+
+.scope-list li {
+display: flex;
+align-items: flex-start;
+gap: 10px;
+font-size: 0.9rem;
+color: var(--text);
+line-height: 1.6;
+}
+
+.scope-list li::before {
+content: '✦';
+color: var(--gold);
+font-size: 0.6rem;
+margin-top: 6px;
+flex-shrink: 0;
+}
+
+/* Pricing table */
+.pricing-table {
+width: 100%;
+border-collapse: collapse;
+margin-bottom: 16px;
+}
+
+.pricing-table th {
+font-size: 0.72rem;
+text-transform: uppercase;
+letter-spacing: 0.08em;
+color: var(--muted);
+padding: 8px 12px;
+text-align: left;
+border-bottom: 1px solid var(--border);
+}
+
+.pricing-table th:last-child { text-align: right; }
+
+.pricing-table td {
+padding: 12px 12px;
+font-size: 0.88rem;
+border-bottom: 1px solid rgba(212,160,23,0.08);
+color: var(--text);
+}
+
+.pricing-table td:last-child { text-align: right; color: var(--gold-light); font-weight: 600; }
+
+.pricing-table tr:last-child td { border-bottom: none; }
+
+.pricing-total {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 14px 12px;
+background: rgba(212,160,23,0.06);
+border: 1px solid var(--border);
+border-radius: 8px;
+font-size: 0.88rem;
+}
+
+.pricing-total .total-label { color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.76rem; }
+
+.pricing-total .total-val { color: var(--gold-light); font-weight: 700; font-size: 1.05rem; }
+
+/* Contract clauses */
+.clause {
+padding: 16px 0;
+border-bottom: 1px solid rgba(212,160,23,0.08);
+}
+
+.clause:last-of-type { border-bottom: none; }
+
+.clause-title {
+font-size: 0.78rem;
+text-transform: uppercase;
+letter-spacing: 0.08em;
+color: var(--gold);
+margin-bottom: 8px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.clause-title .cn {
+width: 22px; height: 22px;
+border-radius: 50%;
+border: 1px solid var(--gold-dim);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 0.68rem;
+color: var(--gold);
+flex-shrink: 0;
+}
+
+.clause p {
+font-size: 0.86rem;
+color: var(--muted);
+line-height: 1.7;
+}
+
+/* Signature Block */
+.sig-block {
+background: linear-gradient(135deg, #0f1f33 0%, #1D3557 100%);
+border: 1px solid var(--gold);
+border-radius: var(--radius);
+padding: 32px;
+margin-top: 32px;
+position: relative;
+overflow: hidden;
+}
+
+.sig-block h3 {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
+font-size: 1.15rem;
+color: var(--gold-light);
+margin-bottom: 20px;
+text-align: center;
+}
+
+.sig-field {
+margin-bottom: 18px;
+}
+
+.sig-field label {
+display: block;
+font-size: 0.76rem;
+text-transform: uppercase;
+letter-spacing: 0.08em;
+color: var(--muted);
+margin-bottom: 6px;
+}
+
+.sig-field input[type="text"],
+.sig-field input[type="email"] {
+width: 100%;
+background: rgba(255,255,255,0.04);
+border: 1px solid var(--border);
+border-radius: 8px;
+padding: 12px 16px;
+color: var(--text);
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+font-size: 0.92rem;
+transition: border-color 0.2s;
+outline: none;
+}
+
+.sig-field input[type="text"]:focus,
+.sig-field input[type="email"]:focus {
+border-color: var(--gold);
+}
+
+.sig-field input[type="text"].sig-name {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
+font-size: 1.15rem;
+text-align: center;
+letter-spacing: 0.04em;
+}
+
+.consent-row {
+display: flex;
+gap: 12px;
+align-items: flex-start;
+margin-bottom: 24px;
+}
+
+.consent-row input[type="checkbox"] {
+width: 18px;
+height: 18px;
+accent-color: var(--gold);
+margin-top: 2px;
+flex-shrink: 0;
+cursor: pointer;
+}
+
+.consent-row label {
+font-size: 0.82rem;
+color: var(--muted);
+line-height: 1.6;
+cursor: pointer;
+}
+
+.consent-row label strong { color: var(--gold-light); }
+
+.sign-submit-btn {
+width: 100%;
+padding: 18px;
+background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
+color: #1D3557;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+font-size: 1rem;
+font-weight: 700;
+letter-spacing: 0.04em;
+text-transform: uppercase;
+border: none;
+border-radius: 50px;
+cursor: pointer;
+transition: all 0.25s ease;
+box-shadow: 0 6px 32px rgba(212,160,23,0.35);
+position: relative;
+}
+
+.sign-submit-btn:hover:not(:disabled) {
+transform: translateY(-2px);
+box-shadow: 0 10px 44px rgba(212,160,23,0.5);
+}
+
+.sign-submit-btn:disabled {
+opacity: 0.45;
+cursor: not-allowed;
+}
+
+/* Payment unlock */
+.payment-section {
+margin-top: 28px;
+position: relative;
+}
+
+.payment-lock-overlay {
+position: absolute;
+inset: 0;
+background: rgba(10,10,15,0.82);
+backdrop-filter: blur(6px);
+border-radius: var(--radius);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 10px;
+z-index: 2;
+border: 1px solid var(--border);
+transition: opacity 0.4s ease;
+}
+
+.payment-lock-overlay.hidden {
+opacity: 0;
+pointer-events: none;
+}
+
+.lock-icon { font-size: 2rem; }
+.lock-label { font-size: 0.8rem; color: var(--muted); text-align: center; padding: 0 20px; }
+
+.payment-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 12px;
+padding: 20px;
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+}
+
+@media (max-width: 500px) { .payment-grid { grid-template-columns: 1fr; } }
+
+.pay-btn {
+display: block;
+text-align: center;
+text-decoration: none;
+padding: 14px 16px;
+border-radius: 10px;
+font-size: 0.82rem;
+font-weight: 600;
+letter-spacing: 0.04em;
+text-transform: uppercase;
+border: 1px solid var(--border);
+color: var(--text);
+background: rgba(255,255,255,0.04);
+transition: all 0.2s;
+}
+
+.pay-btn:hover { border-color: var(--gold); color: var(--gold-light); background: rgba(212,160,23,0.07); }
+
+.pay-btn.primary {
+grid-column: 1/-1;
+background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
+color: #1D3557;
+border-color: var(--gold);
+}
+
+.pay-btn.primary:hover { opacity: 0.9; }
+
+/* ── Links Tab ───────────────────────────────────────────────── */
+.links-wrap {
+max-width: 720px;
+margin: 0 auto;
+padding: 48px 24px 64px;
+}
+
+.links-header {
+text-align: center;
+margin-bottom: 40px;
+}
+
+.links-header h2 {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
+font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+color: var(--white);
+margin-bottom: 8px;
+}
+
+.links-header p { color: var(--muted); font-size: 0.92rem; }
+
+.link-card {
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+padding: 22px 24px;
+display: flex;
+align-items: center;
+gap: 18px;
+text-decoration: none;
+margin-bottom: 14px;
+transition: all 0.2s ease;
+position: relative;
+overflow: hidden;
+}
+
+.link-card:hover {
+border-color: var(--gold);
+background: rgba(212,160,23,0.05);
+transform: translateX(4px);
+}
+
+.link-card-icon {
+width: 48px; height: 48px;
+border-radius: 12px;
+background: rgba(212,160,23,0.1);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1.4rem;
+flex-shrink: 0;
+}
+
+.link-card-text h4 {
+font-size: 0.96rem;
+font-weight: 600;
+color: var(--text);
+margin-bottom: 3px;
+}
+
+.link-card-text p { font-size: 0.8rem; color: var(--muted); }
+
+.link-card-arrow {
+margin-left: auto;
+color: var(--gold-dim);
+font-size: 1.1rem;
+flex-shrink: 0;
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+footer {
+text-align: center;
+padding: 28px 24px;
+border-top: 1px solid var(--border);
+color: var(--muted);
+font-size: 0.76rem;
+letter-spacing: 0.04em;
+margin-top: 20px;
+}
+
+footer a { color: var(--gold-dim); text-decoration: none; }
+
+/* ── Divider ─────────────────────────────────────────────────── */
+.gold-divider {
+display: flex;
+align-items: center;
+gap: 14px;
+margin: 32px 0;
+}
+
+.gold-divider::before,
+.gold-divider::after {
+content: '';
+flex: 1;
+height: 1px;
+background: var(--border);
+}
+
+.gold-divider span {
+font-size: 0.66rem;
+color: var(--gold-dim);
+text-transform: uppercase;
+letter-spacing: 0.14em;
+white-space: nowrap;
+}
+
+/* ── Hero Section ───────────────────────────────────────────── */
+.hero {
+position: relative;
+min-height: 420px;
+display: flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+overflow: hidden;
+background:
+linear-gradient(180deg, rgba(15,31,51,0.55) 0%, rgba(15,31,51,0.85) 100%),
+url('hero-bg.jpg') center center / cover no-repeat;
+}
+
+.hero::before {
+content: '';
+position: absolute;
+inset: 0;
+background:
+repeating-linear-gradient(90deg, rgba(222,193,113,0.05) 0px, rgba(222,193,113,0.05) 1px, transparent 1px, transparent 60px),
+repeating-linear-gradient(0deg, rgba(240,98,146,0.04) 0px, rgba(240,98,146,0.04) 1px, transparent 1px, transparent 60px),
+radial-gradient(ellipse 80% 60% at 50% 40%, rgba(222,193,113,0.14) 0%, transparent 70%);
+pointer-events: none;
+}
+
+.hero-inner {
+position: relative;
+z-index: 1;
+padding: 72px 24px 80px;
+max-width: 760px;
+}
+
+.hero-eyebrow {
+font-size: 1.05rem;
+font-weight: 700;
+letter-spacing: 0.14em;
+text-transform: uppercase;
+color: var(--gold);
+margin-bottom: 14px;
+}
+
+.hero-title {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-weight: 800;
+font-size: clamp(2.2rem, 6vw, 3.8rem);
+color: #fff;
+line-height: 1.15;
+margin-bottom: 18px;
+text-shadow: 0 2px 24px rgba(0,0,0,0.7);
+}
+
+.hero-title span {
+background: linear-gradient(90deg, var(--gold-light), #f7e09a, var(--gold));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+.hero-sub {
+color: rgba(232,224,208,0.8);
+font-size: 1.08rem;
+max-width: 520px;
+margin: 0 auto 36px;
+line-height: 1.65;
+}
+
+.hero-cta {
+display: inline-flex;
+align-items: center;
+gap: 10px;
+background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
+color: #1D3557;
+font-weight: 700;
+font-size: 0.92rem;
+letter-spacing: 0.06em;
+text-transform: uppercase;
+padding: 15px 36px;
+border-radius: 50px;
+border: none;
+cursor: pointer;
+box-shadow: 0 6px 32px rgba(212,160,23,0.45);
+transition: all 0.25s ease;
+}
+
+.hero-cta:hover {
+transform: translateY(-3px);
+box-shadow: 0 12px 48px rgba(212,160,23,0.6);
+}
+
+.hero-scroll-hint {
+position: absolute;
+bottom: 18px;
+left: 50%;
+transform: translateX(-50%);
+color: var(--gold-dim);
+font-size: 1.5rem;
+animation: bounce 1.6s ease-in-out infinite;
+}
+
+/* ── Tab Background Images ──────────────────────────────────── */
+#tab-welcome {
+background:
+linear-gradient(180deg, rgba(15,31,51,0.55) 0%, rgba(15,31,51,0.72) 100%),
+url('bg-data.jpg') center top / cover no-repeat fixed;
+}
+
+#tab-documents {
+background:
+linear-gradient(180deg, rgba(15,31,51,0.58) 0%, rgba(15,31,51,0.75) 100%),
+url('bg-holo.jpg') center center / cover no-repeat fixed;
+}
+
+#tab-links {
+background:
+linear-gradient(180deg, rgba(15,31,51,0.55) 0%, rgba(15,31,51,0.72) 100%),
+url('bg-media.jpg') center center / cover no-repeat fixed;
+}
+
+/* ── Ad Card ────────────────────────────────────────────────── */
+.ad-card {
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+overflow: hidden;
+margin-bottom: 32px;
+position: relative;
+transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.ad-card::before {
+content: '';
+position: absolute;
+top: 0; left: 0;
+width: 100%; height: 3px;
+background: linear-gradient(to right, var(--gold), var(--blush), var(--gold-dim));
+z-index: 1;
+}
+
+.ad-card:hover {
+transform: translateY(-2px);
+border-color: var(--gold);
+}
+
+/* ── Utility ────────────────────────────────────────────────── */
+.hidden { display: none !important; }
+
+@media (max-width: 600px) {
+header { padding: 14px 16px; }
+.welcome-wrap, .docs-wrap, .links-wrap { padding: 28px 16px 48px; }
+.sign-steps { flex-direction: column; border-radius: var(--radius); }
+.sign-step { border-right: none; border-bottom: 1px solid var(--border); }
+.sign-step:last-child { border-bottom: none; }
+}
+</style>
 </head>
 
 <body>
 
 <!-- ── Password Gate ────────────────────────────────────────────── -->
 <div id="password-gate" style="position:fixed;inset:0;z-index:9999;background:#0d1b2a;display:flex;align-items:center;justify-content:center;padding:24px;">
-  <div style="max-width:360px;width:100%;text-align:center;">
-    <div style="width:56px;height:56px;border-radius:50%;border:2px solid #c9a84c;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 20px;color:#c9a84c;">🔒</div>
-    <h2 style="font-family:'Playfair Display',serif;color:#e8c96e;font-size:1.4rem;margin-bottom:8px;">Private Client Portal</h2>
-    <p style="color:#8a7f6e;font-size:0.88rem;margin-bottom:24px;">Enter your access code to continue.</p>
-    <input type="password" id="gate-password" placeholder="Access Code" autocomplete="off"
-      style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,160,23,0.25);border-radius:8px;padding:14px 16px;color:#e8e0d0;font-size:1rem;text-align:center;margin-bottom:14px;outline:none;" />
-    <button onclick="checkGatePassword()"
-      style="width:100%;padding:14px;background:linear-gradient(135deg,#c9a84c 0%,#a87c2a 100%);color:#0d1b2a;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border:none;border-radius:50px;cursor:pointer;font-size:0.9rem;">
-      Enter Portal
-    </button>
-    <p id="gate-error" style="color:#e07a7a;font-size:0.8rem;margin-top:12px;display:none;">Incorrect code — please try again.</p>
-  </div>
+<div style="max-width:360px;width:100%;text-align:center;">
+<div style="width:56px;height:56px;border-radius:50%;border:2px solid #c9a84c;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 20px;color:#c9a84c;">🔒</div>
+<h2 style="font-family:'Playfair Display',serif;color:#e8c96e;font-size:1.4rem;margin-bottom:8px;">Private Client Portal</h2>
+<p style="color:#8a7f6e;font-size:0.88rem;margin-bottom:24px;">Enter your access code to continue.</p>
+<input type="password" id="gate-password" placeholder="Access Code" autocomplete="off"
+style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(212,160,23,0.25);border-radius:8px;padding:14px 16px;color:#e8e0d0;font-size:1rem;text-align:center;margin-bottom:14px;outline:none;" />
+<button onclick="checkGatePassword()"
+style="width:100%;padding:14px;background:linear-gradient(135deg,#c9a84c 0%,#a87c2a 100%);color:#0d1b2a;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border:none;border-radius:50px;cursor:pointer;font-size:0.9rem;">
+Enter Portal
+</button>
+<p id="gate-error" style="color:#e07a7a;font-size:0.8rem;margin-top:12px;display:none;">Incorrect code — please try again.</p>
+</div>
 </div>
 
 <!-- ── Header ───────────────────────────────────────────────────── -->
 <header>
-  <div class="brand">
-    <div class="brand-logo">
-      <img src="../NewGTElogo.png" alt="AI GlamTech Empire™" onerror="this.style.display='none';this.parentElement.textContent='✦'" />
-    </div>
-    <div class="brand-text">
-      <h1>AI GlamTech Empire™</h1>
-      <p>Pinky Floyd</p>
-    </div>
-  </div>
-  <div style="display:flex;align-items:center;gap:10px;">
-    <span class="arrow-bounce-h">←</span>
-    <span class="pulse-btn" style="display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.66rem;letter-spacing:0.03em;text-transform:uppercase;padding:7px 14px;border-radius:50px;white-space:nowrap;">
-      🎙️ Talk Live to Your AI Receptionist
-    </span>
-    <div class="header-badge">Client Portal</div>
-  </div>
+<div class="brand">
+<div class="brand-logo">
+<img src="../NewGTElogo.png" alt="AI GlamTech Empire™" onerror="this.style.display='none';this.parentElement.textContent='✦'" />
+</div>
+<div class="brand-text">
+<h1>AI GlamTech Empire™</h1>
+<p>Pinky Floyd</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px;">
+<span class="arrow-bounce-h">←</span>
+<span class="pulse-btn" style="display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);color:#1D3557;font-weight:800;font-size:0.66rem;letter-spacing:0.03em;text-transform:uppercase;padding:7px 14px;border-radius:50px;white-space:nowrap;">
+🎙️ Talk Live to Your AI Receptionist
+</span>
+<div class="header-badge">Client Portal</div>
+</div>
 </header>
 
 <!-- ── Hero Section ─────────────────────────────────────────────── -->
 <section class="hero">
-  <div class="hero-inner">
-    <p class="hero-eyebrow">✦ Your Exclusive Client Portal ✦</p>
-    <h1 class="hero-title">Welcome to<br><span>AI GlamTech Empire™</span></h1>
-    <p class="hero-sub">Your personalized command center for signing, scheduling, and staying connected — built just for you.</p>
-  </div>
-  <div class="hero-scroll-hint">⌄</div>
+<div class="hero-inner">
+<p class="hero-eyebrow">✦ Your Exclusive Client Portal ✦</p>
+<h1 class="hero-title">Welcome to<br><span>AI GlamTech Empire™</span></h1>
+<p class="hero-sub">Your personalized command center for signing, scheduling, and staying connected — built just for you.</p>
+</div>
+<div class="hero-scroll-hint">⌄</div>
 </section>
 
 <!-- ── Tab Navigation ───────────────────────────────────────────── -->
 <nav class="tab-nav" role="tablist">
-  <button class="tab-btn active" role="tab" data-tab="welcome" onclick="switchTab('welcome', this)">
-    <span class="tab-icon">✦</span> Welcome
-  </button>
-  <button class="tab-btn" role="tab" data-tab="documents" onclick="switchTab('documents', this)">
-    <span class="tab-icon">📋</span> Coming Soon
-  </button>
-  <button class="tab-btn" role="tab" data-tab="links" onclick="switchTab('links', this)">
-    <span class="tab-icon">🔗</span> Resources
-  </button>
+<button class="tab-btn active" role="tab" data-tab="welcome" onclick="switchTab('welcome', this)">
+<span class="tab-icon">✦</span> Welcome
+</button>
+<button class="tab-btn" role="tab" data-tab="documents" onclick="switchTab('documents', this)">
+<span class="tab-icon">📋</span> Proposal
+</button>
+<button class="tab-btn" role="tab" data-tab="links" onclick="switchTab('links', this)">
+<span class="tab-icon">🔗</span> Resources
+</button>
 </nav>
 
 <!-- ══════════════════════════════════════════════════════════════ -->
-<!--  TAB 1 — WELCOME                                              -->
+<!-- TAB 1 — WELCOME -->
 <!-- ══════════════════════════════════════════════════════════════ -->
 <div id="tab-welcome" class="tab-panel active">
-  <div class="welcome-wrap">
+<div class="welcome-wrap">
 
-    <p class="welcome-eyebrow">Welcome to Your AI Command Center</p>
-    <h2 class="welcome-title"><span class="wt-cream">I'm So Excited</span><br><span class="wt-pink">to Work With You</span></h2>
+<p class="welcome-eyebrow">Welcome to Your AI Command Center</p>
+<h2 class="welcome-title"><span class="wt-cream">I'm So Excited</span><br><span class="wt-pink">to Work With You</span></h2>
 
-    <elevenlabs-convai agent-id="agent_0201kw59qa62ed4rb8hbce21pc3q"></elevenlabs-convai>
+<elevenlabs-convai agent-id="agent_0201kw59qa62ed4rb8hbce21pc3q"></elevenlabs-convai>
 
-    <!-- ── Video ─────────────────────────────────────────────── -->
-    <div id="personal-video" class="video-box">
-      <div class="video-box-header">
-        <div class="dot"></div>
-        <span>Personal Message from Pinky Floyd</span>
-      </div>
-      <div style="position:relative;width:100%;padding-bottom:56.25%;background:#0d1b2a;">
-        <video
-          src="welcome.mp4"
-          controls
-          playsinline
-          autoplay
-          muted
-          poster="../NewGTElogo.png"
-          style="position:absolute;top:0;left:0;width:100%;height:100%;background:#0d1b2a;"
-        ></video>
-      </div>
+<!-- ── ABW Luxury Limousine Ad ─────────────────────────────── -->
+<div class="ad-card">
+<div style="
+  background:
+    linear-gradient(160deg, rgba(13,27,42,0.75) 0%, rgba(29,53,87,0.88) 100%),
+    url('hero-bg.jpg') center center / cover no-repeat;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- glow -->
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 65% 70% at 50% 50%, rgba(222,193,113,0.13) 0%, transparent 70%);pointer-events:none;"></div>
+  <div style="position:relative;z-index:1;max-width:560px;margin:0 auto;">
+    <!-- Badge -->
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(222,193,113,0.1);border:1px solid rgba(222,193,113,0.28);border-radius:50px;padding:5px 18px;margin-bottom:18px;">
+      <span style="color:var(--gold);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;">✦ Orlando's Premier Luxury Transport</span>
     </div>
-
-    <!-- ── Calendly Embed ─────────────────────────────────────── -->
-    <div class="calendar-section">
-      <div class="calendar-header">
-        <div class="calendar-header-icon">📅</div>
-        <div class="calendar-header-text">
-          <h3>Book Your Onboarding Call</h3>
-          <p>Pick a time that works for you — no back and forth.</p>
-        </div>
-      </div>
-
-      <!-- Calendly inline widget begin -->
-      <div class="calendly-embed-wrap">
-        <div class="calendly-inline-widget" data-url="https://calendly.com/agents-avatars-automations/15min" style="min-width:320px;height:700px;"></div>
-      </div>
-      <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-      <!-- Calendly inline widget end -->
+    <!-- Company name -->
+    <h3 style="font-weight:800;font-size:clamp(1.8rem,5vw,2.8rem);color:#fff;margin-bottom:8px;text-shadow:0 2px 24px rgba(0,0,0,0.8);line-height:1.15;">
+      ABW Luxury Limousine
+    </h3>
+    <p style="color:rgba(232,224,208,0.82);font-size:0.96rem;margin-bottom:6px;">
+      Paradise Transportation of Central Florida, Inc.
+    </p>
+    <!-- Fleet line -->
+    <p style="color:var(--gold);font-size:0.82rem;letter-spacing:0.06em;margin-bottom:22px;font-weight:600;">
+      Rolls Royce Ghost &nbsp;·&nbsp; Escalade &nbsp;·&nbsp; Mercedes Van &nbsp;·&nbsp; 10 & 20-pax Limos
+    </p>
+    <!-- Service chips -->
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:28px;">
+      <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.11);border-radius:50px;padding:5px 15px;font-size:0.74rem;color:rgba(232,224,208,0.72);letter-spacing:0.05em;">✈ MCO Airport Transfers</span>
+      <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.11);border-radius:50px;padding:5px 15px;font-size:0.74rem;color:rgba(232,224,208,0.72);letter-spacing:0.05em;">💒 Weddings</span>
+      <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.11);border-radius:50px;padding:5px 15px;font-size:0.74rem;color:rgba(232,224,208,0.72);letter-spacing:0.05em;">💼 Corporate</span>
+      <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.11);border-radius:50px;padding:5px 15px;font-size:0.74rem;color:rgba(232,224,208,0.72);letter-spacing:0.05em;">🎓 Prom &amp; Celebrations</span>
     </div>
-
-
+    <!-- CTA -->
+    <a href="tel:4072273523" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--blush) 0%,var(--gold) 100%);color:#1D3557;font-weight:700;font-size:0.88rem;letter-spacing:0.05em;text-transform:uppercase;padding:14px 36px;border-radius:50px;text-decoration:none;box-shadow:0 6px 28px rgba(212,160,23,0.45);">
+      📞 Book Your Ride &nbsp;·&nbsp; 407.227.3523
+    </a>
   </div>
 </div>
+<div style="padding:12px 20px;border-top:1px solid var(--border);background:rgba(212,160,23,0.04);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+  <p style="font-size:0.7rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;">
+    Available 24/7 · AI-Powered Booking by <span style="color:var(--gold);">ADESINA™</span>
+  </p>
+  <p style="font-size:0.7rem;color:var(--muted);letter-spacing:0.04em;">
+    Powered by <span style="color:var(--gold);">AI GlamTech Empire™</span>
+  </p>
+</div>
+</div>
 
+<!-- ── Video ─────────────────────────────────────────────── -->
+<div id="personal-video" class="video-box">
+<div class="video-box-header">
+<div class="dot"></div>
+<span>Personal Message from Pinky Floyd</span>
+</div>
+<div style="position:relative;width:100%;padding-bottom:56.25%;background:#0d1b2a;">
+<video
+src="welcome.mp4"
+controls
+playsinline
+autoplay
+muted
+poster="../NewGTElogo.png"
+style="position:absolute;top:0;left:0;width:100%;height:100%;background:#0d1b2a;"
+></video>
+</div>
+</div>
+
+<!-- ── Calendly Embed ─────────────────────────────────────── -->
+<div class="calendar-section">
+<div class="calendar-header">
+<div class="calendar-header-icon">📅</div>
+<div class="calendar-header-text">
+<h3>Book Your Onboarding Call</h3>
+<p>Pick a time that works for you — no back and forth.</p>
+</div>
+</div>
+
+<!-- Calendly inline widget begin -->
+<div class="calendly-embed-wrap">
+<div class="calendly-inline-widget" data-url="https://calendly.com/agents-avatars-automations/15min" style="min-width:320px;height:700px;"></div>
+</div>
+<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<!-- Calendly inline widget end -->
+</div>
+
+</div>
+</div>
 
 <!-- ══════════════════════════════════════════════════════════════ -->
-<!--  TAB 2 — SIGN & PAY                                           -->
+<!-- TAB 2 — PROPOSAL -->
 <!-- ══════════════════════════════════════════════════════════════ -->
 <div id="tab-documents" class="tab-panel">
-  <div class="docs-wrap">
+<div class="docs-wrap">
 
-    <div class="proposal-card" style="text-align:center;padding:60px 24px;">
-      <div class="card-body">
-        <div style="font-size:2.5rem;margin-bottom:16px;">📋</div>
-        <h3 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-weight:800;font-size:1.3rem;color:var(--gold-light);margin-bottom:10px;">
-          Coming Soon
-        </h3>
-        <p style="color:var(--muted);font-size:0.95rem;max-width:420px;margin:0 auto 20px;">
-          We're putting together your custom proposal and service agreement. Check back soon, or reach out anytime with questions.
-        </p>
-        <p style="color:var(--gold-light);font-size:0.9rem;font-weight:600;">🎙️ Click the orb on this page to talk to your AI receptionist live.</p>
+  <div class="docs-header">
+    <h2>Your Personalized Proposal</h2>
+    <p>Prepared exclusively for Brian Walcott &nbsp;·&nbsp; ABW Luxury Limousine &nbsp;·&nbsp; Paradise Transportation of Central Florida, Inc.</p>
+  </div>
+
+  <!-- Progress Steps -->
+  <div class="sign-steps">
+    <div class="sign-step done" id="step1">
+      <div class="step-num">✓</div>
+      <p>Review Proposal</p>
+    </div>
+    <div class="sign-step active" id="step2">
+      <div class="step-num">2</div>
+      <p>Sign Agreement</p>
+    </div>
+    <div class="sign-step" id="step3">
+      <div class="step-num">3</div>
+      <p>Secure Investment</p>
+    </div>
+    <div class="sign-step" id="step4">
+      <div class="step-num">4</div>
+      <p>We Build</p>
+    </div>
+  </div>
+
+  <!-- What You Receive -->
+  <div class="proposal-card">
+    <div class="card-head">
+      <h3>Secure Your Investment Within 3 Weeks and Receive:</h3>
+      <span class="card-badge">Phase 1</span>
+    </div>
+    <div class="card-body">
+      <ul class="scope-list">
+        <li><strong>ADESINA™ AI Receptionist</strong> — live and trained to answer every call 24/7, so you never miss another booking again</li>
+        <li><strong>GHL Booking Dashboard</strong> — every inquiry and lead appears on your phone in real time via the LeadConnector mobile app</li>
+        <li><strong>Automated Booking Workflow</strong> — a payment link is sent and a follow-up is triggered automatically after every call, completely hands-free</li>
+        <li><strong>4 ChatGPT Content Prompts Per Month</strong> — ready-to-post social media captions delivered to you monthly; simply copy, paste into ChatGPT, and post</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Pay Today Bonuses -->
+  <div class="proposal-card">
+    <div class="card-head">
+      <h3>Secure Your Investment Today — We Are Gifting You:</h3>
+      <span class="card-badge" style="background:rgba(241,177,193,0.12);color:var(--blush);border-color:rgba(241,177,193,0.3);">Bonus Gifts</span>
+    </div>
+    <div class="card-body">
+      <ul class="scope-list">
+        <li>
+          <div>
+            <strong style="color:var(--gold);">1. LinkedIn Company Page</strong><br>
+            <span style="color:var(--muted);font-size:0.85rem;">Fully built, branded, and loaded with 10 ready-to-publish posts plus a 60-second intro video script</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong style="color:var(--gold);">2. Instagram Launch Pack</strong><br>
+            <span style="color:var(--muted);font-size:0.85rem;">10 branded posts with captions and hashtags — your feed looks professional and established from day one</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong style="color:var(--gold);">3. Two Professional Email Addresses</strong><br>
+            <span style="color:var(--muted);font-size:0.85rem;">info@paradiselimoorlando.com + brian@paradiselimoorlando.com, forwarding directly to your current Gmail</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong style="color:var(--gold);">4. Social Media Brand Kit</strong><br>
+            <span style="color:var(--muted);font-size:0.85rem;">Four post format templates delivered monthly as ready-to-use ChatGPT prompts — no design skills needed</span>
+          </div>
+        </li>
+      </ul>
+      <p style="margin-top:24px;font-size:0.8rem;color:var(--muted);font-style:italic;border-top:1px solid var(--border);padding-top:16px;line-height:1.7;">
+        Clients who secure their investment today receive these gifts as our way of celebrating your commitment to your business.
+      </p>
+    </div>
+  </div>
+
+  <!-- Investment -->
+  <div class="proposal-card">
+    <div class="card-head">
+      <h3>Your Investment</h3>
+      <span class="card-badge">ADESINA™ Phase 1</span>
+    </div>
+    <div class="card-body">
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>One-Time Setup Fee — ADESINA™ AI Receptionist Build &amp; Configuration</td>
+            <td>$2,500</td>
+          </tr>
+          <tr>
+            <td>Monthly Retainer — AI Management, GHL CRM Dashboard &amp; Automations</td>
+            <td>$497 / month</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pricing-total">
+        <span class="total-label">Total Due Today (Setup + First Month)</span>
+        <span class="total-val">$2,997</span>
       </div>
+      <p style="margin-top:14px;font-size:0.78rem;color:var(--muted);line-height:1.7;">
+        Setup fee is due within 3 weeks of signing. Monthly retainer of $497 begins on your go-live date. You will own your 11Labs account directly — AI GlamTech Empire™ manages it on your behalf.
+      </p>
+    </div>
+  </div>
+
+  <!-- Signature Block -->
+  <div class="sig-block" id="signature-section">
+    <h3>✦ Sign Your Agreement ✦</h3>
+
+    <div class="sig-field">
+      <label>Full Legal Name</label>
+      <input type="text" id="sig-name" class="sig-name" placeholder="Brian Walcott" oninput="checkSigReady()" />
+    </div>
+    <div class="sig-field">
+      <label>Email Address</label>
+      <input type="email" id="sig-email" placeholder="BrianWalcott22@gmail.com" oninput="checkSigReady()" />
+    </div>
+    <div class="sig-field">
+      <label>Date</label>
+      <input type="text" id="sig-date" readonly style="color:var(--muted);" />
     </div>
 
+    <div class="consent-row">
+      <input type="checkbox" id="consent-box" onchange="checkSigReady()" />
+      <label for="consent-box">
+        I, <strong>Brian Walcott</strong>, agree to the terms of this proposal and authorize <strong>AI GlamTech Empire™</strong> to begin building the <strong>ADESINA™ AI Receptionist</strong> system for Paradise Transportation of Central Florida, Inc. I understand the one-time setup fee of <strong>$2,500</strong> is due within 3 weeks of signing, followed by a monthly retainer of <strong>$497/month</strong> beginning at go-live.
+      </label>
+    </div>
+
+    <button class="sign-submit-btn pulse-btn" id="sign-btn" onclick="handleSign()" disabled>
+      ✦ Sign &amp; Secure My Investment
+    </button>
   </div>
+
+  <!-- Payment Section -->
+  <div class="payment-section" id="payment-section">
+    <div class="payment-lock-overlay" id="payment-lock">
+      <span class="lock-icon">🔒</span>
+      <p class="lock-label">Sign your agreement above to unlock secure payment options</p>
+    </div>
+    <div class="payment-grid">
+      <a href="#" class="pay-btn primary" target="_blank">
+        💳 &nbsp; Secure Setup Fee — $2,500
+      </a>
+      <a href="#" class="pay-btn" target="_blank">
+        📅 &nbsp; Set Up Monthly Retainer — $497/mo
+      </a>
+      <a href="mailto:admin@glamtechempire.com" class="pay-btn">
+        ✉️ &nbsp; Questions? Email Pinky Floyd Directly
+      </a>
+    </div>
+  </div>
+
+</div>
 </div>
 
-
 <!-- ══════════════════════════════════════════════════════════════ -->
-<!--  TAB 3 — RESOURCES / LINKS                                    -->
+<!-- TAB 3 — RESOURCES / LINKS -->
 <!-- ══════════════════════════════════════════════════════════════ -->
 <div id="tab-links" class="tab-panel">
-  <div class="links-wrap">
+<div class="links-wrap">
 
-    <div class="links-header">
-      <h2>Your Resource Hub</h2>
-      <p>Everything you need in one place — bookmarks, guides, and next steps.</p>
-    </div>
+<div class="links-header">
+<h2>Your Resource Hub</h2>
+<p>Everything you need in one place — bookmarks, guides, and next steps.</p>
+</div>
 
-    <!--
-      ════════════════════════════════════════════════════════════
-      ADD / REMOVE / EDIT link cards below as needed.
-      Replace every href="#" with the real destination URL.
-      ════════════════════════════════════════════════════════════
-    -->
+<a href="#" class="link-card" target="_blank">
+<div class="link-card-icon">🎯</div>
+<div class="link-card-text">
+<h4>Client Intake Form</h4>
+<p>Submit your credentials, service list, and FAQ content.</p>
+</div>
+<div class="link-card-arrow">→</div>
+</a>
 
-    <a href="#" class="link-card" target="_blank">
-      <div class="link-card-icon">🎯</div>
-      <div class="link-card-text">
-        <h4>Client Intake Form</h4>
-        <p>Submit your credentials, service list, and FAQ content.</p>
-      </div>
-      <div class="link-card-arrow">→</div>
-    </a>
+<a href="#" class="link-card" target="_blank">
+<div class="link-card-icon">📖</div>
+<div class="link-card-text">
+<h4>Onboarding Guide</h4>
+<p>Step-by-step walkthrough of the setup process.</p>
+</div>
+<div class="link-card-arrow">→</div>
+</a>
 
-    <a href="#" class="link-card" target="_blank">
-      <div class="link-card-icon">📖</div>
-      <div class="link-card-text">
-        <h4>Onboarding Guide</h4>
-        <p>Step-by-step walkthrough of the setup process.</p>
-      </div>
-      <div class="link-card-arrow">→</div>
-    </a>
+<a href="#" class="link-card" target="_blank">
+<div class="link-card-icon">🎓</div>
+<div class="link-card-text">
+<h4>Video Training Library</h4>
+<p>Self-paced videos so you can monitor and manage your AI system.</p>
+</div>
+<div class="link-card-arrow">→</div>
+</a>
 
-    <a href="#" class="link-card" target="_blank">
-      <div class="link-card-icon">🎓</div>
-      <div class="link-card-text">
-        <h4>Video Training Library</h4>
-        <p>Self-paced videos so you can monitor and manage your AI system.</p>
-      </div>
-      <div class="link-card-arrow">→</div>
-    </a>
+<a href="#" class="link-card" target="_blank">
+<div class="link-card-icon">💬</div>
+<div class="link-card-text">
+<h4>Support &amp; Updates</h4>
+<p>Submit change requests, questions, or performance feedback.</p>
+</div>
+<div class="link-card-arrow">→</div>
+</a>
 
-    <a href="#" class="link-card" target="_blank">
-      <div class="link-card-icon">💬</div>
-      <div class="link-card-text">
-        <h4>Support &amp; Updates</h4>
-        <p>Submit change requests, questions, or performance feedback.</p>
-      </div>
-      <div class="link-card-arrow">→</div>
-    </a>
+<a href="mailto:admin@glamtechempire.com" class="link-card">
+<div class="link-card-icon">✉️</div>
+<div class="link-card-text">
+<h4>Email Pinky Floyd Directly</h4>
+<p>admin@glamtechempire.com</p>
+</div>
+<div class="link-card-arrow">→</div>
+</a>
 
-    <a href="mailto:admin@glamtechempire.com" class="link-card">
-      <div class="link-card-icon">✉️</div>
-      <div class="link-card-text">
-        <h4>Email Pinky Floyd Directly</h4>
-        <p>admin@glamtechempire.com</p>
-      </div>
-      <div class="link-card-arrow">→</div>
-    </a>
-
-  </div>
+</div>
 </div>
 
 <!-- ── Footer ─────────────────────────────────────────────────── -->
 <footer>
-  Prepared by <a href="mailto:admin@glamtechempire.com">Pinky Floyd</a> · AI GlamTech Empire™
-  &nbsp;·&nbsp; All rights reserved.
+Prepared by <a href="mailto:admin@glamtechempire.com">Pinky Floyd</a> · AI GlamTech Empire™
+&nbsp;·&nbsp; All rights reserved.
 </footer>
 
-
 <script>
-  /* ── Tab switching ─────────────────────────────────────────── */
-  function switchTab(id, btn) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + id).classList.add('active');
-    btn.classList.add('active');
-  }
+/* ── Tab switching ─────────────────────────────────────────── */
+function switchTab(id, btn) {
+document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+document.getElementById('tab-' + id).classList.add('active');
+btn.classList.add('active');
+}
 
-  /* ── Set today's date in signature block ───────────────────── */
-  (function() {
-    const d = new Date();
-    const formatted = d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
-    const el = document.getElementById('sig-date');
-    if (el) el.value = formatted;
-  })();
+/* ── Set today's date in signature block ───────────────────── */
+(function() {
+const d = new Date();
+const formatted = d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+const el = document.getElementById('sig-date');
+if (el) el.value = formatted;
+})();
 
-  /* ── Enable sign button when both fields are filled ────────── */
-  function checkSigReady() {
-    const name    = document.getElementById('sig-name').value.trim();
-    const email   = document.getElementById('sig-email').value.trim();
-    const consent = document.getElementById('consent-box').checked;
-    const btn     = document.getElementById('sign-btn');
-    btn.disabled  = !(name && email && consent);
-  }
+/* ── Enable sign button when both fields are filled ────────── */
+function checkSigReady() {
+const name = document.getElementById('sig-name').value.trim();
+const email = document.getElementById('sig-email').value.trim();
+const consent = document.getElementById('consent-box').checked;
+const btn = document.getElementById('sign-btn');
+btn.disabled = !(name && email && consent);
+}
 
-  /* ── Handle signature submission ───────────────────────────── */
-  function handleSign() {
-    const name   = document.getElementById('sig-name').value.trim();
-    const email  = document.getElementById('sig-email').value.trim();
-    const date   = document.getElementById('sig-date').value;
+/* ── Handle signature submission ───────────────────────────── */
+function handleSign() {
+const name = document.getElementById('sig-name').value.trim();
+const email = document.getElementById('sig-email').value.trim();
+const date = document.getElementById('sig-date').value;
 
-    if (!name || !email) return;
+if (!name || !email) return;
 
-    // Lock the signature block
-    document.getElementById('sign-btn').textContent = '✦ Agreement Signed — ' + name;
-    document.getElementById('sign-btn').disabled = true;
-    document.getElementById('sig-name').disabled = true;
-    document.getElementById('sig-email').disabled = true;
-    document.getElementById('consent-box').disabled = true;
-    document.getElementById('signature-section').style.borderColor = 'var(--gold)';
-    document.getElementById('signature-section').style.boxShadow = '0 0 32px rgba(212,160,23,0.25)';
+// Lock the signature block
+document.getElementById('sign-btn').textContent = '✦ Agreement Signed — ' + name;
+document.getElementById('sign-btn').disabled = true;
+document.getElementById('sig-name').disabled = true;
+document.getElementById('sig-email').disabled = true;
+document.getElementById('consent-box').disabled = true;
+document.getElementById('signature-section').style.borderColor = 'var(--gold)';
+document.getElementById('signature-section').style.boxShadow = '0 0 32px rgba(212,160,23,0.25)';
 
-    // Unlock payment
-    document.getElementById('payment-lock').classList.add('hidden');
+// Unlock payment
+document.getElementById('payment-lock').classList.add('hidden');
 
-    // Advance progress steps
-    document.getElementById('step3').classList.add('done');
-    document.getElementById('step4').classList.add('active');
+// Advance progress steps
+document.getElementById('step3').classList.add('done');
+document.getElementById('step4').classList.add('active');
 
-    // Scroll to payment
-    setTimeout(() => {
-      document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 300);
+// Scroll to payment
+setTimeout(() => {
+document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}, 300);
+}
 
-    /*
-      ══════════════════════════════════════════════════════════
-      EMAIL DELIVERY — wire up here when ready.
-      Example: POST to a Formspree or Netlify Form endpoint.
+/* ── Password Gate ──────────────────────────────────────────── */
+const GATE_PASSWORD = 'brian';
 
-      fetch('https://formspree.io/f/YOUR_ENDPOINT', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          name:    name,
-          email:   email,
-          date:    date,
-          version: 'v1.0',
-          setup:   'TBD',
-          monthly: 'TBD',
-        })
-      });
-      ══════════════════════════════════════════════════════════
-    */
-  }
+function checkGatePassword() {
+const input = document.getElementById('gate-password');
+const error = document.getElementById('gate-error');
+if (input.value === GATE_PASSWORD) {
+sessionStorage.setItem('portal-unlocked', 'true');
+document.getElementById('password-gate').style.display = 'none';
+} else {
+error.style.display = 'block';
+input.value = '';
+input.focus();
+}
+}
 
-  /* ── Password Gate ──────────────────────────────────────────── */
-  const GATE_PASSWORD = 'brian';
+document.getElementById('gate-password').addEventListener('keydown', function(e) {
+if (e.key === 'Enter') checkGatePassword();
+});
 
-  function checkGatePassword() {
-    const input = document.getElementById('gate-password');
-    const error = document.getElementById('gate-error');
-    if (input.value === GATE_PASSWORD) {
-      sessionStorage.setItem('portal-unlocked', 'true');
-      document.getElementById('password-gate').style.display = 'none';
-    } else {
-      error.style.display = 'block';
-      input.value = '';
-      input.focus();
-    }
-  }
-
-  document.getElementById('gate-password').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') checkGatePassword();
-  });
-
-  if (sessionStorage.getItem('portal-unlocked') === 'true') {
-    document.getElementById('password-gate').style.display = 'none';
-  }
+if (sessionStorage.getItem('portal-unlocked') === 'true') {
+document.getElementById('password-gate').style.display = 'none';
+}
 </script>
 
 </body>
