@@ -1104,19 +1104,19 @@ animation: bounce 1.6s ease-in-out infinite;
 #tab-welcome {
 background:
 linear-gradient(180deg, rgba(15,31,51,0.55) 0%, rgba(15,31,51,0.72) 100%),
-url('bg-data.jpg') center top / cover no-repeat fixed;
+url('bg-data.jpg') center top / cover no-repeat;
 }
 
 #tab-documents {
 background:
 linear-gradient(180deg, rgba(15,31,51,0.58) 0%, rgba(15,31,51,0.75) 100%),
-url('bg-holo.jpg') center center / cover no-repeat fixed;
+url('bg-holo.jpg') center center / cover no-repeat;
 }
 
 #tab-links {
 background:
 linear-gradient(180deg, rgba(15,31,51,0.55) 0%, rgba(15,31,51,0.72) 100%),
-url('bg-media.jpg') center center / cover no-repeat fixed;
+url('bg-media.jpg') center center / cover no-repeat;
 }
 
 /* ── Ad Card ────────────────────────────────────────────────── */
@@ -1143,6 +1143,25 @@ z-index: 1;
 transform: translateY(-2px);
 border-color: var(--gold);
 }
+
+/* ── Pipeline Phone Mockup ──────────────────────────────────── */
+.phone-wrap { display: flex; justify-content: center; margin: 32px 0 8px; }
+.phone-frame {
+  width: 260px; background: #1a1a1a; border-radius: 32px;
+  padding: 16px 12px; border: 1.5px solid #333;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+}
+.phone-notch { width: 80px; height: 24px; background: #0d0d0d; border-radius: 12px; margin: 0 auto 16px; }
+.phone-header { background: var(--surface); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+.phone-header-text { font-size: 11px; font-weight: 700; color: var(--gold-light); letter-spacing: 1px; }
+.phone-header-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.p-card { background: #242424; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; border-left: 3px solid var(--gold); }
+.p-card-stage { font-size: 9px; font-weight: 700; letter-spacing: 1px; color: var(--gold); margin-bottom: 4px; }
+.p-card-name { font-size: 12px; font-weight: 600; color: #fff; margin-bottom: 2px; }
+.p-card-detail { font-size: 10px; color: rgba(255,255,255,0.4); }
+.p-card.green { border-left-color: #22c55e; } .p-card.green .p-card-stage { color: #22c55e; }
+.p-card.blue { border-left-color: #60a5fa; } .p-card.blue .p-card-stage { color: #60a5fa; }
+.p-card.purple { border-left-color: #a78bfa; } .p-card.purple .p-card-stage { color: #a78bfa; }
 
 /* ── Utility ────────────────────────────────────────────────── */
 .hidden { display: none !important; }
@@ -1213,8 +1232,11 @@ Enter Portal
 <button class="tab-btn" role="tab" data-tab="documents" onclick="switchTab('documents', this)">
 <span class="tab-icon">📋</span> Proposal
 </button>
+<button class="tab-btn" role="tab" data-tab="build" onclick="switchTab('build', this)">
+<span class="tab-icon">⚙️</span> How We Build
+</button>
 <button class="tab-btn" role="tab" data-tab="links" onclick="switchTab('links', this)">
-<span class="tab-icon">🔗</span> Resources
+<span class="tab-icon">📥</span> Docs to Download
 </button>
 </nav>
 
@@ -1283,6 +1305,42 @@ Enter Portal
     Powered by <span style="color:var(--gold);">AI GlamTech Empire™</span>
   </p>
 </div>
+</div>
+
+<!-- ── Sample Dashboard ───────────────────────────────────── -->
+<div class="proposal-card" style="margin-bottom:32px;">
+  <div class="card-head">
+    <h3>Your Live Pipeline — On Your Phone</h3>
+    <span class="card-badge">Sample Dashboard</span>
+  </div>
+  <div class="card-body" style="text-align:center;">
+    <p style="color:var(--muted);font-size:0.88rem;margin-bottom:4px;">Every call ADESINA™ handles drops a card here. Open the LeadConnector app and see exactly where every client stands — in real time.</p>
+    <div class="phone-wrap">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-header">
+          <div class="phone-header-text">ABW LIMO · PIPELINE</div>
+          <div class="phone-header-sub">Live bookings · Updated in real time</div>
+        </div>
+        <div class="p-card green">
+          <div class="p-card-stage">★ NEW INQUIRY</div>
+          <div class="p-card-name">Marcus Johnson</div>
+          <div class="p-card-detail">MCO → Marriott · 2 pax · Escalade</div>
+        </div>
+        <div class="p-card blue">
+          <div class="p-card-stage">✓ BOOKING CONFIRMED</div>
+          <div class="p-card-name">Denise & Robert Carter</div>
+          <div class="p-card-detail">Wedding · Disney · Rolls Royce Ghost</div>
+        </div>
+        <div class="p-card purple">
+          <div class="p-card-stage">💰 DEPOSIT PAID</div>
+          <div class="p-card-name">Anthony Williams</div>
+          <div class="p-card-detail">Prom · Dr. Phillips · $350 collected</div>
+        </div>
+      </div>
+    </div>
+    <p style="color:var(--muted);font-size:0.78rem;margin-top:8px;font-style:italic;">Your only job: drive and deliver. ADESINA handles the rest.</p>
+  </div>
 </div>
 
 <!-- ── Video ─────────────────────────────────────────────── -->
@@ -1498,50 +1556,380 @@ style="position:absolute;top:0;left:0;width:100%;height:100%;background:#0d1b2a;
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════ -->
-<!-- TAB 3 — RESOURCES / LINKS -->
+<!-- TAB 3 — HOW WE BUILD -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="tab-build" class="tab-panel" style="background:#eeebe0; padding:0;">
+
+<style>
+/* ── SOP Embed — scoped to .sop-wrap ── */
+.sop-wrap * { box-sizing: border-box; }
+.sop-wrap { font-family: Arial, sans-serif; color: #111827; background: #eeebe0; }
+.sop-wrap .sop-header {
+  background: #1d3557; padding: 32px 40px 24px;
+  border-bottom: 4px solid #cbb07b;
+}
+.sop-wrap .sop-header h2 { font-size: 28px; color: #fff; font-weight: bold; line-height: 1.2; margin: 0 0 6px; }
+.sop-wrap .sop-header p  { font-size: 14px; color: #b0bad4; font-style: italic; margin: 0; }
+.sop-wrap .sop-container { max-width: 1060px; margin: 0 auto; padding: 36px 24px 56px; }
+.sop-wrap .sop-phase { margin-bottom: 40px; }
+.sop-wrap .sop-phase-label { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.sop-wrap .sop-phase-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #1d3557; color: #cbb07b;
+  font-size: 14px; font-weight: bold;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.sop-wrap .sop-phase-title { font-size: 19px; font-weight: bold; color: #1d3557; }
+.sop-wrap .sop-phase-sub   { font-size: 12px; color: #6B7280; font-style: italic; margin-top: 2px; }
+.sop-wrap .sop-divider { height: 2px; background: #cbb07b; margin: 0 0 20px; border-radius: 2px; }
+.sop-wrap .sop-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px;
+}
+.sop-wrap .sop-card {
+  background: #fff; border-radius: 12px; padding: 18px 16px;
+  border: 1.5px solid #e5e0d5;
+}
+.sop-wrap .sop-card.navy { background: #1d3557; border-color: #1d3557; }
+.sop-wrap .sop-card.gold { background: #cbb07b; border-color: #cbb07b; }
+.sop-wrap .sop-card.pink { background: #f1b1c1; border-color: #f1b1c1; }
+.sop-wrap .sop-icon  { font-size: 22px; margin-bottom: 8px; }
+.sop-wrap .sop-ctitle { font-size: 13px; font-weight: bold; color: #1d3557; margin-bottom: 6px; line-height: 1.3; }
+.sop-wrap .sop-card.navy .sop-ctitle { color: #cbb07b; }
+.sop-wrap .sop-card.gold .sop-ctitle,
+.sop-wrap .sop-card.pink .sop-ctitle { color: #1d3557; }
+.sop-wrap .sop-cbody { font-size: 12px; color: #6B7280; line-height: 1.6; }
+.sop-wrap .sop-card.navy .sop-cbody { color: #b0bad4; }
+.sop-wrap .sop-card.gold .sop-cbody,
+.sop-wrap .sop-card.pink .sop-cbody { color: #333; }
+.sop-wrap .sop-badge {
+  display: inline-block; font-size: 10px; font-weight: bold; letter-spacing: 0.5px;
+  padding: 3px 10px; border-radius: 20px; margin-bottom: 8px;
+}
+.sop-wrap .badge-blue { background: #e1f5ee; color: #0f6e56; }
+.sop-wrap .badge-amber { background: #fef3cd; color: #92400e; }
+.sop-wrap .sop-checks { margin-top: 10px; }
+.sop-wrap .sop-checks label {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; color: #374151; line-height: 1.5;
+  margin-bottom: 5px; cursor: pointer;
+}
+.sop-wrap .sop-checks input[type="checkbox"] { margin-top: 2px; flex-shrink: 0; accent-color: #1d3557; }
+.sop-wrap .sop-note {
+  background: #fff8e7; border-left: 4px solid #cbb07b;
+  border-radius: 0 8px 8px 0; padding: 14px 16px;
+  margin-top: 16px; font-size: 12px; color: #374151; line-height: 1.6;
+}
+.sop-wrap .sop-note strong { color: #1d3557; }
+</style>
+
+<div class="sop-wrap">
+
+  <div class="sop-header">
+    <h2>How We Build ADESINA™ — Your 4-Week Process</h2>
+    <p>From signed agreement to live AI receptionist — every step, every week, so you always know what's happening.</p>
+  </div>
+
+  <div class="sop-container">
+
+    <!-- PHASE 4 — ONBOARDING -->
+    <div class="sop-phase">
+      <div class="sop-phase-label">
+        <div class="sop-phase-num">1</div>
+        <div>
+          <div class="sop-phase-title">ONBOARDING — WE GATHER EVERYTHING</div>
+          <div class="sop-phase-sub">Before we touch a single tool, we collect everything ADESINA needs to represent your business perfectly</div>
+        </div>
+      </div>
+      <div class="sop-divider"></div>
+      <div class="sop-grid">
+        <div class="sop-card">
+          <div class="sop-icon">📝</div>
+          <div class="sop-ctitle">Business Info</div>
+          <div class="sop-checks">
+            <label><input type="checkbox"> Legal business name</label>
+            <label><input type="checkbox"> Owner name</label>
+            <label><input type="checkbox"> Business Gmail address</label>
+            <label><input type="checkbox"> Current website URL</label>
+            <label><input type="checkbox"> Logo file (PNG preferred)</label>
+          </div>
+        </div>
+        <div class="sop-card">
+          <div class="sop-icon">🚗</div>
+          <div class="sop-ctitle">Fleet &amp; Services</div>
+          <div class="sop-checks">
+            <label><input type="checkbox"> Vehicle types &amp; capacity</label>
+            <label><input type="checkbox"> Pricing (per mile, flat rates)</label>
+            <label><input type="checkbox"> Service area / zones</label>
+            <label><input type="checkbox"> Cancellation policy</label>
+            <label><input type="checkbox"> Deposit % required from clients</label>
+          </div>
+        </div>
+        <div class="sop-card">
+          <div class="sop-icon">📞</div>
+          <div class="sop-ctitle">Phone &amp; Accounts</div>
+          <div class="sop-checks">
+            <label><input type="checkbox"> Preferred area code for new number</label>
+            <label><input type="checkbox"> 11Labs account created (you own this)</label>
+            <label><input type="checkbox"> Stripe account created (you own this)</label>
+            <label><input type="checkbox"> Bank connected to Stripe</label>
+          </div>
+        </div>
+        <div class="sop-card navy">
+          <div class="sop-icon">⚠️</div>
+          <div class="sop-ctitle">You Own Your Accounts</div>
+          <div class="sop-cbody">11Labs and Stripe are set up in YOUR name. We manage them — you own them. This means your data, your money, your accounts are always in your control.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 5 — WEEK 1 -->
+    <div class="sop-phase">
+      <div class="sop-phase-label">
+        <div class="sop-phase-num">2</div>
+        <div>
+          <div class="sop-phase-title">WEEK 1 — FOUNDATION BUILD</div>
+          <div class="sop-phase-sub">Every system is set up and connected. Nothing goes live yet — we build it right before we turn it on.</div>
+        </div>
+      </div>
+      <div class="sop-divider"></div>
+      <div class="sop-grid">
+        <div class="sop-card">
+          <span class="sop-badge badge-blue">Day 1–2</span>
+          <div class="sop-icon">🏗️</div>
+          <div class="sop-ctitle">Your Booking Dashboard</div>
+          <div class="sop-cbody">Your GHL dashboard is built. Every inquiry shows up here in stages: New Inquiry → Confirmed → Paid → Complete. You see every lead in real time.</div>
+        </div>
+        <div class="sop-card">
+          <span class="sop-badge badge-blue">Day 2</span>
+          <div class="sop-icon">📱</div>
+          <div class="sop-ctitle">Your Business Phone Number</div>
+          <div class="sop-cbody">A dedicated business number is purchased with your preferred area code and connected to ADESINA. All calls go to her first.</div>
+        </div>
+        <div class="sop-card navy">
+          <span class="sop-badge" style="background:#cbb07b;color:#1d3557;">Day 3–5</span>
+          <div class="sop-icon">🤖</div>
+          <div class="sop-ctitle">ADESINA™ is Built</div>
+          <div class="sop-cbody">ADESINA is trained on your pricing, vehicles, service area, cancellation policy. Tone: warm, luxury, professional. We place 10+ test calls before moving to the next phase.</div>
+        </div>
+        <div class="sop-card">
+          <span class="sop-badge badge-blue">Day 5</span>
+          <div class="sop-icon">✅</div>
+          <div class="sop-ctitle">Week 1 Check-In</div>
+          <div class="sop-cbody">Quick call or voice note from Pinky Floyd: "Foundation is set. ADESINA is trained. Moving to automation this week." You're always in the loop.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 6 — WEEK 2 -->
+    <div class="sop-phase">
+      <div class="sop-phase-label">
+        <div class="sop-phase-num">3</div>
+        <div>
+          <div class="sop-phase-title">WEEK 2 — AUTOMATION BUILD</div>
+          <div class="sop-phase-sub">Everything gets connected. The moment ADESINA answers a call, the entire system fires automatically.</div>
+        </div>
+      </div>
+      <div class="sop-divider"></div>
+      <div class="sop-grid">
+        <div class="sop-card">
+          <span class="sop-badge badge-amber">Week 2</span>
+          <div class="sop-icon">⚡</div>
+          <div class="sop-ctitle">Automation Wired In</div>
+          <div class="sop-cbody">Call ends → booking held → payment link texted &amp; emailed to your caller → you get a push notification on your phone instantly. Hands-free.</div>
+        </div>
+        <div class="sop-card">
+          <span class="sop-badge badge-amber">Week 2</span>
+          <div class="sop-icon">💳</div>
+          <div class="sop-ctitle">Stripe Payment Links</div>
+          <div class="sop-cbody">Payment links created for each service (airport, wedding, corporate, prom). ADESINA sends the right link automatically after booking intake. Deposits collected without you lifting a finger.</div>
+        </div>
+        <div class="sop-card">
+          <span class="sop-badge badge-amber">Week 2</span>
+          <div class="sop-icon">🌐</div>
+          <div class="sop-ctitle">Website Update</div>
+          <div class="sop-cbody">Booking CTA added. Phone number on your site updated to match the new AI number. Pricing page reviewed. Nothing changes without your approval.</div>
+        </div>
+        <div class="sop-card">
+          <span class="sop-badge badge-amber">Week 2</span>
+          <div class="sop-icon">📲</div>
+          <div class="sop-ctitle">QR Code + Digital Card</div>
+          <div class="sop-cbody">A QR code linking to your booking page is created. Digital business card with your phone, booking link, and social links. Keep it in the car for every ride.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 7 — WEEK 3 -->
+    <div class="sop-phase">
+      <div class="sop-phase-label">
+        <div class="sop-phase-num">4</div>
+        <div>
+          <div class="sop-phase-title">WEEK 3 — REFINEMENT &amp; TESTING</div>
+          <div class="sop-phase-sub">We test everything. ADESINA does not go live until every scenario works perfectly.</div>
+        </div>
+      </div>
+      <div class="sop-divider"></div>
+      <div class="sop-grid">
+        <div class="sop-card navy">
+          <div class="sop-icon">📞</div>
+          <div class="sop-ctitle">20+ Test Calls</div>
+          <div class="sop-cbody">We place test calls as a wedding client, airport pickup, prom family, and corporate booker. Every scenario tested. Every answer checked for accuracy.</div>
+        </div>
+        <div class="sop-card navy">
+          <div class="sop-icon">🔄</div>
+          <div class="sop-ctitle">Script Refined</div>
+          <div class="sop-cbody">Edge cases added — client asks for a discount, wrong city, no availability. ADESINA never says "I don't know." She handles every situation gracefully and escalates when needed.</div>
+        </div>
+        <div class="sop-card navy">
+          <div class="sop-icon">🧪</div>
+          <div class="sop-ctitle">Full Pipeline Test</div>
+          <div class="sop-cbody">Complete end-to-end test: call in → ADESINA collects info → automation fires → dashboard card created → payment link sent → Stripe confirmed → pipeline updates. Every step watched.</div>
+        </div>
+        <div class="sop-card navy">
+          <div class="sop-icon">📱</div>
+          <div class="sop-ctitle">Your App Set Up</div>
+          <div class="sop-cbody">LeadConnector app installed on your phone. You see live test cards appearing exactly as they will when real bookings come in. You know exactly what to expect.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 8 — WEEK 4 GO LIVE -->
+    <div class="sop-phase">
+      <div class="sop-phase-label">
+        <div class="sop-phase-num">5</div>
+        <div>
+          <div class="sop-phase-title">WEEK 4 — GO LIVE 🚀</div>
+          <div class="sop-phase-sub">ADESINA is switched on and answering real calls. You drive — she works.</div>
+        </div>
+      </div>
+      <div class="sop-divider"></div>
+      <div class="sop-grid">
+        <div class="sop-card gold">
+          <div class="sop-icon">🚀</div>
+          <div class="sop-ctitle">Go Live</div>
+          <div class="sop-cbody">Your business phone number is switched on. ADESINA answers every call from this moment forward. We monitor the first 48 hours closely and are available if anything needs attention.</div>
+        </div>
+        <div class="sop-card gold">
+          <div class="sop-icon">🤝</div>
+          <div class="sop-ctitle">Handoff Call (30 min)</div>
+          <div class="sop-cbody">We walk you through the LeadConnector app, show you exactly what appears on your phone after every ADESINA call, and answer every question. Nothing is left unclear.</div>
+        </div>
+        <div class="sop-card gold">
+          <div class="sop-icon">🔐</div>
+          <div class="sop-ctitle">Your Credentials</div>
+          <div class="sop-cbody">A secure document is delivered with all your account logins: GHL, Twilio, 11Labs, Stripe. You have everything. You own everything.</div>
+        </div>
+        <div class="sop-card gold">
+          <div class="sop-icon">📊</div>
+          <div class="sop-ctitle">30-Day Check-In Scheduled</div>
+          <div class="sop-cbody">Your first performance review is already on the calendar. We look at calls answered, bookings captured, and pipeline status together. You always know how ADESINA is performing.</div>
+        </div>
+      </div>
+      <div class="sop-note">
+        <strong>What Pinky Floyd sends you on go-live day:</strong> "ADESINA is live and answering your calls. Download the LeadConnector app and you'll see every booking hit your phone in real time. Welcome to the future — you drive, she works."
+      </div>
+    </div>
+
+    <!-- PHASE 9 — MONTHLY $497 -->
+    <div class="sop-phase">
+      <div class="sop-phase-label">
+        <div class="sop-phase-num">6</div>
+        <div>
+          <div class="sop-phase-title">EVERY MONTH — WHAT YOUR $497 COVERS</div>
+          <div class="sop-phase-sub">Your retainer is not a subscription — it is active, ongoing work delivered every single month.</div>
+        </div>
+      </div>
+      <div class="sop-divider"></div>
+      <div class="sop-grid">
+        <div class="sop-card">
+          <div class="sop-icon">🤖</div>
+          <div class="sop-ctitle">ADESINA™ Gets Sharper</div>
+          <div class="sop-cbody">Call transcripts reviewed every month. Script updated for new services, seasonal pricing, and any gaps. ADESINA improves every single month — she never stays the same.</div>
+        </div>
+        <div class="sop-card">
+          <div class="sop-icon">🔧</div>
+          <div class="sop-ctitle">System Monitoring</div>
+          <div class="sop-cbody">All automations checked. Call logs verified. Dashboard confirmed working. If anything is broken, it is fixed within 24 hours. You never have to chase us.</div>
+        </div>
+        <div class="sop-card">
+          <div class="sop-icon">📱</div>
+          <div class="sop-ctitle">4 Social Media Prompts</div>
+          <div class="sop-cbody">4 ready-to-use ChatGPT prompts delivered monthly. Copy, paste into ChatGPT, get a polished social media post in seconds. No Canva, no design work — just copy and post.</div>
+        </div>
+        <div class="sop-card">
+          <div class="sop-icon">📈</div>
+          <div class="sop-ctitle">Monthly Check-In Call</div>
+          <div class="sop-cbody">15-minute call every month. We tell you how many calls ADESINA answered, how many bookings were captured, and what we improved. You stay informed — always.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /sop-container -->
+</div><!-- /sop-wrap -->
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- TAB 4 — RESOURCES / LINKS -->
 <!-- ══════════════════════════════════════════════════════════════ -->
 <div id="tab-links" class="tab-panel">
 <div class="links-wrap">
 
 <div class="links-header">
-<h2>Your Resource Hub</h2>
-<p>Everything you need in one place — bookmarks, guides, and next steps.</p>
+<h2>Your Documents</h2>
+<p>Click any document below to download it directly to your device.</p>
 </div>
 
-<a href="#" class="link-card" target="_blank">
-<div class="link-card-icon">🎯</div>
+<a href="docs/AIGlamTech_ServiceAgreement_BrianWalcott.docx" class="link-card" download>
+<div class="link-card-icon">📄</div>
 <div class="link-card-text">
-<h4>Client Intake Form</h4>
-<p>Submit your credentials, service list, and FAQ content.</p>
+<h4>AI GlamTech Service Agreement</h4>
+<p>Your signed service agreement with AI GlamTech Empire™ — Phase 1 ADESINA™ build.</p>
 </div>
-<div class="link-card-arrow">→</div>
+<div class="link-card-arrow">⬇</div>
 </a>
 
-<a href="#" class="link-card" target="_blank">
-<div class="link-card-icon">📖</div>
+<a href="docs/AIGlamTech_SOW_BrianWalcott.docx" class="link-card" download>
+<div class="link-card-icon">📋</div>
 <div class="link-card-text">
-<h4>Onboarding Guide</h4>
-<p>Step-by-step walkthrough of the setup process.</p>
+<h4>Statement of Work (SOW)</h4>
+<p>Full scope of deliverables, timeline, and milestones for your ADESINA™ build.</p>
 </div>
-<div class="link-card-arrow">→</div>
+<div class="link-card-arrow">⬇</div>
 </a>
 
-<a href="#" class="link-card" target="_blank">
-<div class="link-card-icon">🎓</div>
+<a href="docs/BrianWalcott_TermsAndConditions.docx" class="link-card" download>
+<div class="link-card-icon">📜</div>
 <div class="link-card-text">
-<h4>Video Training Library</h4>
-<p>Self-paced videos so you can monitor and manage your AI system.</p>
+<h4>Brian Walcott Terms &amp; Conditions</h4>
+<p>Terms and conditions for Paradise Transportation of Central Florida, Inc.</p>
 </div>
-<div class="link-card-arrow">→</div>
+<div class="link-card-arrow">⬇</div>
 </a>
 
-<a href="#" class="link-card" target="_blank">
-<div class="link-card-icon">💬</div>
+<a href="docs/BrianWalcott_PassengerAgreement.docx" class="link-card" download>
+<div class="link-card-icon">🤝</div>
 <div class="link-card-text">
-<h4>Support &amp; Updates</h4>
-<p>Submit change requests, questions, or performance feedback.</p>
+<h4>Brian Walcott Passenger Agreement</h4>
+<p>Passenger service agreement and conduct policy for your rides.</p>
 </div>
-<div class="link-card-arrow">→</div>
+<div class="link-card-arrow">⬇</div>
+</a>
+
+<a href="docs/ADESINA_11Labs_Demo_BrianWalcott.docx" class="link-card" download>
+<div class="link-card-icon">🤖</div>
+<div class="link-card-text">
+<h4>ADESINA™ Demo Script</h4>
+<p>Sample call script showing how ADESINA™ handles your incoming bookings.</p>
+</div>
+<div class="link-card-arrow">⬇</div>
+</a>
+
+<a href="docs/BrianWalcott_Onboarding_Checklist.md" class="link-card" download>
+<div class="link-card-icon">✅</div>
+<div class="link-card-text">
+<h4>Onboarding Checklist</h4>
+<p>Step-by-step checklist for getting ADESINA™ live and your pipeline running.</p>
+</div>
+<div class="link-card-arrow">⬇</div>
 </a>
 
 <a href="mailto:admin@glamtechempire.com" class="link-card">
