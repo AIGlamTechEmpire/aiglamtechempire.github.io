@@ -1695,7 +1695,7 @@ style="position:absolute;top:0;left:0;width:100%;height:100%;background:#0d1b2a;
     </button>
 
     <p class="sig-email-note" id="sig-email-note" style="display:none;">
-      ✅ Signed copy emailed to you and AI GlamTech Empire™. Check your inbox.
+      ✅ Your signed PDF downloaded to your device — check your Downloads folder. Confirmation emails sent to you and AI GlamTech Empire™.
     </p>
   </div>
 
@@ -1706,10 +1706,10 @@ style="position:absolute;top:0;left:0;width:100%;height:100%;background:#0d1b2a;
       <p class="lock-label">Sign your agreement above to unlock secure payment options</p>
     </div>
     <div class="payment-grid">
-      <a href="https://buy.stripe.com/bJefZiepO5l7gVp2Me4c805" class="pay-btn primary" target="_blank">
+      <a href="https://buy.stripe.com/3cI28sftSbJv0Wr5Yq4c806" class="pay-btn primary" target="_blank">
         💳 &nbsp; Secure Setup Fee — $2,500
       </a>
-      <a href="https://buy.stripe.com/bJefZiepO5l7gVp2Me4c805" class="pay-btn" target="_blank">
+      <a href="https://buy.stripe.com/3cI28sftSbJv0Wr5Yq4c806" class="pay-btn" target="_blank">
         📅 &nbsp; Set Up AI System Care — $350/mo
       </a>
       <a href="mailto:pinky@aiglamtechempire.com" class="pay-btn">
@@ -2332,44 +2332,53 @@ async function handleSign() {
   const docId = 'AGT-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase();
   const fileName = 'AIGlamTech_SignedAgreement_' + name.replace(/\s+/g, '_') + '.pdf';
 
+  // Generate PDF
   let pdfBase64 = '';
-  try { pdfBase64 = generateSignedPDF(name, email, date, docId); }
-  catch (e) { console.error('PDF generation error:', e); }
-
-  // ── EmailJS config — fill these in after creating your free account ──
-  const EMAILJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';
-  const EMAILJS_SERVICE_ID  = 'YOUR_EMAILJS_SERVICE_ID';
-  const EMAILJS_TEMPLATE_ID = 'YOUR_EMAILJS_TEMPLATE_ID';
-
-  const params = (toName, toEmail) => ({
-    to_name: toName,
-    to_email: toEmail,
-    client_name: name,
-    signed_date: date,
-    doc_id: docId,
-    attachment_data: pdfBase64,
-    attachment_name: fileName
-  });
-
-  // Send to client
+  let pdfBlob = null;
   try {
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID,
-      params(name, email), { publicKey: EMAILJS_PUBLIC_KEY });
+    pdfBase64 = generateSignedPDF(name, email, date, docId);
+    // Convert base64 → Blob for email attachment
+    const byteChars = atob(pdfBase64);
+    const byteArr = new Uint8Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) byteArr[i] = byteChars.charCodeAt(i);
+    pdfBlob = new Blob([byteArr], { type: 'application/pdf' });
+    // Auto-download to client's device
+    const dlLink = document.createElement('a');
+    dlLink.href = 'data:application/pdf;base64,' + pdfBase64;
+    dlLink.download = fileName;
+    document.body.appendChild(dlLink);
+    dlLink.click();
+    document.body.removeChild(dlLink);
+  } catch (e) { console.error('PDF generation error:', e); }
+
+  // ── Formspree — delivers signed PDF as email attachment to admin ──
+  try {
+    const fd = new FormData();
+    fd.append('_subject', '✅ Signed Agreement — ' + name + ' | Doc ' + docId);
+    fd.append('Client_Name', name);
+    fd.append('Client_Email', email);
+    fd.append('Signed_Date', date);
+    fd.append('Document_ID', docId);
+    if (pdfBlob) fd.append('Signed_Agreement_PDF', pdfBlob, fileName);
+    await fetch('https://formspree.io/f/mgawwpwq', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: fd
+    });
+  } catch (e) { console.error('Formspree PDF send error:', e); }
+
+  // ── EmailJS — confirmation text email to client ──
+  const EMAILJS_PUBLIC_KEY  = 'hVtNJdJwvTg0wtraW';
+  const EMAILJS_SERVICE_ID  = 'service_cboo2ja';
+  const EMAILJS_TEMPLATE_ID = 'template_7bnp73d';
+
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_name: name, to_email: email, name: name,
+      message: 'Your signed AI GlamTech Service Agreement has been received. Doc ID: ' + docId + ' | Date: ' + date + '. Your signed copy was downloaded to your device.',
+      time: date, client_name: name, signed_date: date, doc_id: docId
+    }, { publicKey: EMAILJS_PUBLIC_KEY });
   } catch (e) { console.error('EmailJS client send error:', e); }
-
-  // Send copy to Pinky
-  try {
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID,
-      params('Pinky Floyd', 'admin@aiglamtechempire.com'), { publicKey: EMAILJS_PUBLIC_KEY });
-  } catch (e) { console.error('EmailJS admin send error:', e); }
-
-  // Audit trail via Formspree
-  fetch('https://formspree.io/f/mgawwpwq', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify({ name, email, signed_date: date, doc_id: docId,
-      message: '🎉 ' + name + ' signed the Service Agreement. Doc ID: ' + docId })
-  });
 
   // Update UI
   btn.textContent = '❖ Agreement Signed — ' + name;
