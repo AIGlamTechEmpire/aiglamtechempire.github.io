@@ -2351,36 +2351,7 @@ async function handleSign() {
     document.body.removeChild(dlLink);
   } catch (e) { console.error('PDF generation error:', e); }
 
-  // ── Formspree — delivers signed PDF as email attachment to admin ──
-  try {
-    const fd = new FormData();
-    fd.append('_subject', '✅ Signed Agreement — ' + name + ' | Doc ' + docId);
-    fd.append('Client_Name', name);
-    fd.append('Client_Email', email);
-    fd.append('Signed_Date', date);
-    fd.append('Document_ID', docId);
-    if (pdfBlob) fd.append('Signed_Agreement_PDF', pdfBlob, fileName);
-    await fetch('https://formspree.io/f/mgawwpwq', {
-      method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: fd
-    });
-  } catch (e) { console.error('Formspree PDF send error:', e); }
-
-  // ── EmailJS — confirmation text email to client ──
-  const EMAILJS_PUBLIC_KEY  = 'hVtNJdJwvTg0wtraW';
-  const EMAILJS_SERVICE_ID  = 'service_cboo2ja';
-  const EMAILJS_TEMPLATE_ID = 'template_7bnp73d';
-
-  try {
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      to_name: name, to_email: email, name: name,
-      message: 'Your signed AI GlamTech Service Agreement has been received. Doc ID: ' + docId + ' | Date: ' + date + '. Your signed copy was downloaded to your device.',
-      time: date, client_name: name, signed_date: date, doc_id: docId
-    }, { publicKey: EMAILJS_PUBLIC_KEY });
-  } catch (e) { console.error('EmailJS client send error:', e); }
-
-  // Update UI
+  // ── Update UI immediately — don't block on network calls ──
   btn.textContent = '❖ Agreement Signed — ' + name;
   document.getElementById('sig-email-note').style.display = 'block';
   ['sig-name', 'sig-email'].forEach(id => document.getElementById(id).disabled = true);
@@ -2390,10 +2361,37 @@ async function handleSign() {
   document.getElementById('step3').classList.add('done');
   document.getElementById('step4').classList.add('active');
   document.getElementById('payment-lock').classList.add('hidden');
-
   setTimeout(() => {
     document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 500);
+
+  // ── Formspree — fire & forget, sends PDF attachment to admin ──
+  if (pdfBlob) {
+    const fd = new FormData();
+    fd.append('_subject', '✅ Signed Agreement — ' + name + ' | Doc ' + docId);
+    fd.append('Client_Name', name);
+    fd.append('Client_Email', email);
+    fd.append('Signed_Date', date);
+    fd.append('Document_ID', docId);
+    fd.append('Signed_Agreement_PDF', pdfBlob, fileName);
+    fetch('https://formspree.io/f/mgawwpwq', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: fd
+    }).catch(e => console.error('Formspree error:', e));
+  }
+
+  // ── EmailJS — confirmation text email to client (fire & forget) ──
+  const EMAILJS_PUBLIC_KEY  = 'hVtNJdJwvTg0wtraW';
+  const EMAILJS_SERVICE_ID  = 'service_cboo2ja';
+  const EMAILJS_TEMPLATE_ID = 'template_7bnp73d';
+
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    to_name: name, to_email: email, name: name,
+    message: 'Your signed AI GlamTech Service Agreement has been received. Doc ID: ' + docId + ' | Date: ' + date + '. Your signed copy was downloaded to your device.',
+    time: date, client_name: name, signed_date: date, doc_id: docId
+  }, { publicKey: EMAILJS_PUBLIC_KEY }).catch(e => console.error('EmailJS error:', e));
+
 }
 
 /* ── Password Gate ──────────────────────────────────────────── */
