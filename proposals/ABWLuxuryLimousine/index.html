@@ -2365,21 +2365,12 @@ async function handleSign() {
     document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 500);
 
-  // ── Formspree — fire & forget, sends PDF attachment to admin ──
-  if (pdfBlob) {
-    const fd = new FormData();
-    fd.append('_subject', '✅ Signed Agreement — ' + name + ' | Doc ' + docId);
-    fd.append('Client_Name', name);
-    fd.append('Client_Email', email);
-    fd.append('Signed_Date', date);
-    fd.append('Document_ID', docId);
-    fd.append('Signed_Agreement_PDF', pdfBlob, fileName);
-    fetch('https://formspree.io/f/mgawwpwq', {
-      method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: fd
-    }).catch(e => console.error('Formspree error:', e));
-  }
+  // ── Vercel + Resend — emails signed PDF to admin + client ──
+  fetch('https://aiglamtech-sign-relay.vercel.app/api/send-agreement', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, pdfBase64, fileName, docId, date })
+  }).catch(e => console.error('Send agreement error:', e));
 
   // ── EmailJS — confirmation text email to client (fire & forget) ──
   const EMAILJS_PUBLIC_KEY  = 'hVtNJdJwvTg0wtraW';
