@@ -827,6 +827,77 @@ opacity: 0.45;
 cursor: not-allowed;
 }
 
+/* Agreement Scroll Box */
+.agreement-scroll-label {
+  font-size: 0.76rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.agreement-scroll-box {
+  background: rgba(0,0,0,0.28);
+  border: 1px solid rgba(203,176,123,0.22);
+  border-radius: 10px;
+  padding: 18px 20px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin-bottom: 22px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) transparent;
+}
+.agreement-scroll-box::-webkit-scrollbar { width: 5px; }
+.agreement-scroll-box::-webkit-scrollbar-track { background: transparent; }
+.agreement-scroll-box::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+.agreement-scroll-box p {
+  font-size: 0.79rem;
+  color: rgba(238,235,224,0.72);
+  line-height: 1.75;
+  margin-bottom: 12px;
+}
+.agreement-scroll-box strong { color: var(--gold-light); font-weight: 700; }
+.agreement-scroll-box em { color: var(--blush); font-style: normal; font-weight: 600; }
+
+/* Signature Preview */
+.sig-preview-box {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(203,176,123,0.32);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+.sig-preview-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.sig-preview-inner { display: flex; flex-direction: column; gap: 3px; }
+.sig-script {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 2rem;
+  color: var(--gold-light);
+  line-height: 1.2;
+}
+.sig-preview-line {
+  border-bottom: 1px solid rgba(203,176,123,0.38);
+  margin: 4px 0 7px;
+}
+.sig-printed { font-size: 0.79rem; color: var(--muted); }
+.sig-printed span { color: var(--text); font-weight: 600; }
+.sig-preview-meta { font-size: 0.72rem; color: rgba(238,235,224,0.42); margin-top: 4px; }
+
+/* Post-sign note */
+.sig-email-note {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #7dde96;
+  margin-top: 14px;
+  font-weight: 600;
+}
+
 /* Payment unlock */
 .payment-section {
 margin-top: 28px;
@@ -1174,6 +1245,8 @@ header { padding: 14px 16px; }
 .sign-step:last-child { border-bottom: none; }
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
 <body>
@@ -1512,29 +1585,118 @@ style="position:absolute;top:0;left:0;width:100%;height:100%;background:#0d1b2a;
   <div class="sig-block" id="signature-section">
     <h3>✦ Sign Your Agreement ✦</h3>
 
+    <!-- Scrollable Agreement Text -->
+    <p class="agreement-scroll-label">Read the full Service Agreement before signing:</p>
+    <div class="agreement-scroll-box">
+      <p><strong>AI GLAMTECH EMPIRE™ — SERVICE AGREEMENT</strong><br>Phase 1 AI Receptionist Build</p>
+
+      <p><strong>1. PARTIES</strong><br>
+      <em>Service Provider:</em> AI GlamTech Empire™, operated by Pinky Floyd (Casandra Riley) — pinky@aiglamtechempire.com<br>
+      <em>Client:</em> Brian Walcott, Paradise Transportation of Central Florida, Inc. (d/b/a ABW Luxury Limousine Service), Orlando, Florida<br>
+      Note: "Pinky Floyd" is the professional name of Casandra Riley. Both names refer to the same individual.</p>
+
+      <p><strong>2. SCOPE OF SERVICES — PHASE 1</strong></p>
+
+      <p><strong>A. AI Receptionist — ADESINA™ (11Labs)</strong><br>
+      Configure and launch ADESINA, an AI voice receptionist on ElevenLabs ConvAI. Custom system prompt collects passenger name, pickup/destination, date/time, special needs, and group size. Calculates pickup times using worst-case Florida route travel times + 1-hour VIP buffer. Discloses multi-day and overnight fees. Closing script confirms the reservation and notifies the caller that a text + email with the agreement and payment link are on the way. Includes a 60-day complimentary tuning period.</p>
+
+      <p><strong>B. Phone Integration — Twilio</strong><br>
+      Set up Twilio account, provision an Orlando-area phone number (407 or 321 area code), and connect to ADESINA. Account SID and Auth Token delivered to Client upon project completion.</p>
+
+      <p><strong>C. CRM — GoHighLevel (GHL)</strong><br>
+      Create Client's dedicated GHL subaccount. Connect Gmail. Build contact pipeline: Lead → Inquiry → Booked → Confirmed → Completed. Configure automated SMS + email sequence triggered post-call.</p>
+
+      <p><strong>D. Workflow Automation — N8N</strong><br>
+      Post-Call Workflow: ADESINA call ends → N8N webhook → GHL contact created → SMS + email sent with booking summary, service agreement link, and Stripe payment link.<br>
+      Refund Approval Workflow: Client approves/denies refunds; Provider never acts independently.</p>
+
+      <p><strong>E. Payments — Stripe</strong><br>
+      Set up Stripe account in Client's name. Enable card, Apple Pay, Google Pay, and ACH. Create standard payment link for booking deposits (50%). Connect to GHL/N8N automation.</p>
+
+      <p><strong>F. Digital Identity</strong><br>
+      Design branded QR code linking to the booking/GHL form. Set up Dot Card (digital business card). Client is responsible for Dot Card subscription fees directly.</p>
+
+      <p><strong>3. FEES &amp; PAYMENT</strong><br>
+      <em>One-Time Setup Fee:</em> $2,500.00 — due before work begins. Covers full Phase 1 build.<br>
+      <em>60-Day Complimentary Support:</em> Days 1–60 following handoff, Provider monitors, tunes, and fixes at no charge.<br>
+      <em>Monthly Retainer (AI System Care):</em> Beginning Day 61, $350.00/month for initial 6-month term. Covers: ADESINA monitoring, troubleshooting, script updates, platform maintenance, M–F 9 AM–5 PM ET support plus Philippines evening coverage.<br>
+      <em>Emergency After-Hours Support:</em> $150.00/hour outside standard hours, subject to availability.<br>
+      <em>Payment Terms:</em> Setup fee due before work begins. Retainer due 1st of each month starting Month 3. Late fee: $25 after 7 days. Accepted: Stripe, Zelle, or as agreed.</p>
+
+      <p><strong>4. THIRD-PARTY PLATFORM FEES</strong><br>
+      Client is directly responsible for: Twilio (~$20–30/mo), 11Labs (~$22/mo), N8N (~$20/mo), GoHighLevel (included under Provider account), Stripe (2.9% + $0.30/transaction), Dot Card (per their pricing).</p>
+
+      <p><strong>5. CLIENT RESPONSIBILITIES</strong><br>
+      Client shall provide: valid government-issued ID for account verification, business email for GHL connection, approval of ADESINA scripts within 48 hours of delivery, responses to all correspondence within 3 business days, and maintain active third-party subscriptions throughout the engagement.</p>
+
+      <p><strong>6. PASSENGER REFUND APPROVAL POLICY</strong><br>
+      Brian Walcott is the sole decision-maker for all passenger refund requests. Provider's system notifies Client of refund requests; Client responds to approve or deny. Provider will never approve or deny passenger refunds independently.</p>
+
+      <p><strong>7. OUT OF SCOPE — PHASE 1</strong><br>
+      Explicitly excluded: social media management, lead generation, Google Business Profile, paid advertising, website redesign, content creation beyond QR/Dot Card, legal, accounting, or tax advice.</p>
+
+      <p><strong>8. INTELLECTUAL PROPERTY</strong><br>
+      All custom AI scripts, ADESINA™ persona, N8N workflows, and GHL pipeline builds become Client's property upon final payment. Provider retains portfolio rights without disclosing confidential data.</p>
+
+      <p><strong>9. CONFIDENTIALITY</strong><br>
+      Both parties keep confidential all proprietary information shared in this engagement. Obligation survives termination for two (2) years.</p>
+
+      <p><strong>10. LIMITATION OF LIABILITY</strong><br>
+      Provider's maximum liability shall not exceed total fees paid in the preceding 30 days. Provider is not liable for interruptions or failures caused by third-party platforms.</p>
+
+      <p><strong>11. REVISIONS &amp; CHANGE ORDERS</strong><br>
+      Work outside Section 2 scope requires a written Change Order signed by both parties before work begins.</p>
+
+      <p><strong>12. TERMINATION</strong><br>
+      Either party may terminate with 14 days written notice via email. Client pays for completed work; Provider delivers completed work product. Setup fee is non-refundable.</p>
+
+      <p><strong>13. GOVERNING LAW</strong><br>
+      Governed by the laws of the State of Florida. Disputes resolved in Orange County, Florida courts.</p>
+
+      <p><strong>14. ENTIRE AGREEMENT</strong><br>
+      This document, together with the signed SOW, constitutes the entire agreement and supersedes all prior discussions. Modifications must be in writing and signed by both parties.</p>
+    </div>
+
+    <!-- Signature Fields -->
     <div class="sig-field">
       <label>Full Legal Name</label>
-      <input type="text" id="sig-name" class="sig-name" placeholder="Brian Walcott" oninput="checkSigReady()" />
+      <input type="text" id="sig-name" class="sig-name" placeholder="Brian Walcott" oninput="checkSigReady(); updateSigPreview();" />
     </div>
     <div class="sig-field">
       <label>Email Address</label>
-      <input type="email" id="sig-email" placeholder="BrianWalcott22@gmail.com" oninput="checkSigReady()" />
+      <input type="email" id="sig-email" placeholder="BrianWalcott22@gmail.com" oninput="checkSigReady(); updateSigPreview();" />
     </div>
     <div class="sig-field">
       <label>Date</label>
       <input type="text" id="sig-date" readonly style="color:var(--muted);" />
     </div>
 
+    <!-- Live Signature Preview -->
+    <div class="sig-preview-box" id="sig-preview" style="display:none;">
+      <p class="sig-preview-label">Your signature will appear as:</p>
+      <div class="sig-preview-inner">
+        <span class="sig-script" id="sig-preview-script"></span>
+        <div class="sig-preview-line"></div>
+        <span class="sig-printed">Printed Name: <span id="sig-preview-printed"></span></span>
+        <span class="sig-preview-meta" id="sig-preview-meta"></span>
+      </div>
+    </div>
+
+    <!-- Consent Checkbox -->
     <div class="consent-row">
       <input type="checkbox" id="consent-box" onchange="checkSigReady()" />
       <label for="consent-box">
-        I, <strong>Brian Walcott</strong>, agree to the terms of this proposal and authorize <strong>AI GlamTech Empire™</strong> to begin building the <strong>ADESINA™ AI Receptionist</strong> system for Paradise Transportation of Central Florida, Inc. I understand the one-time setup fee of <strong>$2,500</strong> is due within 3 weeks of signing, followed by an AI System Care retainer of <strong>$350/month</strong> beginning Day 61 for an initial 6-month term.
+        By checking this box, you are agreeing to all the terms and conditions in this agreement. I, <strong>Brian Walcott</strong>, authorize <strong>AI GlamTech Empire™</strong> to begin building the <strong>ADESINA™ AI Receptionist</strong> system for Paradise Transportation of Central Florida, Inc. I understand the one-time setup fee of <strong>$2,500</strong> is due before work begins, followed by an AI System Care retainer of <strong>$350/month</strong> beginning Day 61 for an initial 6-month term.
       </label>
     </div>
 
     <button class="sign-submit-btn pulse-btn" id="sign-btn" onclick="handleSign()" disabled>
-      ✦ Sign &amp; Secure My Investment
+      ✦ Sign Agreement &amp; Email Signed Copy
     </button>
+
+    <p class="sig-email-note" id="sig-email-note" style="display:none;">
+      ✅ Signed copy emailed to you and AI GlamTech Empire™. Check your inbox.
+    </p>
   </div>
 
   <!-- Payment Section -->
@@ -1971,55 +2133,258 @@ const el = document.getElementById('sig-date');
 if (el) el.value = formatted;
 })();
 
-/* ── Enable sign button when both fields are filled ────────── */
-function checkSigReady() {
-const name = document.getElementById('sig-name').value.trim();
-const email = document.getElementById('sig-email').value.trim();
-const consent = document.getElementById('consent-box').checked;
-const btn = document.getElementById('sign-btn');
-btn.disabled = !(name && email && consent);
+/* ── Live Signature Preview ─────────────────────────────────── */
+function updateSigPreview() {
+  const name = document.getElementById('sig-name').value.trim();
+  const preview = document.getElementById('sig-preview');
+  if (name.length >= 1) {
+    preview.style.display = 'block';
+    document.getElementById('sig-preview-script').textContent = name;
+    document.getElementById('sig-preview-printed').textContent = name;
+    const email = document.getElementById('sig-email').value.trim();
+    const date = document.getElementById('sig-date').value;
+    document.getElementById('sig-preview-meta').textContent =
+      (email ? email + '  ·  ' : '') + date;
+  } else {
+    preview.style.display = 'none';
+  }
 }
 
-/* ── Handle signature submission ───────────────────────────── */
-function handleSign() {
-const name = document.getElementById('sig-name').value.trim();
-const email = document.getElementById('sig-email').value.trim();
-const date = document.getElementById('sig-date').value;
+/* ── Enable sign button ──────────────────────────────────────── */
+function checkSigReady() {
+  const name = document.getElementById('sig-name').value.trim();
+  const email = document.getElementById('sig-email').value.trim();
+  const consent = document.getElementById('consent-box').checked;
+  document.getElementById('sign-btn').disabled = !(name && email && consent);
+}
 
-if (!name || !email) return;
+/* ── Generate signed PDF ─────────────────────────────────────── */
+function generateSignedPDF(name, email, date, docId) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'letter' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const margin = 20;
+  const usableW = pageW - margin * 2;
+  let y = 20;
 
-// Lock the signature block
-document.getElementById('sign-btn').textContent = '✦ Agreement Signed — ' + name;
-document.getElementById('sign-btn').disabled = true;
-document.getElementById('sig-name').disabled = true;
-document.getElementById('sig-email').disabled = true;
-document.getElementById('consent-box').disabled = true;
-document.getElementById('signature-section').style.borderColor = 'var(--gold)';
-document.getElementById('signature-section').style.boxShadow = '0 0 32px rgba(212,160,23,0.25)';
+  function checkPage(needed) {
+    if (y + needed > 268) { doc.addPage(); y = 20; }
+  }
+  function addHeading(text) {
+    checkPage(14);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(29, 53, 87);
+    y += 4;
+    doc.splitTextToSize(text, usableW).forEach(l => { checkPage(6); doc.text(l, margin, y); y += 6; });
+    y += 1;
+  }
+  function addSub(text) {
+    checkPage(10);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(50, 80, 120);
+    doc.splitTextToSize(text, usableW).forEach(l => { checkPage(5.5); doc.text(l, margin, y); y += 5.5; });
+  }
+  function addBody(text) {
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(50, 50, 50);
+    doc.splitTextToSize(text, usableW).forEach(l => { checkPage(5); doc.text(l, margin, y); y += 5; });
+    y += 2;
+  }
 
-// Unlock payment
-document.getElementById('payment-lock').classList.add('hidden');
+  // Title block
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(18); doc.setTextColor(29, 53, 87);
+  doc.text('AI GLAMTECH EMPIRE™', pageW / 2, y, { align: 'center' }); y += 8;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(11); doc.setTextColor(100, 100, 100);
+  doc.text('Service Agreement — Phase 1 AI Receptionist Build', pageW / 2, y, { align: 'center' }); y += 6;
+  doc.setDrawColor(203, 176, 123); doc.setLineWidth(0.8);
+  doc.line(margin, y, pageW - margin, y); y += 8;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(130);
+  doc.text('Document ID: ' + docId, margin, y);
+  doc.text('Date: ' + date, pageW - margin, y, { align: 'right' }); y += 10;
 
-// Advance progress steps
-document.getElementById('step3').classList.add('done');
-document.getElementById('step4').classList.add('active');
+  // Sections
+  addHeading('1. PARTIES');
+  addBody('Service Provider: AI GlamTech Empire™, operated by Pinky Floyd (Casandra Riley), pinky@aiglamtechempire.com');
+  addBody('Client: Brian Walcott, Paradise Transportation of Central Florida, Inc. (d/b/a ABW Luxury Limousine Service), Orlando, Florida');
+  addBody('Note: "Pinky Floyd" is the professional name of Casandra Riley. Both names refer to the same individual.');
 
-// Notify Pinky via Formspree
-fetch('https://formspree.io/f/mgawwpwq', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-  body: JSON.stringify({
-    name: name,
-    email: email,
-    signed_date: date || new Date().toLocaleDateString(),
-    message: '🎉 Brian Walcott has signed the proposal on the portal. Check Stripe for payment.'
-  })
-});
+  addHeading('2. SCOPE OF SERVICES — PHASE 1');
+  addSub('A. AI Receptionist — ADESINA™ (11Labs)');
+  addBody('Configure and launch ADESINA, an AI voice receptionist on ElevenLabs ConvAI. Custom system prompt collects passenger name, pickup/destination, date/time, special needs, and group size. Calculates pickup times using worst-case Florida route travel times + 1-hour VIP buffer. Discloses multi-day and overnight fees. Closing script confirms reservation and notifies caller that text + email with agreement and payment link are on the way. Includes 60-day complimentary tuning period.');
+  addSub('B. Phone Integration — Twilio');
+  addBody('Set up Twilio account, provision an Orlando-area phone number (407 or 321 area code), connect to ADESINA. Account SID and Auth Token delivered to Client upon project completion.');
+  addSub('C. CRM — GoHighLevel (GHL)');
+  addBody('Create Client\'s dedicated GHL subaccount. Connect Gmail. Build contact pipeline: Lead → Inquiry → Booked → Confirmed → Completed. Configure automated SMS + email sequence triggered post-call.');
+  addSub('D. Workflow Automation — N8N');
+  addBody('Post-Call Workflow: ADESINA call ends → N8N webhook → GHL contact created → SMS + email with booking summary, service agreement link, and Stripe payment link. Refund Approval Workflow: Client approves/denies refunds; Provider never acts independently.');
+  addSub('E. Payments — Stripe');
+  addBody('Set up Stripe account in Client\'s name. Enable card, Apple Pay, Google Pay, and ACH. Create standard payment link for booking deposits (50%). Connect to GHL/N8N automation.');
+  addSub('F. Digital Identity');
+  addBody('Design branded QR code linking to booking/GHL form. Set up Dot Card (digital business card). Client is responsible for Dot Card subscription fees directly.');
 
-// Scroll to payment
-setTimeout(() => {
-document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}, 300);
+  addHeading('3. FEES & PAYMENT');
+  addBody('One-Time Setup Fee: $2,500.00 — due before work begins. Covers full Phase 1 build.');
+  addBody('60-Day Complimentary Support: Days 1–60 following handoff, Provider monitors, tunes, and fixes at no charge.');
+  addBody('Monthly Retainer (AI System Care): Beginning Day 61, $350.00/month for initial 6-month term. Covers: ADESINA monitoring, troubleshooting, script updates, platform maintenance, M–F 9 AM–5 PM ET support plus Philippines evening coverage.');
+  addBody('Emergency After-Hours Support: $150.00/hour outside standard hours, subject to availability.');
+  addBody('Payment Terms: Setup fee due before work begins. Retainer due 1st of each month starting Month 3. Late fee: $25 after 7 days. Accepted: Stripe, Zelle, or as agreed.');
+
+  addHeading('4. THIRD-PARTY PLATFORM FEES');
+  addBody('Client is directly responsible for: Twilio (~$20–30/mo), 11Labs (~$22/mo), N8N (~$20/mo), GoHighLevel (included under Provider account), Stripe (2.9% + $0.30/transaction), Dot Card (per their pricing).');
+
+  addHeading('5. CLIENT RESPONSIBILITIES');
+  addBody('Client shall provide: valid government-issued ID for account verification, business email for GHL connection, approval of ADESINA scripts within 48 hours of delivery, responses to all correspondence within 3 business days, and maintain active third-party subscriptions throughout the engagement.');
+
+  addHeading('6. PASSENGER REFUND APPROVAL POLICY');
+  addBody('Brian Walcott is the sole decision-maker for all passenger refund requests. Provider\'s system notifies Client of refund requests; Client responds to approve or deny. Provider will never approve or deny passenger refunds independently.');
+
+  addHeading('7. OUT OF SCOPE — PHASE 1');
+  addBody('Explicitly excluded: social media management, lead generation, Google Business Profile, paid advertising, website redesign, content creation beyond QR/Dot Card, legal, accounting, or tax advice.');
+
+  addHeading('8. INTELLECTUAL PROPERTY');
+  addBody('All custom AI scripts, ADESINA™ persona, N8N workflows, and GHL pipeline builds become Client\'s property upon final payment. Provider retains portfolio rights without disclosing confidential data.');
+
+  addHeading('9. CONFIDENTIALITY');
+  addBody('Both parties keep confidential all proprietary information shared in this engagement. Obligation survives termination for two (2) years.');
+
+  addHeading('10. LIMITATION OF LIABILITY');
+  addBody('Provider\'s maximum liability shall not exceed total fees paid in the preceding 30 days. Provider is not liable for interruptions or failures caused by third-party platforms.');
+
+  addHeading('11. REVISIONS & CHANGE ORDERS');
+  addBody('Work outside Section 2 scope requires a written Change Order signed by both parties before work begins.');
+
+  addHeading('12. TERMINATION');
+  addBody('Either party may terminate with 14 days written notice via email. Client pays for completed work; Provider delivers completed work product. Setup fee is non-refundable.');
+
+  addHeading('13. GOVERNING LAW');
+  addBody('Governed by the laws of the State of Florida. Disputes resolved in Orange County, Florida courts.');
+
+  addHeading('14. ENTIRE AGREEMENT');
+  addBody('This document, together with the signed SOW, constitutes the entire agreement and supersedes all prior discussions. Modifications must be in writing and signed by both parties.');
+
+  // Signature block
+  checkPage(100);
+  y += 6;
+  doc.setDrawColor(203, 176, 123); doc.setLineWidth(0.5);
+  doc.line(margin, y, pageW - margin, y); y += 8;
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(29, 53, 87);
+  doc.text('SIGNATURES', pageW / 2, y, { align: 'center' }); y += 10;
+
+  // Client
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(60);
+  doc.text('CLIENT', margin, y); y += 8;
+  doc.setFont('times', 'italic'); doc.setFontSize(22); doc.setTextColor(20, 20, 100);
+  doc.text(name, margin, y); y += 5;
+  doc.setDrawColor(120); doc.setLineWidth(0.3);
+  doc.line(margin, y, margin + 100, y); y += 5;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(100);
+  doc.text('Electronic Signature', margin, y); y += 7;
+  doc.setFontSize(10); doc.setTextColor(50);
+  doc.text('Printed Name: ' + name, margin, y); y += 6;
+  doc.text('Email: ' + email, margin, y); y += 6;
+  doc.text('Date Signed: ' + date, margin, y); y += 6;
+  doc.text('Document ID: ' + docId, margin, y); y += 12;
+
+  // Provider
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(60);
+  doc.text('SERVICE PROVIDER — AI GLAMTECH EMPIRE™', margin, y); y += 8;
+  doc.setFont('times', 'italic'); doc.setFontSize(22); doc.setTextColor(20, 20, 100);
+  doc.text('Pinky Floyd', margin, y); y += 5;
+  doc.line(margin, y, margin + 100, y); y += 5;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(100);
+  doc.text('Electronic Signature', margin, y); y += 7;
+  doc.setFontSize(10); doc.setTextColor(50);
+  doc.text('Printed Name: Pinky Floyd (Casandra Riley)', margin, y); y += 6;
+  doc.text('Email: pinky@aiglamtechempire.com', margin, y); y += 6;
+  doc.text('Date: ' + date, margin, y); y += 12;
+
+  // Audit trail
+  checkPage(35);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(100);
+  doc.text('ELECTRONIC SIGNATURE AUDIT TRAIL', margin, y); y += 5;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5);
+  doc.text('Signed electronically under the ESIGN Act. This document is legally binding.', margin, y); y += 5;
+  doc.text('Signer: ' + name + ' <' + email + '>', margin, y); y += 5;
+  doc.text('Timestamp: ' + new Date().toISOString(), margin, y); y += 5;
+  doc.text('Document ID: ' + docId, margin, y);
+
+  // Footer on every page
+  const total = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= total; i++) {
+    doc.setPage(i);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(160);
+    doc.text('AI GlamTech Empire™  |  pinky@aiglamtechempire.com  |  Where AI meets the art of the experience.',
+      pageW / 2, 278, { align: 'center' });
+    doc.text('Page ' + i + ' of ' + total, pageW - margin, 278, { align: 'right' });
+  }
+
+  return doc.output('datauristring').split(',')[1]; // base64 only
+}
+
+/* ── Handle signature submission ────────────────────────────── */
+async function handleSign() {
+  const name = document.getElementById('sig-name').value.trim();
+  const email = document.getElementById('sig-email').value.trim();
+  const date = document.getElementById('sig-date').value;
+  if (!name || !email) return;
+
+  const btn = document.getElementById('sign-btn');
+  btn.textContent = '⏳ Generating your signed document...';
+  btn.disabled = true;
+
+  const docId = 'AGT-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+  const fileName = 'AIGlamTech_SignedAgreement_' + name.replace(/\s+/g, '_') + '.pdf';
+
+  let pdfBase64 = '';
+  try { pdfBase64 = generateSignedPDF(name, email, date, docId); }
+  catch (e) { console.error('PDF generation error:', e); }
+
+  // ── EmailJS config — fill these in after creating your free account ──
+  const EMAILJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';
+  const EMAILJS_SERVICE_ID  = 'YOUR_EMAILJS_SERVICE_ID';
+  const EMAILJS_TEMPLATE_ID = 'YOUR_EMAILJS_TEMPLATE_ID';
+
+  const params = (toName, toEmail) => ({
+    to_name: toName,
+    to_email: toEmail,
+    client_name: name,
+    signed_date: date,
+    doc_id: docId,
+    attachment_data: pdfBase64,
+    attachment_name: fileName
+  });
+
+  // Send to client
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID,
+      params(name, email), { publicKey: EMAILJS_PUBLIC_KEY });
+  } catch (e) { console.error('EmailJS client send error:', e); }
+
+  // Send copy to Pinky
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID,
+      params('Pinky Floyd', 'admin@aiglamtechempire.com'), { publicKey: EMAILJS_PUBLIC_KEY });
+  } catch (e) { console.error('EmailJS admin send error:', e); }
+
+  // Audit trail via Formspree
+  fetch('https://formspree.io/f/mgawwpwq', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ name, email, signed_date: date, doc_id: docId,
+      message: '🎉 ' + name + ' signed the Service Agreement. Doc ID: ' + docId })
+  });
+
+  // Update UI
+  btn.textContent = '❖ Agreement Signed — ' + name;
+  document.getElementById('sig-email-note').style.display = 'block';
+  ['sig-name', 'sig-email'].forEach(id => document.getElementById(id).disabled = true);
+  document.getElementById('consent-box').disabled = true;
+  document.getElementById('signature-section').style.borderColor = 'var(--gold)';
+  document.getElementById('signature-section').style.boxShadow = '0 0 32px rgba(212,160,23,0.25)';
+  document.getElementById('step3').classList.add('done');
+  document.getElementById('step4').classList.add('active');
+  document.getElementById('payment-lock').classList.add('hidden');
+
+  setTimeout(() => {
+    document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 500);
 }
 
 /* ── Password Gate ──────────────────────────────────────────── */
