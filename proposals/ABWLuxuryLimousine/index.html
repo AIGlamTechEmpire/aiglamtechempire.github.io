@@ -2004,6 +2004,18 @@ document.getElementById('payment-lock').classList.add('hidden');
 document.getElementById('step3').classList.add('done');
 document.getElementById('step4').classList.add('active');
 
+// Notify Pinky via Formspree
+fetch('https://formspree.io/f/mgawwpwq', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+  body: JSON.stringify({
+    name: name,
+    email: email,
+    signed_date: date || new Date().toLocaleDateString(),
+    message: '🎉 Brian Walcott has signed the proposal on the portal. Check Stripe for payment.'
+  })
+});
+
 // Scroll to payment
 setTimeout(() => {
 document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
