@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>AI GlamTech Empire™ — What Is This Business Worth On A Day You Don't Show Up?</title>
-<meta name="description" content="Pinky Floyd helps business owners earning $100K–$1M stop being the busiest employee in their own company. Human intelligence first. An AI-powered version of your brilliance last." />
+<meta name="description" content="Pinky Floyd helps business owners earning $100K–$1M stop being the busiest employee in their own company. Human-led. Agent-powered. &nbsp;·&nbsp; AI is not the hero — you are." />
 <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -77,7 +77,10 @@
   /* ══ Hero ══ */
   .hero { position: relative; background: var(--navy-deep); padding: 0 0 64px; }
   .hero-img-wrap { position: relative; }
-  .hero-img-wrap img { width: 100%; height: auto; }
+  .hero-img-wrap .hero-media { width: 100%; height: auto; display: block; }
+  .hero-img-wrap .hero-media-fallback { width: 100%; height: auto; display: none; }
+  .hero-img-wrap.no-video .hero-media { display: none; }
+  .hero-img-wrap.no-video .hero-media-fallback { display: block; }
   .hero-img-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, var(--navy-deep) 100%); pointer-events: none; }
 
   .hero-fallback {
@@ -88,6 +91,12 @@
   .hero-fallback h1 .q2 { color: var(--blush-hot); font-style: italic; display: block; }
 
   .hero-below { max-width: 860px; margin: 0 auto; padding: 34px 24px 0; text-align: center; }
+  .tagline {
+    font-size: clamp(1.15rem, 2.6vw, 1.6rem); font-weight: 800;
+    letter-spacing: 0.04em; margin-bottom: 18px;
+    background: linear-gradient(90deg, var(--blush-hot), var(--gold-light), var(--blush));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
   .hero-below .lede { font-size: clamp(1.05rem, 2.2vw, 1.3rem); color: var(--cream); margin-bottom: 14px; line-height: 1.5; }
   .hero-below .sub { color: rgba(238,235,224,0.78); font-size: 1rem; margin-bottom: 28px; }
 
@@ -167,6 +176,26 @@
   .bfn h3 { font-size: 1.5rem; font-weight: 800; letter-spacing: 0.08em; margin-bottom: 6px; background: linear-gradient(135deg, var(--blush-hot), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
   .bfn .bfn-q { color: var(--gold-light); font-weight: 700; font-size: 1rem; margin-bottom: 12px; }
   .bfn p { color: rgba(238,235,224,0.86); font-size: 0.98rem; }
+
+  /* ══ Sequence flow ══ */
+  .sequence {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 10px; margin-top: 46px;
+  }
+  .seq-step {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 16px 20px;
+    text-align: center; font-weight: 700; font-size: 0.95rem;
+    color: var(--cream); min-width: 130px; line-height: 1.35;
+  }
+  .seq-step span {
+    display: block; font-size: 0.7rem; letter-spacing: 0.14em;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .seq-step em { display: block; font-size: 0.78rem; color: var(--muted); font-weight: 500; font-style: italic; }
+  .seq-arrow { color: var(--blush-hot); font-size: 1.3rem; font-weight: 800; }
+  @media (max-width: 760px) { .seq-arrow { transform: rotate(90deg); } .sequence { flex-direction: column; } }
 
   /* ══ Case study ══ */
   .case { border-radius: var(--radius); padding: 34px 32px; display: grid; gap: 26px; }
@@ -284,7 +313,13 @@
 <!-- ══ HERO ══ -->
 <section class="hero">
   <div class="hero-img-wrap">
-    <img src="images/hero-sixpanel.jpg" alt="What is this business worth on a day you don't show up? — CEO, Marketing, Sales, Admin, Content, Operations" onerror="this.style.display='none';document.getElementById('hero-fb').style.display='block';" />
+    <!-- Six-panel hero. Drop in hero-sixpanel.mp4 (the HeyGen talking version) and it plays
+         automatically with the still image as the poster frame. If there's no video yet,
+         the still image shows on its own. -->
+    <video class="hero-media" autoplay muted loop playsinline poster="images/hero-sixpanel.jpg">
+      <source src="images/hero-sixpanel.mp4" type="video/mp4" />
+    </video>
+    <img class="hero-media-fallback" src="images/hero-sixpanel.jpg" alt="What is this business worth on a day you don't show up? — CEO, Marketing, Sales, Admin, Content, Operations" onerror="this.style.display='none';document.getElementById('hero-fb').style.display='block';" />
   </div>
 
   <div class="hero-fallback" id="hero-fb">
@@ -292,8 +327,9 @@
   </div>
 
   <div class="hero-below">
+    <p class="tagline">Human-led. Agent-powered.</p>
     <p class="lede">If the honest answer is <em>not much</em> — that is not a failure. It means your business grew and your role never did.</p>
-    <p class="sub">I help owners earning $100K to $1M find what only they can do, hand off the rest, and build a company that is worth something on a day they are not inside it.</p>
+    <p class="sub">I help owners earning $100K to $1M find where the business is bleeding, build a 30-day revenue plan, and put agents only where they remove low-value work. In that order.</p>
 
     <div class="cta-row">
       <button class="btn-gold" onclick="startCall('shuryi')">🎙️ Talk to My AI Receptionist — Right Now</button>
@@ -363,8 +399,8 @@
 <!-- ══ HUMAN INTELLIGENCE FIRST ══ -->
 <section class="band band-dark">
   <div class="wrap">
-    <h2 class="sec-title">Human Intelligence First</h2>
-    <p class="sec-sub">An AI-powered version of your brilliance last. In that order — every time.</p>
+    <h2 class="sec-title">AI Is Not the Hero</h2>
+    <p class="sec-sub">You are. The technology is a supporting character, and it does not get to enter until Act Three.</p>
 
     <div class="glow-box" style="border-radius:var(--radius);padding:34px 32px;max-width:860px;margin:0 auto;">
       <p style="font-size:1.05rem;margin-bottom:16px;">I sat with an insurance agent whose people were spending eight hours a day on the phone. Not selling — collecting names, dates of birth, addresses, and chasing old leads.</p>
@@ -381,25 +417,37 @@
 <!-- ══ BLEED FEED NEED ══ -->
 <section class="band band-navy">
   <div class="wrap">
-    <h2 class="sec-title">Bleed · Feed · Need</h2>
-    <p class="sec-sub">Three questions. This is the diagnosis, and it happens before a single tool is chosen.</p>
+    <h2 class="sec-title">Bleeding · Feeding · Needing</h2>
+    <p class="sec-sub">The recurring engine. Three questions, asked in this order, before a single tool is chosen.</p>
 
     <div class="bfn-grid">
       <div class="bfn glow-box">
-        <h3>BLEED</h3>
-        <div class="bfn-q">Where is this business bleeding?</div>
-        <p>Money. Time. Attention. Opportunity. Energy. At your level the bleed is not sloppiness — it is <strong style="color:var(--gold-light);">rate</strong>. It is a four-hundred-dollar hour spent on twenty-two-dollar work.</p>
+        <h3>BLEEDING</h3>
+        <div class="bfn-q">Where are time, money, energy, leads, or opportunities leaking?</div>
+        <p>At your level the bleed is not sloppiness — it is <strong style="color:var(--gold-light);">rate</strong>. It is a four-hundred-dollar hour spent on twenty-two-dollar work. And most owners never call it a process problem. They call it being busy.</p>
       </div>
       <div class="bfn glow-box">
-        <h3>FEED</h3>
-        <div class="bfn-q">What has to be moving for your money to move?</div>
-        <p>Name it. One thing. When that thing is happening, this business is feeding. Every hour spent elsewhere is an hour it isn't. Don't starve what's working because you're busy fixing everything else.</p>
+        <h3>FEEDING</h3>
+        <div class="bfn-q">What is actually feeding revenue — and what should get more attention?</div>
+        <p>Name the one thing that, when it is moving, the money is moving. Every hour spent elsewhere is an hour it isn't. Don't starve what's working because you're busy fixing everything else.</p>
       </div>
       <div class="bfn glow-box">
-        <h3>NEED</h3>
-        <div class="bfn-q">What does this business need from you in the next thirty days?</div>
-        <p>Not forever. Thirty. Then pick <strong style="color:var(--gold-light);">one</strong> thing that should stop depending on you — and put a date on it. A decision without a date is a wish.</p>
+        <h3>NEEDING</h3>
+        <div class="bfn-q">What does the business need next to hit the goal?</div>
+        <p>Not forever. Next. Then pick <strong style="color:var(--gold-light);">one</strong> thing that should stop depending on you and put a date on it — because a decision without a date is a wish.</p>
       </div>
+    </div>
+
+    <div class="sequence">
+      <div class="seq-step"><span>1</span>Human decision</div>
+      <div class="seq-arrow">→</div>
+      <div class="seq-step"><span>2</span>The plan</div>
+      <div class="seq-arrow">→</div>
+      <div class="seq-step"><span>3</span>AI &amp; agents<br /><em>where useful</em></div>
+      <div class="seq-arrow">→</div>
+      <div class="seq-step"><span>4</span>Revenue</div>
+      <div class="seq-arrow">→</div>
+      <div class="seq-step"><span>5</span>Impact</div>
     </div>
   </div>
 </section>
@@ -546,11 +594,12 @@
         <div class="step">Step Two</div>
         <h3>The Business Improvement Plan</h3>
         <div class="price">$650</div>
-        <p>They hand employees a PIP. I write your business a BIP. Two hours of real conversation, then the diagnosis and the thirty-day plan that changes your role.</p>
+        <p>They hand employees a PIP. I write your business a BIP — <strong style="color:var(--gold-light);">your 30-day revenue plan.</strong> Two hours of real conversation, then the diagnosis and the plan that changes your role.</p>
         <ul>
-          <li>BLEED · FEED · NEED, run against your actual day</li>
-          <li>Where the business is bleeding, in dollars and hours</li>
-          <li>The one thing that stops depending on you — with a date on it</li>
+          <li>Bleeding · Feeding · Needing, run against your actual day</li>
+          <li>Where the business is leaking time, money, leads, and opportunity</li>
+          <li>What is actually feeding revenue — and what deserves more of you</li>
+          <li>The one thing that stops depending on you, with a date on it</li>
           <li>Where people, process, and technology each belong</li>
         </ul>
         <a href="https://calendly.com/agents-avatars-automations/15min" target="_blank" rel="noopener" class="btn-ghost">Start With the Free Call</a>
@@ -590,7 +639,7 @@
 </section>
 
 <footer>
-  AI GlamTech Empire™ · Pinky Floyd &nbsp;·&nbsp; Human intelligence first. An AI-powered version of your brilliance last.
+  AI GlamTech Empire™ · Pinky Floyd &nbsp;·&nbsp; Human-led. Agent-powered. &nbsp;·&nbsp; AI is not the hero — you are.
 </footer>
 
 <!-- Shuryi fly-in -->
