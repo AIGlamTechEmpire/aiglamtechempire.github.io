@@ -122,6 +122,23 @@ Do not let this build go live without the compliance question settled.
 
 ### 8. Testimonials — she has some, not yet supplied
 
+### 9. HER OWN BUILD QUEUE — she is building her own agents first
+This is deliberate and strategically right: **her business is the showcase.** Every agent she builds for herself becomes the live demo she sells from. Shuryi already proves this — visitors talk to her on the site.
+
+What she is actively building for AI GlamTech Empire itself:
+- **Social media agent** (Vanessa) — in progress, "trying to get my social media agent working"
+- **Video dashboard** — in progress. *Ambiguous: may mean the six-panel hero video work, or an actual dashboard for tracking video content. CLARIFY NEXT SESSION.*
+- **Video content agent** — wants to build one
+- **AI clones** — marketing clones, part of the same content system
+- **Shuryi** — done, needs retest
+
+Her framing: *"It's just really the first setup."* Content, videos, and clones are the same build stack as the receptionist — all phase one for her own business.
+
+**Why this matters for sequencing:** she is trying to do all of these at once while also doing sales, and that IS the bleed she diagnoses in others. When she's overloaded, help her pick ONE. The honest priority order:
+1. Shuryi booking correctly (revenue leaks without it)
+2. Website images + six-panel hero (the site is live and incomplete)
+3. Social media / video content agents (content engine)
+
 ---
 
 ## STANDING RULES
