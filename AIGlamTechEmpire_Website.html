@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI GlamTech Empire™ — What Is This Business Worth On A Day You Don't Show Up?</title>
+<meta name="description" content="Pinky Floyd helps business owners earning $100K–$1M stop being the busiest employee in their own company. Human intelligence first. An AI-powered version of your brilliance last." />
+<script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { overflow-x: hidden; max-width: 100%; }
+
+  :root {
+    --navy:        #1d3557;
+    --navy-deep:   #142743;
+    --navy-soft:   #24405f;
+    --gold:        #cbb07b;
+    --gold-light:  #e2cd9f;
+    --gold-dim:    #a68d5c;
+    --blush:       #f1b1c1;
+    --blush-hot:   #ff9db6;
+    --cream:       #eeebe0;
+    --ink:         #142743;
+    --ink-2:       #1d3557;
+    --card:        #3a3560;
+    --lavender:    #4a4275;
+    --lavender-lt: #5a5187;
+    --border:      rgba(255,157,182,0.45);
+    --text:        #eeebe0;
+    --muted:       #b9c7d8;
+    --radius:      18px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+
+  body { font-family: var(--font); background: var(--ink); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* ══ Top voice bar ══ */
+  .voice-bar { position: sticky; top: 0; z-index: 200; background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 100%); border-bottom: 1px solid var(--border); }
+  .voice-bar-inner { max-width: 1120px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+  .voice-toggle {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
+    color: var(--navy); font-weight: 800; font-size: 0.86rem;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 11px 26px; border: none; border-radius: 50px; cursor: pointer;
+    animation: blinkGlow 1.6s ease-in-out infinite;
+  }
+  @keyframes blinkGlow {
+    0%, 100% { box-shadow: 0 0 0 rgba(255,157,182,0); transform: scale(1); }
+    50%      { box-shadow: 0 0 26px rgba(255,157,182,0.85); transform: scale(1.03); }
+  }
+  .voice-toggle .chev { transition: transform 0.3s ease; font-size: 0.9rem; }
+  .voice-bar.open .voice-toggle .chev { transform: rotate(180deg); }
+
+  .voice-drawer { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; background: linear-gradient(180deg, rgba(20,39,67,0.98) 0%, rgba(29,53,87,0.98) 100%); border-top: 1px solid var(--border); }
+  .voice-bar.open .voice-drawer { max-height: 680px; }
+  .voice-drawer-inner { max-width: 1120px; margin: 0 auto; padding: 22px 24px 26px; }
+  .voice-drawer h3 { text-align: center; font-size: 1.05rem; color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .voice-drawer p.vd-sub { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 18px; }
+  .voice-agents { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .voice-agent { border-radius: 14px; padding: 16px; text-align: center; }
+  .voice-agent .va-name { font-weight: 800; color: var(--gold-light); font-size: 1rem; }
+  .voice-agent .va-role { font-size: 0.8rem; color: var(--muted); margin-bottom: 12px; }
+
+  .va-call {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
+    color: var(--navy); font-weight: 800; font-size: 0.76rem;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 9px 18px; border: none; border-radius: 50px; cursor: pointer;
+  }
+
+  /* ══ Hero ══ */
+  .hero { position: relative; background: var(--navy-deep); padding: 0 0 64px; }
+  .hero-img-wrap { position: relative; }
+  .hero-img-wrap img { width: 100%; height: auto; }
+  .hero-img-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, var(--navy-deep) 100%); pointer-events: none; }
+
+  .hero-fallback {
+    display: none; text-align: center; padding: 80px 24px 40px;
+  }
+  .hero-fallback h1 { font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 800; line-height: 1.15; }
+  .hero-fallback h1 .q1 { color: var(--gold-light); display: block; }
+  .hero-fallback h1 .q2 { color: var(--blush-hot); font-style: italic; display: block; }
+
+  .hero-below { max-width: 860px; margin: 0 auto; padding: 34px 24px 0; text-align: center; }
+  .hero-below .lede { font-size: clamp(1.05rem, 2.2vw, 1.3rem); color: var(--cream); margin-bottom: 14px; line-height: 1.5; }
+  .hero-below .sub { color: rgba(238,235,224,0.78); font-size: 1rem; margin-bottom: 28px; }
+
+  .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  .btn-gold {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%);
+    color: var(--navy); font-weight: 800; font-size: 1rem; letter-spacing: 0.02em;
+    padding: 16px 34px; border: none; border-radius: 50px; cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(255,157,182,0.4); }
+
+  .btn-ghost {
+    display: inline-block; background: transparent; color: var(--gold-light);
+    border: 1.5px solid var(--gold-dim); font-weight: 700; font-size: 1rem;
+    padding: 16px 34px; border-radius: 50px; cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-ghost:hover { border-color: var(--blush-hot); color: var(--blush-hot); }
+
+  .keynote-credit {
+    max-width: 760px; margin: 34px auto 0; padding: 14px 22px;
+    border-left: 3px solid var(--gold-dim);
+    background: rgba(255,255,255,0.04);
+    color: var(--muted); font-size: 0.88rem; text-align: left; line-height: 1.55;
+  }
+  .keynote-credit strong { color: var(--gold-light); }
+
+  /* ══ Sections ══ */
+  section.band { padding: 76px 0; position: relative; }
+  .band-navy { background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%); }
+  .band-dark { background: var(--ink); }
+
+  .sec-title { text-align: center; font-size: clamp(1.8rem, 4.5vw, 2.7rem); font-weight: 800; color: var(--gold); margin-bottom: 12px; text-shadow: 0 2px 22px rgba(0,0,0,0.65); }
+  .sec-sub { text-align: center; color: var(--muted); max-width: 680px; margin: 0 auto 44px; font-size: 1.02rem; }
+
+  .glow-box {
+    background: linear-gradient(160deg, var(--lavender-lt) 0%, var(--lavender) 55%, #3a3560 100%);
+    border: 1.5px solid rgba(255,157,182,0.55);
+    box-shadow: 0 0 0 1px rgba(255,157,182,0.18), 0 0 22px rgba(255,157,182,0.38), 0 0 54px rgba(255,157,182,0.20), inset 0 1px 0 rgba(255,255,255,0.10);
+    animation: glowPulse 3.6s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 0 1px rgba(255,157,182,0.18), 0 0 20px rgba(255,157,182,0.32), 0 0 48px rgba(255,157,182,0.16), inset 0 1px 0 rgba(255,255,255,0.10); }
+    50%      { box-shadow: 0 0 0 1px rgba(255,157,182,0.30), 0 0 34px rgba(255,157,182,0.60), 0 0 78px rgba(255,157,182,0.32), inset 0 1px 0 rgba(255,255,255,0.14); }
+  }
+
+  /* ══ Sound familiar — video + list ══ */
+  .familiar-card { border-radius: var(--radius); padding: 30px; display: grid; grid-template-columns: minmax(240px, 400px) 1fr; gap: 34px; align-items: center; }
+  .video-frame { border: 2px solid var(--gold-dim); border-radius: 14px; overflow: hidden; background: var(--navy-deep); aspect-ratio: 3 / 4; display: flex; align-items: center; justify-content: center; }
+  .video-frame video { width: 100%; height: 100%; object-fit: cover; }
+
+  .still-list { list-style: none; display: grid; gap: 13px; }
+  .still-list li { position: relative; padding-left: 30px; font-size: 1.04rem; color: var(--cream); }
+  .still-list li::before { content: '✦'; position: absolute; left: 0; top: 1px; color: var(--blush-hot); font-size: 1rem; }
+  .still-kicker { font-size: 1.06rem; color: var(--gold-light); font-weight: 700; margin-bottom: 18px; }
+  .still-after { margin-top: 20px; color: rgba(238,235,224,0.86); font-size: 1rem; }
+  .still-after strong { color: var(--gold-light); }
+
+  /* ══ Clock walk ══ */
+  .clock { max-width: 760px; margin: 0 auto; text-align: center; }
+  .clock-line { font-size: clamp(1.1rem, 2.6vw, 1.5rem); font-weight: 700; color: var(--cream); padding: 9px 0; }
+  .clock-line span { color: var(--blush-hot); }
+  .clock-punch { margin-top: 26px; font-size: clamp(1.3rem, 3.2vw, 1.9rem); font-weight: 800; color: var(--gold-light); line-height: 1.35; }
+
+  /* ══ Pull quote ══ */
+  .pull { max-width: 860px; margin: 0 auto; text-align: center; }
+  .pull q { display: block; font-size: clamp(1.4rem, 3.6vw, 2.2rem); font-weight: 800; line-height: 1.3; quotes: none; }
+  .pull q span { background: linear-gradient(90deg, var(--blush-hot), var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .pull p { margin-top: 20px; color: rgba(238,235,224,0.85); font-size: 1.06rem; }
+
+  /* ══ BLEED FEED NEED ══ */
+  .bfn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 22px; }
+  .bfn { border-radius: var(--radius); padding: 30px 26px; }
+  .bfn h3 { font-size: 1.5rem; font-weight: 800; letter-spacing: 0.08em; margin-bottom: 6px; background: linear-gradient(135deg, var(--blush-hot), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .bfn .bfn-q { color: var(--gold-light); font-weight: 700; font-size: 1rem; margin-bottom: 12px; }
+  .bfn p { color: rgba(238,235,224,0.86); font-size: 0.98rem; }
+
+  /* ══ Case study ══ */
+  .case { border-radius: var(--radius); padding: 34px 32px; display: grid; gap: 26px; }
+  .case-before h4, .case-after h4 { font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .case-before h4 { color: var(--muted); }
+  .case-after h4 { color: var(--gold); }
+  .case ul { list-style: none; display: grid; gap: 10px; }
+  .case li { padding-left: 26px; position: relative; font-size: 1rem; color: rgba(238,235,224,0.88); }
+  .case-before li::before { content: '✕'; position: absolute; left: 0; color: #e08a9e; }
+  .case-after li::before { content: '✓'; position: absolute; left: 0; color: var(--gold); }
+  .case-punch { text-align: center; font-size: clamp(1.1rem, 2.6vw, 1.4rem); font-weight: 800; color: var(--gold-light); line-height: 1.4; padding-top: 8px; }
+  @media (min-width: 860px) { .case-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; } }
+
+  /* ══ Team flip cards ══ */
+  .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+  .flip { perspective: 1200px; height: 430px; cursor: pointer; }
+  .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(0.4,0.2,0.2,1); transform-style: preserve-3d; }
+  .flip.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+  .flip-front img { width: 100%; height: 320px; object-fit: cover; }
+  .flip-front .ff-name { font-size: 1.3rem; font-weight: 800; color: var(--gold-light); text-align: center; margin-top: 14px; }
+  .flip-front .ff-role { text-align: center; color: var(--muted); font-size: 0.9rem; }
+  .flip-back { transform: rotateY(180deg); padding: 26px 22px; justify-content: center; text-align: center; }
+  .flip-back h4 { color: var(--gold); font-size: 1.15rem; margin-bottom: 12px; }
+  .flip-back p { font-size: 0.94rem; color: rgba(238,235,224,0.9); margin-bottom: 18px; }
+  .hint { text-align: center; color: var(--muted); font-size: 0.85rem; margin-bottom: 26px; }
+
+  /* ══ Offer ══ */
+  .offer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; align-items: stretch; }
+  .offer { border-radius: var(--radius); padding: 32px 28px; display: flex; flex-direction: column; }
+  .offer .step { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .offer h3 { color: var(--gold-light); font-size: 1.3rem; margin-bottom: 8px; }
+  .offer .price { font-size: 1.9rem; font-weight: 800; background: linear-gradient(135deg, var(--blush-hot), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 14px; }
+  .offer p { color: rgba(238,235,224,0.86); font-size: 0.97rem; margin-bottom: 14px; }
+  .offer ul { list-style: none; display: grid; gap: 8px; margin-bottom: 22px; }
+  .offer li { padding-left: 22px; position: relative; font-size: 0.94rem; color: rgba(238,235,224,0.82); }
+  .offer li::before { content: '✦'; position: absolute; left: 0; color: var(--blush); }
+  .offer .btn-gold, .offer .btn-ghost { margin-top: auto; text-align: center; }
+
+  .anchor-note { max-width: 700px; margin: 30px auto 0; text-align: center; color: var(--muted); font-size: 0.95rem; font-style: italic; }
+  .anchor-note strong { color: var(--gold-light); font-style: normal; }
+
+  /* ══ Final CTA ══ */
+  .final-cta { text-align: center; padding: 88px 24px; background: linear-gradient(180deg, rgba(20,39,67,0.72) 0%, rgba(20,39,67,0.92) 100%), url('images/cta-bg.jpg') center center / cover no-repeat; }
+  .final-cta h2 { font-size: clamp(1.6rem, 4.4vw, 2.6rem); font-weight: 800; margin-bottom: 18px; line-height: 1.3; text-shadow: 0 2px 24px rgba(0,0,0,0.7); }
+  .final-cta .four-beats { max-width: 620px; margin: 0 auto 28px; color: var(--gold-light); font-size: 1.08rem; font-weight: 700; line-height: 1.7; }
+  .final-cta p { color: rgba(238,235,224,0.88); max-width: 640px; margin: 0 auto 28px; font-size: 1.02rem; }
+
+  footer { background: var(--ink-2); border-top: 1px solid var(--border); text-align: center; padding: 30px 24px; color: var(--muted); font-size: 0.88rem; }
+
+  /* ══ Shuryi fly-in ══ */
+  .pinky-flyin { position: fixed; right: 20px; bottom: 108px; z-index: 290; display: flex; align-items: flex-end; gap: 10px; opacity: 0; transform: translateX(120%) scale(0.85); transition: opacity 0.9s ease, transform 1s cubic-bezier(0.22, 1, 0.36, 1); pointer-events: none; }
+  .pinky-flyin.in { opacity: 1; transform: translateX(0) scale(1); pointer-events: auto; }
+  .pinky-bubble { position: relative; background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%); color: var(--navy); font-size: 0.8rem; font-weight: 700; line-height: 1.35; padding: 12px 16px; border-radius: 16px 16px 4px 16px; max-width: 210px; box-shadow: 0 8px 26px rgba(0,0,0,0.45); }
+  .pinky-orb { width: 92px; height: 92px; border-radius: 50%; border: 3px solid var(--gold); overflow: hidden; background: var(--navy-soft); cursor: pointer; flex-shrink: 0; animation: pinkyFloat 3.4s ease-in-out infinite; box-shadow: 0 0 26px rgba(255,157,182,0.55); }
+  .pinky-orb img { width: 100%; height: 100%; object-fit: cover; }
+  @keyframes pinkyFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+  .pinky-close { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; border-radius: 50%; background: var(--navy); color: var(--cream); border: 1px solid var(--border); font-size: 0.72rem; line-height: 1; cursor: pointer; }
+
+  /* ══ Reveal ══ */
+  .reveal { opacity: 0; transform: translateY(46px) scale(0.97); }
+  .reveal.in { animation: bounceGlowIn 1.05s cubic-bezier(0.22, 1.4, 0.36, 1) forwards; }
+  @keyframes bounceGlowIn {
+    0%   { opacity: 0; transform: translateY(46px) scale(0.97); }
+    55%  { opacity: 1; transform: translateY(-12px) scale(1.02); }
+    75%  { transform: translateY(5px) scale(0.995); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .glow-box.reveal.in { animation: bounceGlowIn 1.05s cubic-bezier(0.22, 1.4, 0.36, 1) forwards, glowPulse 3.6s ease-in-out 1.05s infinite; }
+
+  .music-toggle { position: fixed; left: 18px; bottom: 18px; z-index: 300; display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--blush) 0%, var(--gold) 100%); color: var(--navy); font-weight: 800; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 10px 18px; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+
+  @media (max-width: 860px) {
+    .familiar-card { grid-template-columns: 1fr; }
+    section.band { padding: 56px 0; }
+  }
+</style>
+</head>
+<body>
+
+<elevenlabs-convai agent-id="agent_8301m29pkteyembv0emfqy58m629"></elevenlabs-convai>
+
+<!-- ══ TOP VOICE BAR ══ -->
+<div class="voice-bar" id="voice-bar">
+  <div class="voice-bar-inner">
+    <button class="voice-toggle" onclick="toggleVoiceBar()">
+      🎙️ Hear Our Voice AI in Action <span class="chev">⌄</span>
+    </button>
+  </div>
+  <div class="voice-drawer">
+    <div class="voice-drawer-inner">
+      <h3>Talk to Them Right Now</h3>
+      <p class="vd-sub">Don't take my word for it. Start a live call and hear one of these agents handle a real conversation.</p>
+      <div class="voice-agents">
+        <div class="voice-agent glow-box">
+          <div class="va-name">Shuryi</div>
+          <div class="va-role">The Receptionist That Never Sleeps</div>
+          <button class="va-call" onclick="startCall('shuryi')">📞 Start a Call</button>
+        </div>
+        <div class="voice-agent glow-box">
+          <div class="va-name">Vanessa</div>
+          <div class="va-role">Social Media Agent</div>
+          <button class="va-call" onclick="startCall('vanessa')">📞 Start a Call</button>
+        </div>
+        <div class="voice-agent glow-box">
+          <div class="va-name">Iris</div>
+          <div class="va-role">24/7 Support Agent</div>
+          <button class="va-call" onclick="startCall('receptionist')">📞 Start a Call</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-img-wrap">
+    <img src="images/hero-sixpanel.jpg" alt="What is this business worth on a day you don't show up? — CEO, Marketing, Sales, Admin, Content, Operations" onerror="this.style.display='none';document.getElementById('hero-fb').style.display='block';" />
+  </div>
+
+  <div class="hero-fallback" id="hero-fb">
+    <h1><span class="q1">What is this business worth</span><span class="q2">on a day you don't show up?</span></h1>
+  </div>
+
+  <div class="hero-below">
+    <p class="lede">If the honest answer is <em>not much</em> — that is not a failure. It means your business grew and your role never did.</p>
+    <p class="sub">I help owners earning $100K to $1M find what only they can do, hand off the rest, and build a company that is worth something on a day they are not inside it.</p>
+
+    <div class="cta-row">
+      <button class="btn-gold" onclick="startCall('shuryi')">🎙️ Talk to My AI Receptionist — Right Now</button>
+      <a href="#offer" class="btn-ghost">Book a Free 20-Minute Call</a>
+    </div>
+
+    <div class="keynote-credit">
+      Much of what follows comes from a keynote I delivered through my <strong>entrepreneur speaker program</strong> — twenty minutes, no slides, to a room of <strong>business owners earning $100K to $1M</strong>. That is who this work is built for, and that is why it reads the way it does.
+    </div>
+  </div>
+</section>
+
+<!-- ══ SOUND FAMILIAR — video + the list ══ -->
+<section class="band band-navy">
+  <div class="wrap">
+    <h2 class="sec-title">Sound Familiar?</h2>
+    <p class="sec-sub">Nobody gets where you are being disorganized. You are organized. That is not the problem.</p>
+
+    <div class="familiar-card glow-box">
+      <div class="video-frame">
+        <video controls playsinline poster="images/video-poster.jpg">
+          <source src="images/keynote.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div>
+        <p class="still-kicker">Write down three to five things you are still doing that you already know should not depend on you.</p>
+        <ul class="still-list">
+          <li>Still approving routine decisions your team could make</li>
+          <li>Still personally onboarding every client</li>
+          <li>Still reviewing every proposal before it goes out</li>
+          <li>Still making every graphic, every deck, every post</li>
+          <li>Still being the person everybody has to ask before anything moves</li>
+        </ul>
+        <p class="still-after">Don't judge the list. Just write it.<br />
+        <strong>That list is not proof that you are failing. It is proof that you built something that works — and that the role has to change now.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE CLOCK WALK ══ -->
+<section class="band band-dark">
+  <div class="wrap">
+    <div class="clock">
+      <h2 class="sec-title" style="margin-bottom:26px;">You Have CEO In Your Title</h2>
+      <div class="clock-line">And you were the administrative assistant by <span>nine</span>.</div>
+      <div class="clock-line">The designer by <span>eleven</span>.</div>
+      <div class="clock-line">Customer service by <span>one</span>.</div>
+      <div class="clock-line">Tech support by <span>three</span>.</div>
+      <div class="clock-line">Content creator at <span>midnight</span>.</div>
+      <p style="margin-top:22px;color:rgba(238,235,224,0.82);font-size:1.05rem;">And somewhere in between all of that, you were supposed to find some time to make money.</p>
+      <div class="clock-punch">Nobody had to demote you.<br />You demoted yourself.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE HARD SENTENCE ══ -->
+<section class="band band-navy">
+  <div class="wrap">
+    <div class="pull">
+      <q>A business that depends entirely on its owner is not a business. It is <span>a job with excellent branding</span>.</q>
+      <p>You cannot sell it. You cannot leave it. Nobody can buy it — because there is nothing to buy but you. And you are not for sale.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HUMAN INTELLIGENCE FIRST ══ -->
+<section class="band band-dark">
+  <div class="wrap">
+    <h2 class="sec-title">Human Intelligence First</h2>
+    <p class="sec-sub">An AI-powered version of your brilliance last. In that order — every time.</p>
+
+    <div class="glow-box" style="border-radius:var(--radius);padding:34px 32px;max-width:860px;margin:0 auto;">
+      <p style="font-size:1.05rem;margin-bottom:16px;">I sat with an insurance agent whose people were spending eight hours a day on the phone. Not selling — collecting names, dates of birth, addresses, and chasing old leads.</p>
+      <p style="font-size:1.05rem;margin-bottom:16px;">Six of them. Eight hours apiece. <strong style="color:var(--gold-light);">Forty-eight hours a day of licensed professionals doing intake.</strong></p>
+      <p style="font-size:1.05rem;margin-bottom:16px;">Everybody's first instinct is the same: put a bot on it. That is the wrong first move. Before I put one piece of technology anywhere near that business, I asked him what his business model actually was.</p>
+      <p style="font-size:1.12rem;color:var(--gold-light);font-weight:700;margin-bottom:16px;">The question is never "what can we automate." It is: what should stop requiring a human — and what should only ever be a human?</p>
+      <p style="font-size:1.05rem;">They did not need to be automated. They needed to be humanized. The intake never needed a licensed anybody. The conversation where somebody is deciding how to protect their family? That should never be anything but him.</p>
+    </div>
+
+    <p style="text-align:center;margin-top:34px;font-size:clamp(1.15rem,2.8vw,1.5rem);font-weight:800;color:var(--blush-hot);">If you automate confusion, you just get confusion faster.</p>
+  </div>
+</section>
+
+<!-- ══ BLEED FEED NEED ══ -->
+<section class="band band-navy">
+  <div class="wrap">
+    <h2 class="sec-title">Bleed · Feed · Need</h2>
+    <p class="sec-sub">Three questions. This is the diagnosis, and it happens before a single tool is chosen.</p>
+
+    <div class="bfn-grid">
+      <div class="bfn glow-box">
+        <h3>BLEED</h3>
+        <div class="bfn-q">Where is this business bleeding?</div>
+        <p>Money. Time. Attention. Opportunity. Energy. At your level the bleed is not sloppiness — it is <strong style="color:var(--gold-light);">rate</strong>. It is a four-hundred-dollar hour spent on twenty-two-dollar work.</p>
+      </div>
+      <div class="bfn glow-box">
+        <h3>FEED</h3>
+        <div class="bfn-q">What has to be moving for your money to move?</div>
+        <p>Name it. One thing. When that thing is happening, this business is feeding. Every hour spent elsewhere is an hour it isn't. Don't starve what's working because you're busy fixing everything else.</p>
+      </div>
+      <div class="bfn glow-box">
+        <h3>NEED</h3>
+        <div class="bfn-q">What does this business need from you in the next thirty days?</div>
+        <p>Not forever. Thirty. Then pick <strong style="color:var(--gold-light);">one</strong> thing that should stop depending on you — and put a date on it. A decision without a date is a wish.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CASE STUDY — THE DRIVER ══ -->
+<section class="band band-dark">
+  <div class="wrap">
+    <h2 class="sec-title">Twenty-Five Years, No Contract</h2>
+    <p class="sec-sub">He never once told me he had a process problem. He told me he was busy.</p>
+
+    <div class="case glow-box">
+      <p style="font-size:1.05rem;">A man called me. Twenty-five years driving celebrities. Good money, real business. And he was telling me how it ran — <em>while he was driving</em>. Taking a client call at seventy miles an hour, pen and paper on the passenger seat.</p>
+
+      <div class="case-cols">
+        <div class="case-before">
+          <h4>Before</h4>
+          <ul>
+            <li>No contract. Twenty-five years, and there was no contract.</li>
+            <li>Collecting on Zelle — and driving clients to an ATM when they didn't have it.</li>
+            <li>Drove across town for pickups that evaporated. He ate the gas and the time.</li>
+            <li>Intake by pen and paper, on the seat, while driving.</li>
+            <li>No service answering the phone. If he didn't pick up, he didn't get the business.</li>
+          </ul>
+        </div>
+        <div class="case-after">
+          <h4>After</h4>
+          <ul>
+            <li>A receptionist that never sleeps. Someone books a limo at 11pm — they get booked.</li>
+            <li>Contract by email. Payment link by email. They pay before he turns a key.</li>
+            <li>A no-show now costs the customer instead of costing him.</li>
+            <li>The phone gets answered while he is driving — the only time it ever rang.</li>
+            <li>Two dashboards: what he's making today, what he made yesterday.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p style="font-size:1.06rem;color:var(--cream);">He resigned from the job of dispatcher. And he went from a man taking whatever ride came through the phone that hour — to a man with a calendar. <strong style="color:var(--gold-light);">Now he books weddings.</strong></p>
+
+      <div class="case-punch">The only hours he could earn were the only hours he could not sell.<br />
+      He came in as the operator of it. He walked out as the architect of it.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE GUARDRAIL ══ -->
+<section class="band band-navy">
+  <div class="wrap">
+    <div class="pull">
+      <q>I could hand you five tools right now. And you would end up with <span>five new jobs</span> — watching agents.</q>
+      <p>That is not leverage. That is a second shift. When there is confusion, nothing gets done — which is exactly why the technology comes last, not first.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MEET YOUR AI TEAM ══ -->
+<section class="band band-dark">
+  <div class="wrap">
+    <h2 class="sec-title">Meet Your AI Team</h2>
+    <p class="hint">(hover or tap each card to flip — then actually call one)</p>
+    <div class="team-grid">
+
+      <div class="flip" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-face flip-front glow-box">
+            <img src="images/shuryi.jpg" alt="Shuryi — The Receptionist That Never Sleeps" />
+            <div class="ff-name">Shuryi</div>
+            <div class="ff-role">The Receptionist That Never Sleeps</div>
+          </div>
+          <div class="flip-face flip-back glow-box">
+            <h4>Shuryi</h4>
+            <p>She answers every call, books every appointment, and never sends anyone to voicemail. Nights, weekends, holidays. Your phone gets answered during the only hours you can't answer it.</p>
+            <button class="va-call" onclick="event.stopPropagation(); startCall('shuryi')">📞 Talk to Shuryi</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-face flip-front glow-box">
+            <img src="images/vanessa.jpg" alt="Vanessa — Social Media Agent" />
+            <div class="ff-name">Vanessa</div>
+            <div class="ff-role">Social Media Agent</div>
+          </div>
+          <div class="flip-face flip-back glow-box">
+            <h4>Vanessa</h4>
+            <p>One client was spending ten hours on a single video. Now it's a picture and a script — and content creation is not her job anymore.</p>
+            <button class="va-call" onclick="event.stopPropagation(); startCall('vanessa')">📞 Talk to Vanessa</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-face flip-front glow-box">
+            <img src="images/receptionist.jpg" alt="Iris — 24/7 Support Agent" />
+            <div class="ff-name">Iris</div>
+            <div class="ff-role">24/7 Support Agent</div>
+          </div>
+          <div class="flip-face flip-back glow-box">
+            <h4>Iris</h4>
+            <p>The intake, the routine questions, the follow-up nobody got to. The work that never needed a licensed anybody — handled, so your people do the part that only a person can do.</p>
+            <button class="va-call" onclick="event.stopPropagation(); startCall('receptionist')">📞 Talk to Iris</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE VALUATION TEST ══ -->
+<section class="band band-navy">
+  <div class="wrap">
+    <div class="pull">
+      <q>Facebook bought Instagram for a billion dollars. The company had about <span>thirteen people</span>.</q>
+      <p>Nobody was buying the founder's calendar. They bought a thing that ran. So don't sit there telling yourself you're too small to be worth something.</p>
+      <p style="margin-top:16px;font-size:1.25rem;font-weight:800;color:var(--gold-light);">Small is not the problem. Owner-dependent is the problem.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE OFFER ══ -->
+<section class="band band-dark" id="offer">
+  <div class="wrap">
+    <h2 class="sec-title">How We Start</h2>
+    <p class="sec-sub">Two hours of human conversation before one piece of technology gets touched. Not a form. Not a questionnaire.</p>
+
+    <div class="offer-grid">
+
+      <div class="offer glow-box">
+        <div class="step">Step One · Free</div>
+        <h3>The 20-Minute Call</h3>
+        <div class="price">Free</div>
+        <p>Twenty minutes, no pitch. You tell me how the business actually runs, and I tell you honestly whether this is even the right fit for you.</p>
+        <ul>
+          <li>What's still depending on you</li>
+          <li>Whether a BIP would actually help</li>
+          <li>A straight answer either way</li>
+        </ul>
+        <a href="https://calendly.com/agents-avatars-automations/15min" target="_blank" rel="noopener" class="btn-gold">Book the Free Call</a>
+      </div>
+
+      <div class="offer glow-box">
+        <div class="step">Step Two</div>
+        <h3>The Business Improvement Plan</h3>
+        <div class="price">$650</div>
+        <p>They hand employees a PIP. I write your business a BIP. Two hours of real conversation, then the diagnosis and the thirty-day plan that changes your role.</p>
+        <ul>
+          <li>BLEED · FEED · NEED, run against your actual day</li>
+          <li>Where the business is bleeding, in dollars and hours</li>
+          <li>The one thing that stops depending on you — with a date on it</li>
+          <li>Where people, process, and technology each belong</li>
+        </ul>
+        <a href="https://calendly.com/agents-avatars-automations/15min" target="_blank" rel="noopener" class="btn-ghost">Start With the Free Call</a>
+      </div>
+
+      <div class="offer glow-box">
+        <div class="step">Step Three</div>
+        <h3>The Build</h3>
+        <div class="price">Scoped</div>
+        <p>Only after the plan exists. We build exactly what the diagnosis called for — no package, no stack of tools you'll stop using in March.</p>
+        <ul>
+          <li>Voice and chat agents deployed live</li>
+          <li>CRM buildout, pipelines, and follow-up that fires on time</li>
+          <li>Workflow automation between the tools you already pay for</li>
+          <li>QA on every edge case before handoff</li>
+        </ul>
+        <button class="btn-ghost" onclick="startCall('shuryi')">🎙️ Hear One Working Now</button>
+      </div>
+
+    </div>
+
+    <p class="anchor-note">The bleed at your level isn't sloppiness — it's rate. <strong>$650 is under two hours of a four-hundred-dollar hour.</strong> The question is how many of those hours are currently going to twenty-two-dollar work.</p>
+  </div>
+</section>
+
+<!-- ══ FINAL CTA ══ -->
+<section class="final-cta">
+  <h2>Just because you can do it does not mean<br />you should be the one doing it.</h2>
+  <div class="four-beats">
+    Find what's bleeding.<br />
+    Feed what's working.<br />
+    Decide what still needs you.<br />
+    Then decide where people, process, and technology belong.
+  </div>
+  <p>Your next level may not need more of your labor. It may need more of your leadership.</p>
+  <a href="https://calendly.com/agents-avatars-automations/15min" target="_blank" rel="noopener" class="btn-gold">Put a Date On It</a>
+</section>
+
+<footer>
+  AI GlamTech Empire™ · Pinky Floyd &nbsp;·&nbsp; Human intelligence first. An AI-powered version of your brilliance last.
+</footer>
+
+<!-- Shuryi fly-in -->
+<div class="pinky-flyin" id="pinky">
+  <div class="pinky-bubble">
+    Hi — I'm Shuryi. Tap the orb below me and let's talk live. 👇
+    <button class="pinky-close" onclick="dismissPinky(event)" aria-label="Close">✕</button>
+  </div>
+  <div class="pinky-orb" onclick="startCall('shuryi')">
+    <img src="images/shuryi.jpg" alt="Shuryi — AI Receptionist" />
+  </div>
+</div>
+
+<audio id="bg-music" loop preload="none">
+  <source src="images/album-track.mp3" type="audio/mpeg" />
+</audio>
+<button class="music-toggle" id="music-btn" onclick="toggleMusic()">🎵 Play Music</button>
+
+<script>
+  var pinkyDismissed = false;
+  function dismissPinky(e) {
+    e.stopPropagation();
+    pinkyDismissed = true;
+    document.getElementById('pinky').classList.remove('in');
+  }
+  window.addEventListener('scroll', function () {
+    if (pinkyDismissed) return;
+    var el = document.getElementById('pinky');
+    if (window.scrollY > 420) { el.classList.add('in'); } else { el.classList.remove('in'); }
+  });
+
+  window.addEventListener('DOMContentLoaded', function () {
+    var targets = document.querySelectorAll('.familiar-card, .flip, .pull, .bfn, .case, .offer, .clock');
+    targets.forEach(function (t) { t.classList.add('reveal'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.12 });
+    targets.forEach(function (t) { io.observe(t); });
+  });
+
+  var musicOn = false;
+  function toggleMusic() {
+    var a = document.getElementById('bg-music');
+    var b = document.getElementById('music-btn');
+    if (musicOn) { a.pause(); b.textContent = '🎵 Play Music'; }
+    else { a.volume = 0.35; a.play(); b.textContent = '⏸ Pause Music'; }
+    musicOn = !musicOn;
+  }
+
+  function toggleVoiceBar() {
+    document.getElementById('voice-bar').classList.toggle('open');
+  }
+
+  function startCall(who) {
+    var widget = document.querySelector('elevenlabs-convai');
+    if (!widget) return;
+    widget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+</script>
+
+</body>
+</html>
